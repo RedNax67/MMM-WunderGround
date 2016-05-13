@@ -149,7 +149,6 @@ Module.register("MMM-WunderGround",{
 		temperature.innerHTML = " " + this.temperature + "&deg;";
 		large.appendChild(temperature);
 				
-	
 		wrapper.appendChild(small);
 		wrapper.appendChild(large);
 
@@ -190,6 +189,11 @@ Module.register("MMM-WunderGround",{
 			minTempCell.innerHTML = forecast.minTemp;
 			minTempCell.className = "align-right min-temp";
 			row.appendChild(minTempCell);
+
+			var popCell = document.createElement("td");
+			popCell.innerHTML = forecast.pop + "%";
+			popCell.className = "align-right min-temp";
+			row.appendChild(popCell);
 
 			if (this.config.fade && this.config.fadePoint < 1) {
 				if (this.config.fadePoint < 0) {
@@ -281,7 +285,8 @@ Module.register("MMM-WunderGround",{
 				day:     forecast.date.weekday_short,
 				maxTemp: forecast.high.celsius,
 				minTemp: forecast.low.celsius,
-				icon:    this.config.iconTable[forecast.icon]
+				icon:    this.config.iconTable[forecast.icon],
+				pop:	 forecast.pop
 			});
 		}
 		
