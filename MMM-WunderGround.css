@@ -1,0 +1,22 @@
+.MMM-WunderGround .weathericon {
+  font-size: 75%;
+  line-height: 65px;
+  display: inline-block;
+  -ms-transform: translate(0, -3px); /* IE 9 */
+  -webkit-transform: translate(0, -3px); /* Safari */
+  transform: translate(0, -3px);
+} 
+.MMM-WunderGround .day {
+  padding-left: 0;
+  padding-right: 25px;
+}
+
+.MMM-WunderGround .weather-icon {
+  padding-right: 30px;
+  text-align: center;
+}
+
+.MMM-WunderGround .min-temp {
+  padding-left: 20px;
+  padding-right: 0;
+}
