@@ -84,6 +84,7 @@ Module.register("MMM-WunderGround",{
 		var wrapper = document.createElement("div");
 		var table = document.createElement("table");
 		table.className = "small";
+		table.setAttribute("width", "25%");
 
 
 		if (this.config.apikey === "") {
@@ -114,21 +115,8 @@ Module.register("MMM-WunderGround",{
 		var spacer = document.createElement("span");
 		spacer.innerHTML = "&nbsp;";
 		small.appendChild(spacer);
-		var spacer = document.createElement("span");
-		spacer.innerHTML = "&nbsp;";
 		small.appendChild(spacer);
 
-		
-//		var windSpeed = document.createElement("span");
-//		windSpeed.innerHTML = " " + this.windSpeed;
-//		small.appendChild(windSpeed);
-	
-//		if (this.config.showWindDirection) {
-//			var windDirection = document.createElement("sup");
-//			windDirection.innerHTML = " " + this.windDirection;
-//			small.appendChild(windDirection);
-//		}
-		
 		var windDirectionIcon = document.createElement("span");
 		windDirectionIcon.className = "wi wi-wind " + this.windDirection;
 		small.appendChild(windDirectionIcon);
@@ -136,6 +124,7 @@ Module.register("MMM-WunderGround",{
 		var spacer = document.createElement("span");
 		spacer.innerHTML = "&nbsp;";
 		small.appendChild(spacer);
+		
 		var spacer = document.createElement("span");
 		spacer.innerHTML = "&nbsp;";
 		small.appendChild(spacer);
@@ -159,11 +148,19 @@ Module.register("MMM-WunderGround",{
 		temperature.className = "bright";
 		temperature.innerHTML = " " + this.temperature + "&deg;";
 		large.appendChild(temperature);
-
+				
+	
 		wrapper.appendChild(small);
 		wrapper.appendChild(large);
-		
 
+		var row = document.createElement("tr");
+		table.appendChild(row);
+			
+		var forecastTextCell = document.createElement("td");
+		forecastTextCell.className = "forecastText";
+		forecastTextCell.innerHTML = this.forecastText.replace(/\.\ /g, ".<br>");
+		forecastTextCell.setAttribute("colSpan", "0");
+		row.appendChild(forecastTextCell);
 
 		for (var f in this.forecast) {
 			var forecast = this.forecast[f];
@@ -273,6 +270,7 @@ Module.register("MMM-WunderGround",{
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
+		this.forecastText = data.forecast.txt_forecast.forecastday[0].fcttext_metric;
 
 		this.forecast = [];
 		for (var i = 0, count = data.forecast.simpleforecast.forecastday.length; i < count; i++) {
