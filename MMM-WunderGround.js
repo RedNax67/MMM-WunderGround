@@ -195,6 +195,12 @@ Module.register("MMM-WunderGround",{
 			popCell.className = "align-right min-temp";
 			row.appendChild(popCell);
 
+
+			var mmCell = document.createElement("td");
+			mmCell.innerHTML = forecast.mm + "mm";
+			mmCell.className = "align-right min-temp";
+			row.appendChild(mmCell);
+
 			if (this.config.fade && this.config.fadePoint < 1) {
 				if (this.config.fadePoint < 0) {
 					this.config.fadePoint = 0;
@@ -286,7 +292,8 @@ Module.register("MMM-WunderGround",{
 				maxTemp: forecast.high.celsius,
 				minTemp: forecast.low.celsius,
 				icon:    this.config.iconTable[forecast.icon],
-				pop:	 forecast.pop
+				pop:	 forecast.pop,
+				mm:		 forecast.qpf_allday.mm
 			});
 		}
 		
