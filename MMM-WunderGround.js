@@ -120,7 +120,7 @@ Module.register("MMM-WunderGround",{
 		var windDirectionIcon = document.createElement("span");
 		windDirectionIcon.className = "wi wi-wind " + this.windDirection;
 		small.appendChild(windDirectionIcon);
-		
+				
 		var spacer = document.createElement("span");
 		spacer.innerHTML = "&nbsp;";
 		small.appendChild(spacer);
@@ -157,8 +157,10 @@ Module.register("MMM-WunderGround",{
 			
 		var forecastTextCell = document.createElement("td");
 		forecastTextCell.className = "forecastText";
-		forecastTextCell.innerHTML = this.forecastText.replace(/\.\ /g, ".<br>");
-		forecastTextCell.setAttribute("colSpan", "0");
+		forecastTextCell.setAttribute("colSpan", "10");
+		//forecastTextCell.innerHTML = this.forecastText.replace(/\.\ /g, ".<br>");
+		forecastTextCell.innerHTML = this.forecastText;
+		
 		row.appendChild(forecastTextCell);
 
 		for (var f in this.forecast) {
@@ -274,13 +276,18 @@ Module.register("MMM-WunderGround",{
 	 *
 	 * argument data object - Weather information received form openweather.org.
 	 */
+	 
 	processWeather: function(data) {
 		
+	
 		this.temperature = data.current_observation.temp_c;
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
+//		this.windDirection = "wi-wind.from-" + data.current_observation.wind_degrees + "-deg" ; // Doesn't work for some reason.
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
-		this.forecastText = data.forecast.txt_forecast.forecastday[0].fcttext_metric;
+		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,25,'<BR>');
+//		this.forecastText = data.forecast.txt_forecast.forecastday[0].fcttext_metric;
+		Log.error(self.name + ": " + this.forecastText);
 
 		this.forecast = [];
 		for (var i = 0, count = data.forecast.simpleforecast.forecastday.length; i < count; i++) {
@@ -383,6 +390,32 @@ Module.register("MMM-WunderGround",{
 		return 12;
 	},
 	
+	wordwrap: function ( str, width, brk, cut ) {
+ 
+    brk = brk || 'n';
+    width = width || 75;
+    cut = cut || false;
+ 
+    if (!str) { return str; }
+ 
+	
+    var re = /.{1,25}(\s|$)|\ S+?(\s|$)/g; 
+    var m;
+     
+    while ((m = re.exec(str)) !== null) {
+        if (m.index === re.lastIndex) {
+            re.lastIndex++;
+        }
+        // View your result using the m-variable.
+        // eg m[0] etc.
+    }	
+	var ff = re.exec(str);
+	
+    // return str.match( regex );
+    return str.match( RegExp(re) ).join( brk );
+ 
+},
+
 		/* function(temperature)
 	 * Rounds a temperature to 1 decimal.
 	 *
@@ -394,7 +427,7 @@ Module.register("MMM-WunderGround",{
 	deg2Cardinal: function(deg) {
                 if (deg>11.25 && deg<=33.75){
                         return "wi-from-nne";
-                }else if (deg>33.75 && deg<=56.25){
+                }else if (deg>33.75 && deg<=56.25){  
                         return "wi-from-ne";
                 }else if (deg>56.25 && deg<=78.75){
                         return "wi-from-ene";
