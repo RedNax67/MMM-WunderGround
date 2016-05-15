@@ -8,23 +8,26 @@
 } 
 .MMM-WunderGround .day {
   padding-left: 0;
-  padding-right: 25px;
+  padding-right: 10px;
 }
 
 .MMM-WunderGround .weather-icon {
-  padding-right: 30px;
-  text-align: center;
+  padding-right: 0px;
 }
 
 .MMM-WunderGround .min-temp {
-  padding-left: 20px;
+  padding-left: 10px;
   padding-right: 0;
 }
 
 .MMM-WunderGround .forecastText {
-  padding-left: 20px;
+  padding-left: 10px;
   padding-right: 0;
   word-wrap: break-word;
   text-align: right;
   rowspan: 0;
 }
+
+.MMM-WunderGround .tableheader {
+  font-size: 75%;
+} 

@@ -162,6 +162,42 @@ Module.register("MMM-WunderGround",{
 		
 		row.appendChild(forecastTextCell);
 
+		var row = document.createElement("tr");
+		
+		var dayHeader = document.createElement("th");
+		dayHeader.className = "day"
+		dayHeader.innerHTML = ""
+		row.appendChild(dayHeader);
+		
+		var iconHeader = document.createElement("th");
+		iconHeader.className = "tableheader"
+		iconHeader.innerHTML = ""
+		row.appendChild(iconHeader);
+		
+		var maxtempHeader = document.createElement("th");
+		maxtempHeader.className = "tableheader"
+		maxtempHeader.innerHTML = "max"
+		row.appendChild(maxtempHeader);
+		
+		var mintempHeader = document.createElement("th");
+		mintempHeader.className = "tableheader"
+		mintempHeader.innerHTML = "min"
+		row.appendChild(mintempHeader);
+		
+		var popHeader = document.createElement("th");
+		popHeader.className = "align-center tableheader"
+		popHeader.innerHTML = "%"
+		row.appendChild(popHeader);
+
+		var aopHeader = document.createElement("th");
+		aopHeader.className = "tableheader"
+		aopHeader.innerHTML = "mm"
+		row.appendChild(aopHeader);
+		
+		
+		table.appendChild(row);
+		
+
 		for (var f in this.forecast) {
 			var forecast = this.forecast[f];
 
@@ -173,17 +209,17 @@ Module.register("MMM-WunderGround",{
 			dayCell.innerHTML = forecast.day;
 			row.appendChild(dayCell);
 
-			var iconCell = document.createElement("td");
-			iconCell.className = "bright weather-icon";
-			row.appendChild(iconCell);
+//			var iconCell = document.createElement("td");
+//			iconCell.className = "bright weather-icon";
+//			row.appendChild(iconCell);
 
-			var icon = document.createElement("span");
-			icon.className = "align-center wi " + forecast.icon;
-			iconCell.appendChild(icon);
+			var icon = document.createElement("td");
+			icon.className = "align-center bright wi " + forecast.icon;
+			row.appendChild(icon);
 
 			var maxTempCell = document.createElement("td");
 			maxTempCell.innerHTML = forecast.maxTemp;
-			maxTempCell.className = "align-right bright max-temp";
+			maxTempCell.className = "align-right max-temp";
 			row.appendChild(maxTempCell);
 
 			var minTempCell = document.createElement("td");
@@ -192,13 +228,13 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(minTempCell);
 
 			var popCell = document.createElement("td");
-			popCell.innerHTML = forecast.pop + "%";
+			popCell.innerHTML = forecast.pop;
 			popCell.className = "align-right min-temp";
 			row.appendChild(popCell);
 
 
 			var mmCell = document.createElement("td");
-			mmCell.innerHTML = forecast.mm + "mm";
+			mmCell.innerHTML = forecast.mm;
 			mmCell.className = "align-right min-temp";
 			row.appendChild(mmCell);
 
@@ -389,17 +425,15 @@ Module.register("MMM-WunderGround",{
 		return 12;
 	},
 	
-	wordwrap: function ( str, width, brk, cut ) {
+	wordwrap: function ( str, width, brk ) {
  
     brk = brk || 'n';
     width = width || 75;
-    cut = cut || false;
  
     if (!str) { return str; }
  
     var re = new RegExp('.{1,'+ width +'}(\\s|$)|\\ S+?(\\s|$)','g'); 
 	
-    // return str.match( regex );
     return str.match( RegExp(re) ).join( brk );
  
 },
