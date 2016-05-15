@@ -158,7 +158,6 @@ Module.register("MMM-WunderGround",{
 		var forecastTextCell = document.createElement("td");
 		forecastTextCell.className = "forecastText";
 		forecastTextCell.setAttribute("colSpan", "10");
-		//forecastTextCell.innerHTML = this.forecastText.replace(/\.\ /g, ".<br>");
 		forecastTextCell.innerHTML = this.forecastText;
 		
 		row.appendChild(forecastTextCell);
@@ -285,7 +284,7 @@ Module.register("MMM-WunderGround",{
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
 //		this.windDirection = "wi-wind.from-" + data.current_observation.wind_degrees + "-deg" ; // Doesn't work for some reason.
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
-		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,25,'<BR>');
+		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>');
 //		this.forecastText = data.forecast.txt_forecast.forecastday[0].fcttext_metric;
 		Log.error(self.name + ": " + this.forecastText);
 
@@ -398,18 +397,7 @@ Module.register("MMM-WunderGround",{
  
     if (!str) { return str; }
  
-	
-    var re = /.{1,25}(\s|$)|\ S+?(\s|$)/g; 
-    var m;
-     
-    while ((m = re.exec(str)) !== null) {
-        if (m.index === re.lastIndex) {
-            re.lastIndex++;
-        }
-        // View your result using the m-variable.
-        // eg m[0] etc.
-    }	
-	var ff = re.exec(str);
+    var re = new RegExp('.{1,'+ width +'}(\\s|$)|\\ S+?(\\s|$)','g'); 
 	
     // return str.match( regex );
     return str.match( RegExp(re) ).join( brk );
