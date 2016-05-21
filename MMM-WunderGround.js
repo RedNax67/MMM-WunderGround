@@ -11,10 +11,9 @@ Module.register("MMM-WunderGround",{
 
 	// Default module config.
 	defaults: {
-		location: "",
 		apikey: "",
+		pws: "",		
 		units: config.units,
-		maxNumberOfDays: 7,
 		updateInterval: 10 * 60 * 1000, // every 10 minutes
 		animationSpeed: 1000,
 		timeFormat: config.timeFormat,
@@ -23,6 +22,15 @@ Module.register("MMM-WunderGround",{
 		fade: true,
 		fadePoint: 0.25, // Start on 1/4th of the list.
 		tz: "",
+		//lang: 'NL', 
+		fcdaycount: "5",
+		fcdaystart: "0",
+		hourly: '1',
+		hourlyinterval: "3",
+		hourlycount: "2",
+		fctext: '1',
+		
+
 
 		initialLoadDelay: 2500, // 2.5 seconds delay. This delay is used to keep the OpenWeather API happy.
 		retryDelay: 2500,
@@ -31,25 +39,24 @@ Module.register("MMM-WunderGround",{
 		apiBase: "http://api.wunderground.com/api/",
 
 		iconTable: {                        
-            // meteoblue
+            "chanceflurries": "wi-day-snow-wind",
+            "chancerain": "wi-day-showers",
+            "chancesleet": "wi-day-sleet",
+            "chancesnow": "wi-day-snow",
+            "chancetstorms": "wi-day-storm-showers",
             "clear": "wi-day-sunny",
-			"partlycloudy": "wi-day-sunny-overcast",
-			"mostlycloudy": "wi-day-cloudy",
-			"cloudy": "wi-cloudy",
-            "fog": "wi-day-fog",
-            "chancerain": "wi-rain",
-            "sleet": "wi-day-rain-mix",
-            "tstorms": "wi-day-thunderstorm",
-			"snow": "wi-snow",
-			"10": "wi-day-snow",
-			"11": "wi-rain-mix",
-            "12": "wi-sprinkle",
-			"13": "wi-day-snow",
-            "rain": "wi-day-rain",
-            "15": "wi-day-snow",
-    
-	"16": "wi-day-sprinkle",
-            "17": "wi-day-snow"
+            "cloudy": "wi-cloud",
+            "flurries": "wi-snow-wind",
+            "fog": "wi-fog",
+            "haze": "wi-day-haze",
+            "mostlycloudy": "wi-cloudy",
+            "mostlysunny": "wi-day-sunny-overcast",
+            "partlycloudy": "wi-day-cloudy",
+            "partlysunny": "wi-day-cloudy-high",
+            "rain": "wi-rain",
+            "sleet": "wi-sleet",
+            "snow": "wi-snow",
+            "tstorms": "wi-thunderstorm"
 		},
 	},
 
@@ -72,6 +79,7 @@ Module.register("MMM-WunderGround",{
 		moment.locale(config.language);
 
 		this.forecast = [];
+		this.hourlyforecast = [];
 		this.loaded = false;
 		this.scheduleUpdate(this.config.initialLoadDelay);
 
@@ -88,16 +96,11 @@ Module.register("MMM-WunderGround",{
 
 
 		if (this.config.apikey === "") {
-			wrapper.innerHTML = "Please set the correct openweather <i>appid</i> in the config for module: " + this.name + ".";
+			wrapper.innerHTML = "Please set the correct winderground <i>apikey</i> in the config for module: " + this.name + ".";
 			wrapper.className = "dimmed light small";
 			return wrapper;
 		}
 
-		if (this.config.city === "") {
-			wrapper.innerHTML = "Please set the openweather <i>location</i> in the config for module: " + this.name + ".";
-			wrapper.className = "dimmed light small";
-			return wrapper;
-		}
 
 		if (!this.loaded) {
 			wrapper.innerHTML = "Weerbericht laden...";
@@ -151,16 +154,21 @@ Module.register("MMM-WunderGround",{
 				
 		wrapper.appendChild(small);
 		wrapper.appendChild(large);
+		
+		
+		// Forecast table
 
 		var row = document.createElement("tr");
 		table.appendChild(row);
-			
-		var forecastTextCell = document.createElement("td");
-		forecastTextCell.className = "forecastText";
-		forecastTextCell.setAttribute("colSpan", "10");
-		forecastTextCell.innerHTML = this.forecastText;
+
+        if ( this.config.fctext == 1 ) {		
+		  var forecastTextCell = document.createElement("td");
+		  forecastTextCell.className = "forecastText";
+		  forecastTextCell.setAttribute("colSpan", "10");
+		  forecastTextCell.innerHTML = this.forecastText;
 		
-		row.appendChild(forecastTextCell);
+		  row.appendChild(forecastTextCell);
+		}
 
 		var row = document.createElement("tr");
 		
@@ -170,17 +178,17 @@ Module.register("MMM-WunderGround",{
 		row.appendChild(dayHeader);
 		
 		var iconHeader = document.createElement("th");
-		iconHeader.className = "tableheader"
+		iconHeader.className = "tableheader icon"
 		iconHeader.innerHTML = ""
 		row.appendChild(iconHeader);
 		
 		var maxtempHeader = document.createElement("th");
-		maxtempHeader.className = "tableheader"
+		maxtempHeader.className = "align-center tableheader"
 		maxtempHeader.innerHTML = "max"
 		row.appendChild(maxtempHeader);
 		
 		var mintempHeader = document.createElement("th");
-		mintempHeader.className = "tableheader"
+		mintempHeader.className = "align-center tableheader"
 		mintempHeader.innerHTML = "min"
 		row.appendChild(mintempHeader);
 		
@@ -190,12 +198,56 @@ Module.register("MMM-WunderGround",{
 		row.appendChild(popHeader);
 
 		var aopHeader = document.createElement("th");
-		aopHeader.className = "tableheader"
+		aopHeader.className = "align-center tableheader"
 		aopHeader.innerHTML = "mm"
 		row.appendChild(aopHeader);
 		
 		
 		table.appendChild(row);
+
+		for (var f in this.forecast) {
+			var forecast = this.hourlyforecast[f * 3];
+
+			var row = document.createElement("tr");
+			table.appendChild(row);
+
+			var hourCell = document.createElement("td");
+			hourCell.className = "hour";
+			hourCell.innerHTML = forecast.hour + ":00";
+			row.appendChild(hourCell);
+
+            var iconCell = document.createElement("td");
+            iconCell.className = "align-center bright weather-icon";
+            row.appendChild(iconCell);
+
+            var icon = document.createElement("span");
+            icon.className = "wi " + forecast.icon;
+            iconCell.appendChild(icon);
+
+			var maxTempCell = document.createElement("td");
+			maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
+			maxTempCell.className = "align-right max-temp";
+			row.appendChild(maxTempCell);
+
+			var minTempCell = document.createElement("td");
+			minTempCell.innerHTML = forecast.minTemp + "&deg;";
+			minTempCell.className = "align-right min-temp";
+			row.appendChild(minTempCell);
+
+			var popCell = document.createElement("td");
+			popCell.innerHTML = forecast.pop;
+			popCell.className = "align-right pop";
+			row.appendChild(popCell);
+
+			var mmCell = document.createElement("td");
+			mmCell.innerHTML = forecast.mm;
+			mmCell.className = "align-right mm";
+			row.appendChild(mmCell);
+
+			if ( f > this.config.hourlycount ) { break; }
+			
+           
+		}
 		
 
 		for (var f in this.forecast) {
@@ -209,33 +261,32 @@ Module.register("MMM-WunderGround",{
 			dayCell.innerHTML = forecast.day;
 			row.appendChild(dayCell);
 
-//			var iconCell = document.createElement("td");
-//			iconCell.className = "bright weather-icon";
-//			row.appendChild(iconCell);
+            var iconCell = document.createElement("td");
+            iconCell.className = "align-center bright weather-icon";
+            row.appendChild(iconCell);
 
-			var icon = document.createElement("td");
-			icon.className = "align-center bright wi " + forecast.icon;
-			row.appendChild(icon);
+            var icon = document.createElement("span");
+            icon.className = "wi " + forecast.icon;
+            iconCell.appendChild(icon);
 
 			var maxTempCell = document.createElement("td");
-			maxTempCell.innerHTML = forecast.maxTemp;
+			maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
 			maxTempCell.className = "align-right max-temp";
 			row.appendChild(maxTempCell);
 
 			var minTempCell = document.createElement("td");
-			minTempCell.innerHTML = forecast.minTemp;
+			minTempCell.innerHTML = forecast.minTemp + "&deg;";
 			minTempCell.className = "align-right min-temp";
 			row.appendChild(minTempCell);
 
 			var popCell = document.createElement("td");
 			popCell.innerHTML = forecast.pop;
-			popCell.className = "align-right min-temp";
+			popCell.className = "align-right pop";
 			row.appendChild(popCell);
-
 
 			var mmCell = document.createElement("td");
 			mmCell.innerHTML = forecast.mm;
-			mmCell.className = "align-right min-temp";
+			mmCell.className = "align-right mm";
 			row.appendChild(mmCell);
 
 			if (this.config.fade && this.config.fadePoint < 1) {
@@ -296,7 +347,7 @@ Module.register("MMM-WunderGround",{
 	 */
 	getParams: function() {
         var params  = this.config.apikey;
-		params += "/conditions/forecast10day/astronomy/lang:" + this.config.lang;
+		params += "/conditions/hourly/forecast10day/astronomy/lang:" + this.config.lang;
 		params += "/q/" + this.config.pws;
 		params += ".json";
 		
@@ -320,12 +371,11 @@ Module.register("MMM-WunderGround",{
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
 //		this.windDirection = "wi-wind.from-" + data.current_observation.wind_degrees + "-deg" ; // Doesn't work for some reason.
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
-		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>');
-//		this.forecastText = data.forecast.txt_forecast.forecastday[0].fcttext_metric;
+		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
 		Log.error(self.name + ": " + this.forecastText);
 
 		this.forecast = [];
-		for (var i = 0, count = data.forecast.simpleforecast.forecastday.length; i < count; i++) {
+		for (var i = this.config.fcdaystart, count = data.forecast.simpleforecast.forecastday.length; i < this.config.fcdaycount ; i++) {
 
 			var forecast = data.forecast.simpleforecast.forecastday[i];
 			this.forecast.push({
@@ -338,6 +388,23 @@ Module.register("MMM-WunderGround",{
 				mm:		 forecast.qpf_allday.mm
 			});
 		}
+
+		this.hourlyforecast = [];
+		for (var i = 0, count = data.hourly_forecast.length; i < count; i++) {
+
+			var hourlyforecast = data.hourly_forecast[i];
+			this.hourlyforecast.push({
+
+				hour:    hourlyforecast.FCTTIME.hour,
+				maxTemp: hourlyforecast.temp.metric,
+				minTemp: hourlyforecast.feelslike.metric,
+				icon:    this.config.iconTable[hourlyforecast.icon],
+				pop:	 hourlyforecast.pop,
+				mm:		 hourlyforecast.qpf.metric
+			});
+		}
+		
+		
 		
 		
 		var now = new Date();

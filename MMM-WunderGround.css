@@ -8,26 +8,36 @@
 } 
 .MMM-WunderGround .day {
   padding-left: 0;
-  padding-right: 10px;
+#  padding-right: 10px;
 }
 
 .MMM-WunderGround .weather-icon {
-  padding-right: 0px;
+  padding-left: 20px;
+  text-align: center;
+}
+
+.MMM-WunderGround .max-temp {
+  padding-left: 0px;
+  padding-right: 0;
 }
 
 .MMM-WunderGround .min-temp {
-  padding-left: 10px;
-  padding-right: 0;
+#  padding-left: 10px;
+#  padding-right: 0;
 }
 
 .MMM-WunderGround .forecastText {
-  padding-left: 10px;
-  padding-right: 0;
-  word-wrap: break-word;
-  text-align: right;
-  rowspan: 0;
+# padding-left: 10px;
+#  padding-right: 0;
+#  word-wrap: break-word;
+#  text-align: right;
+#  rowspan: 0;
 }
 
 .MMM-WunderGround .tableheader {
+  font-size: 75%;
+} 
+
+.MMM-WunderGround .hour {
   font-size: 75%;
 } 
