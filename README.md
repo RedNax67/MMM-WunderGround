@@ -9,13 +9,22 @@ To use this module, add it to the modules array in the `config/config.js` file:
 ````javascript
 modules: [
 	{
-		module: 'wuforecast',
+		module: 'MMM-Wunderground',
 		position: 'top_right',	// This can be any of the regions.
 									// Best results in left or right regions.
 		config: {
 			// See 'Configuration options' for more information.
-			location: 'France/Paris',
-			appid: 'abcde12345abcde12345abcde12345ab' //wunderground.com API key.
+			apikey: 'xxxxxxxxxxx', // private; don't share!
+			pws: 'locid:NLXX8014;loctype:1',
+			lang: 'NL', 
+			hourly: '1',
+			fctext: '1',
+                	fcdaycount: "5",
+		        fcdaystart: "0",
+		        hourly: '1',
+		        hourlyinterval: "3",
+                	hourlycount: "2",
+                	fctext: '1'
 		}
 	}
 ]
@@ -37,7 +46,7 @@ The following properties can be configured:
 	<tbody>
 
 		<tr>
-			<td><code>location</code></td>
+			<td><code>pws</code></td>
 			<td>The location used for weather information.<br>
 				<br><b>US Example:</b> <code>NY/New_York</code>
 				<br><b>Example:</b> <code>France/Paris</code><br>
