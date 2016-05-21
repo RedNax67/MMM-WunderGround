@@ -36,8 +36,16 @@
 
 .MMM-WunderGround .tableheader {
   font-size: 75%;
+  text-align: center;
 } 
 
 .MMM-WunderGround .hour {
+  font-size: 75%;
+} 
+
+.MMM-WunderGround .pop {
+  font-size: 75%;
+} 
+.MMM-WunderGround .mm {
   font-size: 75%;
 } 

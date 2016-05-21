@@ -183,25 +183,46 @@ Module.register("MMM-WunderGround",{
 		row.appendChild(iconHeader);
 		
 		var maxtempHeader = document.createElement("th");
-		maxtempHeader.className = "align-center tableheader"
-		maxtempHeader.innerHTML = "max"
+		maxtempHeader.className = "align-center bright tableheader"
+//		maxtempHeader.innerHTML = "max"
 		row.appendChild(maxtempHeader);
+
+        var maxtempicon = document.createElement("span");
+        maxtempicon.className = "wi wi-thermometer";
+        maxtempHeader.appendChild(maxtempicon);
 		
+	
 		var mintempHeader = document.createElement("th");
-		mintempHeader.className = "align-center tableheader"
-		mintempHeader.innerHTML = "min"
+		mintempHeader.className = "align-center bright tableheader"
+//		mintempHeader.innerHTML = "min"
 		row.appendChild(mintempHeader);
+
+        var mintempicon = document.createElement("span");
+        mintempicon.className = "wi wi-thermometer-exterior";
+        mintempHeader.appendChild(mintempicon);
+
 		
-		var popHeader = document.createElement("th");
-		popHeader.className = "align-center tableheader"
-		popHeader.innerHTML = "%"
-		row.appendChild(popHeader);
+		var popiconHeader = document.createElement("th");
+		popiconHeader.className = "align-center bright tableheader";
+		popiconHeader.setAttribute("colSpan", "10");
+		row.appendChild(popiconHeader);
+
+        var popicon = document.createElement("span");
+        popicon.className = "wi wi-umbrella";
+		popicon.setAttribute("colSpan", "10");
+        popiconHeader.appendChild(popicon);
+		
+		
+/*		var maxtempHeader = document.createElement("th");
+		maxtempHeader.className = "align-center tableheader"
+		maxtempHeader.innerHTML = "%"
+		row.appendChild(maxtempHeader);
 
 		var aopHeader = document.createElement("th");
 		aopHeader.className = "align-center tableheader"
 		aopHeader.innerHTML = "mm"
 		row.appendChild(aopHeader);
-		
+*/
 		
 		table.appendChild(row);
 
@@ -235,12 +256,12 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(minTempCell);
 
 			var popCell = document.createElement("td");
-			popCell.innerHTML = forecast.pop;
+			popCell.innerHTML = forecast.pop + "%";
 			popCell.className = "align-right pop";
 			row.appendChild(popCell);
 
 			var mmCell = document.createElement("td");
-			mmCell.innerHTML = forecast.mm;
+			mmCell.innerHTML = forecast.mm + "mm";
 			mmCell.className = "align-right mm";
 			row.appendChild(mmCell);
 
@@ -280,12 +301,12 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(minTempCell);
 
 			var popCell = document.createElement("td");
-			popCell.innerHTML = forecast.pop;
+			popCell.innerHTML = forecast.pop + "%";
 			popCell.className = "align-right pop";
 			row.appendChild(popCell);
 
 			var mmCell = document.createElement("td");
-			mmCell.innerHTML = forecast.mm;
+			mmCell.innerHTML = forecast.mm + "mm";
 			mmCell.className = "align-right mm";
 			row.appendChild(mmCell);
 
