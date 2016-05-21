@@ -9,13 +9,20 @@ To use this module, add it to the modules array in the `config/config.js` file:
 ````javascript
 modules: [
 	{
-		module: 'wuforecast',
+		module: 'MMM-Wunderground',
 		position: 'top_right',	// This can be any of the regions.
 									// Best results in left or right regions.
 		config: {
 			// See 'Configuration options' for more information.
-			location: 'France/Paris',
-			appid: 'abcde12345abcde12345abcde12345ab' //wunderground.com API key.
+			apikey: 'xxxxxxxxxxx', // private; don't share!
+			pws: 'locid:NLXX8014;loctype:1',
+			lang: 'NL', 
+			fctext: '1',
+                	fcdaycount: "5",
+		        fcdaystart: "0",
+		        hourly: '1',
+		        hourlyinterval: "3",
+                	hourlycount: "2"
 		}
 	}
 ]
@@ -37,15 +44,15 @@ The following properties can be configured:
 	<tbody>
 
 		<tr>
-			<td><code>location</code></td>
-			<td>The location used for weather information.<br>
+			<td><code>pws</code></td>
+			<td>Can be any WU api location info.<br>
 				<br><b>US Example:</b> <code>NY/New_York</code>
-				<br><b>Example:</b> <code>France/Paris</code><br>
+				<br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br>
                                 <br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
 		<tr>
-			<td><code>appid</code></td>
+			<td><code>apikey</code></td>
 			<td>The <a href="https://www.wunderground.com/weather/api/d/pricing" target="_blank">Weather Underground</a> API key, which can be obtained by creating an OpenWeatherMap account. You need either Cumulus or Anvil plan for this module. As long as you make less than 500 queries a day, this is free.<br>
 				<br> This value is <b>REQUIRED</b>
 			</td>
@@ -58,31 +65,57 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-			<td><code>pop</code></td>
-			<td>Display or not display the probability of precipitation. Specified by config.js<br>
-				<br><b>Possible values:</b> <code>true</code> = Display the Probability of Precipitation if above 0%, <code>false</code> = Do not display the Probability of Precipitation
-				<br><b>Default value:</b> <code>true</code>
-			</td>
-		</tr>
-		<tr>
-			<td><code>degreeSym</code></td>
-			<td>Display or not display the degree symbol after the high and low temps. Specified by config.js<br>
-				<br><b>Possible values:</b> <code>true</code> = Display the degree symbol after the high/low temps.  <code>False</code> = Do not dsplay the degree symbol after the high/low temps.
-				<br><b>Default value:</b> <code>true</code>
-			</td>
-		</tr>
-		<tr>
-			<td><code>maxNumberOfDays</code></td>
+			<td><code>fcdaycount</code></td>
 			<td>How many days of forecast to return. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>1</code> - <code>10</code>
 				<br><b>Default value:</b> <code>7</code> (7 days)
-				<br>This value is optional. By default the wuforecast module will return 7 days.
+				<br>This value is optional. By default the wunderground module will return 7 days.
+			</td>
+		</tr>
+		<tr>
+			<td><code>fcdaystart</code></td>
+			<td>On which day to start the forecast. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>1</code> - <code>10</code>
+				<br><b>Default value:</b> <code>0</code> (Today)
+				<br>This value is optional. By default the forecast will start today.
+			</td>
+		</tr>
+		<tr>
+			<td><code>fctext</code></td>
+			<td>Display human readable forecast text. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
+				<br><b>Default value:</b> <code>1</code> (Will display text)
+				<br>This value is optional. By default the forecast text will be displayed.
+			</td>
+		</tr>
+		<tr>
+			<td><code>hourly</code></td>
+			<td>Display hourly forecasts. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
+				<br><b>Default value:</b> <code>1</code> (Will display hourly forecasts)
+				<br>This value is optional. By default the forecast text will be displayed.
+			</td>
+		</tr>
+		<tr>
+			<td><code>hourlycount</code></td>
+			<td>How many hourly forecasts. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>24</code>
+				<br><b>Default value:</b> <code>3</code> (Will display 4 hourly forecasts)
+				<br>This value is optional. By default the 4 hourly forecasts will be displayed.
+			</td>
+		</tr>
+		<tr>
+			<td><code>hourlyinterval</code></td>
+			<td>Hours between hourly forecasts. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>1</code> - <code>24</code>
+				<br><b>Default value:</b> <code>3</code> (Will display hourly forecasts with 3 hour interval)
+				<br>This value is optional.
 			</td>
 		</tr>
 		<tr>
 			<td><code>updateInterval</code></td>
 			<td>How often does the content needs to be fetched? (Milliseconds)
-				<br>Note that wunderground updates every 15 minutes maximum. Also free version of API only allows 500 calls per day.
+				<br>Note that Wunderground updates every 15 minutes maximum. Also free version of API only allows 500 calls per day.
 				<br><b>Possible values:</b> <code>1000</code> - <code>86400000</code>
 				<br><b>Default value:</b> <code>900000</code> (15 minutes)
 			</td>
@@ -131,17 +164,6 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-			<td><code>apiBase</code></td>
-			<td>The Weather Underground base URL.<br>
-				<br><b>Default value:</b>  <code>'http://api.wunderground.com/api/'</code>
-			</td>
-		</tr>
-		<tr>
-			<td><code>weatherEndpoint</code></td>
-			<td>The Weather Underground API endPoint.<br>
-				<br><b>Default value:</b>  <code>'/forecast10day/q/'</code>
-			</td>
-		</tr>
 
 	</tbody>
 </table>
