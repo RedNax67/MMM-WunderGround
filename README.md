@@ -1,6 +1,7 @@
-# Module: Weather Forecast
-The `weatherforecast` module is one of the default modules of the MagicMirror.
-This module displays the weather forecast for the coming week, including an an icon to display the current conditions, the minimum temperature and the maximum temperature.
+# Module: Weather Underground Forecast
+This is a module for MagicMirror, modified of the default `weatherforecast` module. 
+
+This is similar to the default `weatherforecast` module, however it has additional functionality (such as displaying the probability of precipitation for each day). It also retrieves its data from Weather Underground instead of OpenWeatherMap.
 
 ## Using the module
 
@@ -8,13 +9,13 @@ To use this module, add it to the modules array in the `config/config.js` file:
 ````javascript
 modules: [
 	{
-		module: 'weatherforecast',
+		module: 'wuforecast',
 		position: 'top_right',	// This can be any of the regions.
 									// Best results in left or right regions.
 		config: {
 			// See 'Configuration options' for more information.
-			location: 'Amsterdam,Netherlands',
-			appid: 'abcde12345abcde12345abcde12345ab' //openweathermap.org API key.
+			location: 'France/Paris',
+			appid: 'abcde12345abcde12345abcde12345ab' //wunderground.com API key.
 		}
 	}
 ]
@@ -38,13 +39,14 @@ The following properties can be configured:
 		<tr>
 			<td><code>location</code></td>
 			<td>The location used for weather information.<br>
-				<br><b>Example:</b> <code>Amsterdam,Netherlands</code>
-				<br><b>Default value:</b> <code>New York</code>
+				<br><b>US Example:</b> <code>NY/New_York</code>
+				<br><b>Example:</b> <code>France/Paris</code><br>
+                                <br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
 		<tr>
 			<td><code>appid</code></td>
-			<td>The <a href="https://home.openweathermap.org" target="_blank">OpenWeatherMap</a> API key, which can be obtained by creating an OpenWeatherMap account.<br>
+			<td>The <a href="https://www.wunderground.com/weather/api/d/pricing" target="_blank">Weather Underground</a> API key, which can be obtained by creating an OpenWeatherMap account. You need either Cumulus or Anvil plan for this module. As long as you make less than 500 queries a day, this is free.<br>
 				<br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
@@ -56,18 +58,33 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>pop</code></td>
+			<td>Display or not display the probability of precipitation. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>true</code> = Display the Probability of Precipitation if above 0%, <code>false</code> = Do not display the Probability of Precipitation
+				<br><b>Default value:</b> <code>true</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>degreeSym</code></td>
+			<td>Display or not display the degree symbol after the high and low temps. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>true</code> = Display the degree symbol after the high/low temps.  <code>False</code> = Do not dsplay the degree symbol after the high/low temps.
+				<br><b>Default value:</b> <code>true</code>
+			</td>
+		</tr>
+		<tr>
 			<td><code>maxNumberOfDays</code></td>
 			<td>How many days of forecast to return. Specified by config.js<br>
-				<br><b>Possible values:</b> <code>1</code> - <code>16</code>
+				<br><b>Possible values:</b> <code>1</code> - <code>10</code>
 				<br><b>Default value:</b> <code>7</code> (7 days)
-				<br>This value is optional. By default the weatherforecast module will return 7 days.
+				<br>This value is optional. By default the wuforecast module will return 7 days.
 			</td>
 		</tr>
 		<tr>
 			<td><code>updateInterval</code></td>
-			<td>How often does the content needs to be fetched? (Milliseconds)<br>
+			<td>How often does the content needs to be fetched? (Milliseconds)
+				<br>Note that wunderground updates every 15 minutes maximum. Also free version of API only allows 500 calls per day.
 				<br><b>Possible values:</b> <code>1000</code> - <code>86400000</code>
-				<br><b>Default value:</b> <code>300000</code> (10 minutes)
+				<br><b>Default value:</b> <code>900000</code> (15 minutes)
 			</td>
 		</tr>
 		<tr>
@@ -114,49 +131,19 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-			<td><code>apiVersion</code></td>
-			<td>The OpenWeatherMap API version to use.<br>
-				<br><b>Default value:</b>  <code>2.5</code>
-			</td>
-		</tr>
-		<tr>
 			<td><code>apiBase</code></td>
-			<td>The OpenWeatherMap base URL.<br>
-				<br><b>Default value:</b>  <code>'http://api.openweathermap.org/data/'</code>
+			<td>The Weather Underground base URL.<br>
+				<br><b>Default value:</b>  <code>'http://api.wunderground.com/api/'</code>
 			</td>
 		</tr>
 		<tr>
 			<td><code>weatherEndpoint</code></td>
-			<td>The OpenWeatherMap API endPoint.<br>
-				<br><b>Default value:</b>  <code>'forecast/daily'</code>
-			</td>
-		</tr>
-		<tr>
-			<td><code>iconTable</code></td>
-			<td>The conversion table to convert the weather conditions to weather-icons.<br>
-				<br><b>Default value:</b>  <code>iconTable: {
-			'01d':'wi-day-sunny',
-			'02d':'wi-day-cloudy',
-			'03d':'wi-cloudy',
-			'04d':'wi-cloudy-windy',
-			'09d':'wi-showers',
-			'10d':'wi-rain',
-			'11d':'wi-thunderstorm',
-			'13d':'wi-snow',
-			'50d':'wi-fog',
-			'01n':'wi-night-clear',
-			'02n':'wi-night-cloudy',
-			'03n':'wi-night-cloudy',
-			'04n':'wi-night-cloudy',
-			'09n':'wi-night-showers',
-			'10n':'wi-night-rain',
-			'11n':'wi-night-thunderstorm',
-			'13n':'wi-night-snow',
-			'50n':'wi-night-alt-cloudy-windy'
-		}</code>
+			<td>The Weather Underground API endPoint.<br>
+				<br><b>Default value:</b>  <code>'/forecast10day/q/'</code>
 			</td>
 		</tr>
 
 	</tbody>
 </table>
-# WunderGround
+
+
