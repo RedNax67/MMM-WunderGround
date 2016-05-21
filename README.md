@@ -69,7 +69,7 @@ The following properties can be configured:
 			<td>How many days of forecast to return. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>1</code> - <code>10</code>
 				<br><b>Default value:</b> <code>7</code> (7 days)
-				<br>This value is optional. By default the wuforecast module will return 7 days.
+				<br>This value is optional. By default the wunderground module will return 7 days.
 			</td>
 		</tr>
 		<tr>
@@ -115,7 +115,7 @@ The following properties can be configured:
 		<tr>
 			<td><code>updateInterval</code></td>
 			<td>How often does the content needs to be fetched? (Milliseconds)
-				<br>Note that wunderground updates every 15 minutes maximum. Also free version of API only allows 500 calls per day.
+				<br>Note that Wunderground updates every 15 minutes maximum. Also free version of API only allows 500 calls per day.
 				<br><b>Possible values:</b> <code>1000</code> - <code>86400000</code>
 				<br><b>Default value:</b> <code>900000</code> (15 minutes)
 			</td>
