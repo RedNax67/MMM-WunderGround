@@ -63,10 +63,10 @@ Module.register("MMM-WunderGround",{
 
 // Define required translations.
 	getTranslations: function() {
-		// The translations for the defaut modules are defined in the core translation files.
-		// Therefor we can just return false. Otherwise we should have returned a dictionairy.
-		// If you're trying to build yiur own module including translations, check out the documentation.
-		return false;
+		return {
+            en: "translations/en.json",
+            nl: "translations/nl.json"
+		}
 	},
 	
 	// Define required scripts.
@@ -104,7 +104,7 @@ Module.register("MMM-WunderGround",{
 
 
 		if (this.config.apikey === "") {
-			wrapper.innerHTML = "Please set the correct winderground <i>apikey</i> in the config for module: " + this.name + ".";
+			wrapper.innerHTML = this.translate('APIKEY') + this.name + ".";
 			wrapper.className = "dimmed light small";
 			return wrapper;
 		}
