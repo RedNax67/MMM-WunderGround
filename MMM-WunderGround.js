@@ -60,6 +60,13 @@ Module.register("MMM-WunderGround",{
 		},
 	},
 
+// Define required translations.
+	getTranslations: function() {
+		// The translations for the defaut modules are defined in the core translation files.
+		// Therefor we can just return false. Otherwise we should have returned a dictionairy.
+		// If you're trying to build yiur own module including translations, check out the documentation.
+		return false;
+	},
 	
 	// Define required scripts.
 	getScripts: function() {
@@ -103,7 +110,7 @@ Module.register("MMM-WunderGround",{
 
 
 		if (!this.loaded) {
-			wrapper.innerHTML = "Weerbericht laden...";
+			wrapper.innerHTML = this.translate('LOADING');
 			wrapper.className = "dimmed light small";
 			return wrapper;
 		}
@@ -393,7 +400,7 @@ Module.register("MMM-WunderGround",{
 //		this.windDirection = "wi-wind.from-" + data.current_observation.wind_degrees + "-deg" ; // Doesn't work for some reason.
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
 		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
-		Log.error(self.name + ": " + this.forecastText);
+//		Log.error(self.name + ": " + this.forecastText);
 
 		this.forecast = [];
 		for (var i = this.config.fcdaystart, count = data.forecast.simpleforecast.forecastday.length; i < this.config.fcdaycount ; i++) {
@@ -434,14 +441,9 @@ Module.register("MMM-WunderGround",{
 		sunrise.setHours(data.sun_phase.sunrise.hour);
 		sunrise.setMinutes(data.sun_phase.sunrise.minute);
 		
-		//if ( now > sunrise ) { sunrise = new Date(sunrise.getTime() + 24 * 60 * 60 * 1000); }
-
 		var sunset = new Date();
 		sunset.setHours(data.sun_phase.sunset.hour);
 		sunset.setMinutes(data.sun_phase.sunset.minute);
-		
-		//if ( now > sunset ) { sunset = new Date(sunset.getTime() + 24 * 60 * 60 * 1000); }
-
 		
 		
 		// The moment().format('h') method has a bug on the Raspberry Pi.
