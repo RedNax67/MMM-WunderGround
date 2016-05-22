@@ -268,8 +268,14 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(popCell);
 
 			var mmCell = document.createElement("td");
-			mmCell.innerHTML = forecast.mm + "mm";
-			mmCell.className = "align-right mm";
+			if  ( this.units == 'metric' ) {
+				mmCell.innerHTML = forecast.mm + "mm";
+				mmCell.className = "align-right mm";
+			} else {
+				mmCell.innerHTML = forecast.mm + "in";
+				mmCell.className = "align-right in";
+				
+			}
 			row.appendChild(mmCell);
 
 			if ( f > this.config.hourlycount ) { break; }
@@ -313,8 +319,14 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(popCell);
 
 			var mmCell = document.createElement("td");
-			mmCell.innerHTML = forecast.mm + "mm";
-			mmCell.className = "align-right mm";
+			if  ( this.units == 'metric' ) {
+				mmCell.innerHTML = forecast.mm + "mm";
+				mmCell.className = "align-right mm";
+			} else {
+				mmCell.innerHTML = forecast.mm + "in";
+				mmCell.className = "align-right in";
+				
+			}
 			row.appendChild(mmCell);
 
 			if (this.config.fade && this.config.fadePoint < 1) {
@@ -357,7 +369,7 @@ Module.register("MMM-WunderGround",{
 					Log.error(self.name + ": Incorrect APPID.");
 					retry = false;
 				} else {
-					Log.error(self.name + ": Could not load weather.");
+					Log.error(self.name + ":* Could not load weather.");
 				}
 
 				if (retry) {
@@ -394,26 +406,43 @@ Module.register("MMM-WunderGround",{
 	processWeather: function(data) {
 		
 	
-		this.temperature = data.current_observation.temp_c;
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
-		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
-//		this.windDirection = "wi-wind.from-" + data.current_observation.wind_degrees + "-deg" ; // Doesn't work for some reason.
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
-		this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
-//		Log.error(self.name + ": " + this.forecastText);
+		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
+
+		if  ( this.units == 'metric' ) {
+			this.temperature = data.current_observation.temp_c;
+			this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
+		} else {
+			this.temperature = data.current_observation.temp_f;
+			this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
+		}
 
 		this.forecast = [];
 		for (var i = this.config.fcdaystart, count = data.forecast.simpleforecast.forecastday.length; i < this.config.fcdaycount ; i++) {
+			
+			
 
 			var forecast = data.forecast.simpleforecast.forecastday[i];
+			
+			if  ( this.units == 'metric' ) {
+					this.tmaxTemp = forecast.high.celsius,
+					this.tminTemp = forecast.low.celsius,
+					this.tmm = forecast.qpf_allday.mm
+			} else {
+					this.tmaxTemp = forecast.high.fahrenheit,
+					this.tminTemp = forecast.low.fahrenheit,
+					this.tmm = forecast.qpf_allday.in
+			}
+
 			this.forecast.push({
 
 				day:     forecast.date.weekday_short,
-				maxTemp: forecast.high.celsius,
-				minTemp: forecast.low.celsius,
+				maxTemp: this.tmaxTemp,
+				minTemp: this.tminTemp,
 				icon:    this.config.iconTable[forecast.icon],
 				pop:	 forecast.pop,
-				mm:		 forecast.qpf_allday.mm
+				mm:		 this.tmm
 			});
 		}
 
@@ -421,14 +450,25 @@ Module.register("MMM-WunderGround",{
 		for (var i = 0, count = data.hourly_forecast.length; i < count; i++) {
 
 			var hourlyforecast = data.hourly_forecast[i];
+			
+			if  ( this.units == 'metric' ) {
+					this.tmaxTemp = hourlyforecast.temp.metric,
+					this.tminTemp = hourlyforecast.feelslike.metric,
+					this.tmm = hourlyforecast.qpf.metric
+			} else {
+					this.tmaxTemp = hourlyforecast.temp.english,
+					this.tminTemp = hourlyforecast.feelslike.english,
+					this.tmm = hourlyforecast.qpf.english
+			}
+
 			this.hourlyforecast.push({
 
 				hour:    hourlyforecast.FCTTIME.hour,
-				maxTemp: hourlyforecast.temp.metric,
-				minTemp: hourlyforecast.feelslike.metric,
+				maxTemp: this.tmaxTemp,
+				minTemp: this.tminTemp,
 				icon:    this.config.iconTable[hourlyforecast.icon],
 				pop:	 hourlyforecast.pop,
-				mm:		 hourlyforecast.qpf.metric
+				mm:		 this.tmm
 			});
 		}
 		
