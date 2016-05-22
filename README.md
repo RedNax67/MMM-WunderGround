@@ -1,7 +1,9 @@
 # Module: Weather Underground Forecast
-This is a module for MagicMirror, modified of the default `weatherforecast` module. 
+This is a module for MagicMirror, modified version of the default `weatherforecast` module. 
 
 This is similar to the default `weatherforecast` module, however it has additional functionality (such as displaying the probability of precipitation for each day). It also retrieves its data from Weather Underground instead of OpenWeatherMap.
+
+The Weather Icons used in this module are created and maintained by Erik Flowers. v1.0 artwork by Lukas Bischoff. v1.1 - 2.0 artwork by Erik Flowers www.weathericons.io
 
 ## Using the module
 
