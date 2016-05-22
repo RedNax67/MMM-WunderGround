@@ -14,6 +14,7 @@ Module.register("MMM-WunderGround",{
 		apikey: "",
 		pws: "",		
 		units: config.units,
+		//units: 'imperial',
 		updateInterval: 10 * 60 * 1000, // every 10 minutes
 		animationSpeed: 1000,
 		timeFormat: config.timeFormat,
@@ -241,7 +242,7 @@ Module.register("MMM-WunderGround",{
 
 			var hourCell = document.createElement("td");
 			hourCell.className = "hour";
-			hourCell.innerHTML = forecast.hour + ":00";
+			hourCell.innerHTML = forecast.hour;
 			row.appendChild(hourCell);
 
             var iconCell = document.createElement("td");
@@ -273,7 +274,7 @@ Module.register("MMM-WunderGround",{
 				mmCell.className = "align-right mm";
 			} else {
 				mmCell.innerHTML = forecast.mm + "in";
-				mmCell.className = "align-right in";
+				mmCell.className = "align-right mm";
 				
 			}
 			row.appendChild(mmCell);
@@ -324,7 +325,7 @@ Module.register("MMM-WunderGround",{
 				mmCell.className = "align-right mm";
 			} else {
 				mmCell.innerHTML = forecast.mm + "in";
-				mmCell.className = "align-right in";
+				mmCell.className = "align-right mm";
 				
 			}
 			row.appendChild(mmCell);
@@ -454,16 +455,18 @@ Module.register("MMM-WunderGround",{
 			if  ( this.config.units == 'metric' ) {
 					this.tmaxTemp = hourlyforecast.temp.metric,
 					this.tminTemp = hourlyforecast.feelslike.metric,
-					this.tmm = hourlyforecast.qpf.metric
+					this.tmm = hourlyforecast.qpf.metric,
+					this.thour = hourlyforecast.FCTTIME.hour + ":00"
 			} else {
 					this.tmaxTemp = hourlyforecast.temp.english,
 					this.tminTemp = hourlyforecast.feelslike.english,
 					this.tmm = hourlyforecast.qpf.english
+					this.thour = hourlyforecast.FCTTIME.civil
 			}
 
 			this.hourlyforecast.push({
 
-				hour:    hourlyforecast.FCTTIME.hour,
+				hour:    this.thour,
 				maxTemp: this.tmaxTemp,
 				minTemp: this.tminTemp,
 				icon:    this.config.iconTable[hourlyforecast.icon],
