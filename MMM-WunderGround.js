@@ -268,7 +268,7 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(popCell);
 
 			var mmCell = document.createElement("td");
-			if  ( this.units == 'metric' ) {
+			if  ( this.config.units == 'metric' ) {
 				mmCell.innerHTML = forecast.mm + "mm";
 				mmCell.className = "align-right mm";
 			} else {
@@ -319,7 +319,7 @@ Module.register("MMM-WunderGround",{
 			row.appendChild(popCell);
 
 			var mmCell = document.createElement("td");
-			if  ( this.units == 'metric' ) {
+			if  ( this.config.units == 'metric' ) {
 				mmCell.innerHTML = forecast.mm + "mm";
 				mmCell.className = "align-right mm";
 			} else {
@@ -387,7 +387,7 @@ Module.register("MMM-WunderGround",{
 	 */
 	getParams: function() {
         var params  = this.config.apikey;
-		params += "/conditions/hourly/forecast10day/astronomy/lang:" + this.config.lang;
+		params += "/conditions/hourly/forecast10day/astronomy/lang:" + this.config.lang.toUpperCase(); 
 		params += "/q/" + this.config.pws;
 		params += ".json";
 		
@@ -410,7 +410,7 @@ Module.register("MMM-WunderGround",{
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
 
-		if  ( this.units == 'metric' ) {
+		if  ( this.config.units == 'metric' ) {
 			this.temperature = data.current_observation.temp_c;
 			this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext_metric,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
 		} else {
@@ -425,7 +425,7 @@ Module.register("MMM-WunderGround",{
 
 			var forecast = data.forecast.simpleforecast.forecastday[i];
 			
-			if  ( this.units == 'metric' ) {
+			if  ( this.config.units == 'metric' ) {
 					this.tmaxTemp = forecast.high.celsius,
 					this.tminTemp = forecast.low.celsius,
 					this.tmm = forecast.qpf_allday.mm
@@ -451,7 +451,7 @@ Module.register("MMM-WunderGround",{
 
 			var hourlyforecast = data.hourly_forecast[i];
 			
-			if  ( this.units == 'metric' ) {
+			if  ( this.config.units == 'metric' ) {
 					this.tmaxTemp = hourlyforecast.temp.metric,
 					this.tminTemp = hourlyforecast.feelslike.metric,
 					this.tmm = hourlyforecast.qpf.metric
