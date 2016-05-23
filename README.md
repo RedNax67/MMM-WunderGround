@@ -24,7 +24,9 @@ modules: [
 		        fcdaystart: "0",
 		        hourly: '1',
 		        hourlyinterval: "3",
-                	hourlycount: "2"
+                	hourlycount: "2",
+                	alerttime: 10000 
+                	
 		}
 	}
 ]
