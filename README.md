@@ -25,7 +25,8 @@ modules: [
 		        hourly: '1',
 		        hourlyinterval: "3",
                 	hourlycount: "2",
-                	alerttime: 10000 
+                	alerttime: 10000,
+                	alerttruncatestring: "english:" // truncate the alertstring ath this word
                 	
 		}
 	}
