@@ -49,3 +49,15 @@
 .MMM-WunderGround .mm {
   font-size: 75%;
 } 
+
+.MMM-WunderGround .green {
+  color: #83FFB3;
+}
+
+.MMM-WunderGround .yellow {
+  color: yellow;
+}
+
+.MMM-WunderGround .red {
+  color: #FF4C4C;
+}
