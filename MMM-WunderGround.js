@@ -235,7 +235,7 @@ Module.register("MMM-WunderGround",{
 		table.appendChild(row);
 
 		for (var f in this.forecast) {
-			var forecast = this.hourlyforecast[f * 3];
+			var forecast = this.hourlyforecast[f * this.config.hourlyinterval];
 
 			var row = document.createElement("tr");
 			table.appendChild(row);
