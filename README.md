@@ -169,6 +169,20 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>alerttime</code></td>
+			<td>The amount of time the alert is duisplayed. (Milliseconds)<br>
+				<br><b>Possible values:</b> <code>1000</code> - <code>60000</code>
+				<br><b>Default value:</b>  <code>10000</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>alerttruncatestring</code></td>
+			<td>Truncates the aletr text at the defined word (Milliseconds)<br>
+				<br><b>Possible values:</b> <code>any string</code>
+				<br><b>Default value:</b>  <code></code>
+			</td>
+		</tr>
+		<tr>
 
 	</tbody>
 </table>
