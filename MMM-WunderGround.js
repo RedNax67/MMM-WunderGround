@@ -26,10 +26,11 @@ Module.register("MMM-WunderGround",{
 		//lang: 'NL', 
 		fcdaycount: "5",
 		fcdaystart: "0",
-		hourly: '1',
+		hourly: '0',
 		hourlyinterval: "3",
 		hourlycount: "2",
 		fctext: '1',
+		alerttime: 5000,
 		
 
 
@@ -234,54 +235,56 @@ Module.register("MMM-WunderGround",{
 		
 		table.appendChild(row);
 
-		for (var f in this.forecast) {
-			var forecast = this.hourlyforecast[f * this.config.hourlyinterval];
-
-			var row = document.createElement("tr");
-			table.appendChild(row);
-
-			var hourCell = document.createElement("td");
-			hourCell.className = "hour";
-			hourCell.innerHTML = forecast.hour;
-			row.appendChild(hourCell);
-
-            var iconCell = document.createElement("td");
-            iconCell.className = "align-center bright weather-icon";
-            row.appendChild(iconCell);
-
-            var icon = document.createElement("span");
-            icon.className = "wi " + forecast.icon;
-            iconCell.appendChild(icon);
-
-			var maxTempCell = document.createElement("td");
-			maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
-			maxTempCell.className = "align-right max-temp";
-			row.appendChild(maxTempCell);
-
-			var minTempCell = document.createElement("td");
-			minTempCell.innerHTML = forecast.minTemp + "&deg;";
-			minTempCell.className = "align-right min-temp";
-			row.appendChild(minTempCell);
-
-			var popCell = document.createElement("td");
-			popCell.innerHTML = forecast.pop + "%";
-			popCell.className = "align-right pop";
-			row.appendChild(popCell);
-
-			var mmCell = document.createElement("td");
-			if  ( this.config.units == 'metric' ) {
-				mmCell.innerHTML = forecast.mm + "mm";
-				mmCell.className = "align-right mm";
-			} else {
-				mmCell.innerHTML = forecast.mm + "in";
-				mmCell.className = "align-right mm";
-				
-			}
-			row.appendChild(mmCell);
-
-			if ( f > this.config.hourlycount ) { break; }
+		if (this.config.hourly == 1 ) {
+			for (var f in this.forecast) {
+				var forecast = this.hourlyforecast[f * this.config.hourlyinterval];
+	
+				var row = document.createElement("tr");
+				table.appendChild(row);
+	
+				var hourCell = document.createElement("td");
+				hourCell.className = "hour";
+				hourCell.innerHTML = forecast.hour;
+				row.appendChild(hourCell);
+	
+				var iconCell = document.createElement("td");
+				iconCell.className = "align-center bright weather-icon";
+				row.appendChild(iconCell);
+	
+				var icon = document.createElement("span");
+				icon.className = "wi " + forecast.icon;
+				iconCell.appendChild(icon);
+	
+				var maxTempCell = document.createElement("td");
+				maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
+				maxTempCell.className = "align-right max-temp";
+				row.appendChild(maxTempCell);
+	
+				var minTempCell = document.createElement("td");
+				minTempCell.innerHTML = forecast.minTemp + "&deg;";
+				minTempCell.className = "align-right min-temp";
+				row.appendChild(minTempCell);
+	
+				var popCell = document.createElement("td");
+				popCell.innerHTML = forecast.pop + "%";
+				popCell.className = "align-right pop";
+				row.appendChild(popCell);
+	
+				var mmCell = document.createElement("td");
+				if  ( this.config.units == 'metric' ) {
+					mmCell.innerHTML = forecast.mm + "mm";
+					mmCell.className = "align-right mm";
+				} else {
+					mmCell.innerHTML = forecast.mm + "in";
+					mmCell.className = "align-right mm";
+					
+				}
+				row.appendChild(mmCell);
+	
+				if ( f > this.config.hourlycount ) { break; }
 			
            
+			}
 		}
 		
 
@@ -388,7 +391,7 @@ Module.register("MMM-WunderGround",{
 	 */
 	getParams: function() {
         var params  = this.config.apikey;
-		params += "/conditions/hourly/forecast10day/astronomy/lang:" + this.config.lang.toUpperCase(); 
+		params += "/conditions/hourly/forecast10day/astronomy/alerts/lang:" + this.config.lang.toUpperCase(); 
 		params += "/q/" + this.config.pws;
 		params += ".json";
 		
@@ -405,6 +408,13 @@ Module.register("MMM-WunderGround",{
 	 */
 	 
 	processWeather: function(data) {
+	
+		
+		for (var i = 0, count = data.alerts.length; i < count; i++) {
+				this.sendNotification("SHOW_ALERT", {type: "alert", message: data.alerts[i].description, title: this.translate(data.alerts[i].type), timer: this.config.alerttime });
+		}
+			
+		
 		
 	
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
@@ -445,8 +455,11 @@ Module.register("MMM-WunderGround",{
 				pop:	 forecast.pop,
 				mm:		 this.tmm
 			});
+			
+			
 		}
 
+		if (this.config.hourly == 1 ) {
 		this.hourlyforecast = [];
 		for (var i = 0, count = data.hourly_forecast.length; i < count; i++) {
 
@@ -474,7 +487,7 @@ Module.register("MMM-WunderGround",{
 				mm:		 this.tmm
 			});
 		}
-		
+		}
 		
 		
 		

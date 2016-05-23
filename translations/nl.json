@@ -1,5 +1,26 @@
 {
 	/* GENERAL */
-	"APIKEY": "Zet een <i>apikey</i> in de config voor module: "
+	"APIKEY": "Zet een <i>apikey</i> in de config voor module: ",
+	
+	"HUR": 	"Orkaan waarschwing",
+	"TOR": 	"Tornado waarschuwing",
+	"TOW": 	"Tornado mogelijk",
+	"WRN": 	"Zware onweersbuien",
+	"SEW": 	"Zware onweersbuien mogelijk",
+	"WIN": 	"Mogelijke gladheid",
+	"FLO": 	"Wateroverlast",
+	"WAT": 	"Wateroverlast mogelijk",
+	"WND": 	"Harde wind",
+	"SVR": 	"Zwaar weer",
+	"HEA": 	"Extreme hitte",
+	"FOG": 	"Dichte mist",
+	"SPE": 	"Uitzonderlijk weer",
+	"FIR": 	"Natuurbranden",
+	"VOL": 	"Vulkanische activiteit",
+	"HWW": 	"Zeer harde wind",
+	"REC": 	"Nieuw record behaald",
+	"REP": 	"Rapport",
+	"PUB": 	"Informatie"
+
 	
 }
