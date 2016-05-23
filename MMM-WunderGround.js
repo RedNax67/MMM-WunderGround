@@ -412,8 +412,15 @@ Module.register("MMM-WunderGround",{
 		
 		this.alerttext = ""
 		for (var i = 0, count = data.alerts.length; i < count; i++) {
-				this.sendNotification("SHOW_ALERT", {type: "alert", message: data.alerts[i].description, title: this.translate(data.alerts[i].type), timer: this.config.alerttime });
+			
+				var talert = data.alerts[i].description;
+			    if ( this.config.alerttruncatestring != "" ) { 
+					var ialert = talert.indexOf(this.config.alerttruncatestring);
+					talert = talert.substring(1,ialert);
+				}
+				this.sendNotification("SHOW_ALERT", {type: "alert", message: talert, title: this.translate(data.alerts[i].type), timer: this.config.alerttime });
 				this.alerttext = this.alerttext + "<B style=\"color:" + data.alerts[i].level_meteoalarm_name + "\">" + this.translate(data.alerts[i].type) + "</B>";
+				
 		}
 			
 		
