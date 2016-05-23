@@ -410,8 +410,10 @@ Module.register("MMM-WunderGround",{
 	processWeather: function(data) {
 	
 		
+		this.alerttext = ""
 		for (var i = 0, count = data.alerts.length; i < count; i++) {
 				this.sendNotification("SHOW_ALERT", {type: "alert", message: data.alerts[i].description, title: this.translate(data.alerts[i].type), timer: this.config.alerttime });
+				this.alerttext = this.alerttext + this.translate(data.alerts[i].type);
 		}
 			
 		
@@ -428,6 +430,9 @@ Module.register("MMM-WunderGround",{
 			this.temperature = data.current_observation.temp_f;
 			this.forecastText = this.wordwrap(data.forecast.txt_forecast.forecastday[0].fcttext,30,'<BR>'); //  Wordwrap the text so it doesn't mess up the display 
 		}
+		
+		this.forecastText = "<B>" + this.alerttext + "</B><BR>" + this.forecastText;
+		
 
 		this.forecast = [];
 		for (var i = this.config.fcdaystart, count = data.forecast.simpleforecast.forecastday.length; i < this.config.fcdaycount ; i++) {
