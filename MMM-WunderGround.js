@@ -420,16 +420,18 @@ Module.register("MMM-WunderGround",{
 					var ialert = talert.indexOf(this.config.alerttruncatestring);
 					talert = talert.substring(1,ialert);
 				}
-				this.alertmsg = this.alertmsg + talert + "<BR>";
-			
-				this.alerttext = this.alerttext + "<B style=\"color:" + data.alerts[i].level_meteoalarm_name + "\">" + this.translate(data.alerts[i].type) + "</B> ";
-				
+				this.alertmsg = this.alertmsg + talert;
+	
+				this.alerttext = this.alerttext + "<B style=\"color:" + data.alerts[i].level_meteoalarm_name + "\">" + this.translate(data.alerts[i].type) + "</B>";
+				if ( i < (count - 1) ) {
+						this.alerttext = this.alerttext + "<BR>";
+				} 
 			
 		}
 		
 		if ( this.alertmsg != "" ) {
 			this.sendNotification("SHOW_ALERT", {type: "alert", message: this.alertmsg, title: this.alerttext, timer: this.config.alerttime });
-			this.alerttext = this.wordwrap(this.alerttext,30,'<BR>');
+			//this.alerttext = this.wordwrap(this.alerttext,30+28,'<BR>');
 		}
 			
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
