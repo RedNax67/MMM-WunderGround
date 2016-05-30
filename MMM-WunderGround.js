@@ -420,9 +420,9 @@ Module.register("MMM-WunderGround",{
 					var ialert = talert.indexOf(this.config.alerttruncatestring);
 					talert = talert.substring(1,ialert);
 				}
-				this.alertmsg = this.alertmsg + talert + " ";
+				this.alertmsg = this.alertmsg + talert + "<BR>";
 			
-				this.alerttext = this.alerttext + "<B style=\"color:" + data.alerts[i].level_meteoalarm_name + "\">" + this.translate(data.alerts[i].type) + "</B>";
+				this.alerttext = this.alerttext + "<B style=\"color:" + data.alerts[i].level_meteoalarm_name + "\">" + this.translate(data.alerts[i].type) + "</B> ";
 				
 			
 		}
