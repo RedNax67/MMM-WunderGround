@@ -1,0 +1,24 @@
+{
+  /* GENERAL */
+  "APIKEY": "Please set the correct openweather <i>appid</i> in the config for module: ",
+  
+  "HUR":  "Orkanwarnung",
+  "TOR":  "Tornadowarnung",
+  "TOW":  "Tornado möglich",
+  "WRN":  "Schwere Gewitterwarnung",
+  "SEW":  "Schwere Gewitter möglich",
+  "WIN":  "Mögliche Glätte",
+  "FLO":  "Hochwasserwarnung",
+  "WAT":  "Hochwasser möglich",
+  "WND":  "Starker Wind",
+  "SVR":  "Unwetter",
+  "HEA":  "Extreme Hitze",
+  "FOG":  "Dichter Nebel",
+  "SPE":  "Außergewöhnliches Wetter",
+  "FIR":  "Waldbrandgefahr",
+  "VOL":  "Vulkanische Aktivität",
+  "HWW":  "Sehr starker Wind",
+  "REC":  "Rekord erreicht",
+  "REP":  "Berichte",
+  "PUB":  "Informationen"
+}
