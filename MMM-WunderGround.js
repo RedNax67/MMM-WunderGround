@@ -67,7 +67,8 @@ Module.register("MMM-WunderGround",{
 		return {
             en: "translations/en.json",
             nl: "translations/nl.json",
-			de: "translations/de.json"
+			de: "translations/de.json",
+			dl: "translations/de.json"			
 		}
 	},
 	
@@ -394,7 +395,7 @@ Module.register("MMM-WunderGround",{
         var params  = this.config.apikey;
 		var wulang = this.config.lang.toUpperCase();
 		if ( wulang == "DE" ) {
-			wulang = "DL"
+			wulang = "DL";
 		}
 		params += "/conditions/hourly/forecast10day/astronomy/alerts/lang:" + wulang; 
 		params += "/q/" + this.config.pws;
