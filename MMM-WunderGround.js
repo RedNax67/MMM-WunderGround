@@ -410,7 +410,9 @@ Module.register("MMM-WunderGround",{
 	processWeather: function(data) {
 	
 		
-		this.alerttext = ""
+		this.alerttext = "";
+		this.alertmsg = "";
+		
 		for (var i = 0, count = data.alerts.length; i < count; i++) {
 			
 				var talert = data.alerts[i].description;
@@ -418,14 +420,18 @@ Module.register("MMM-WunderGround",{
 					var ialert = talert.indexOf(this.config.alerttruncatestring);
 					talert = talert.substring(1,ialert);
 				}
-				this.sendNotification("SHOW_ALERT", {type: "alert", message: talert, title: this.translate(data.alerts[i].type), timer: this.config.alerttime });
+				this.alertmsg = this.alertmsg + talert + " ";
+			
 				this.alerttext = this.alerttext + "<B style=\"color:" + data.alerts[i].level_meteoalarm_name + "\">" + this.translate(data.alerts[i].type) + "</B>";
 				
+			
+		}
+		
+		if ( this.alertmsg != "" ) {
+			this.sendNotification("SHOW_ALERT", {type: "alert", message: this.alertmsg, title: this.alerttext, timer: this.config.alerttime });
+			this.alerttext = this.wordwrap(this.alerttext,30,'<BR>');
 		}
 			
-		
-		
-	
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
