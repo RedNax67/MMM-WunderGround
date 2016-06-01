@@ -424,7 +424,9 @@ Module.register("MMM-WunderGround",{
 				var talert = data.alerts[i].description;
 			    if ( this.config.alerttruncatestring != "" ) { 
 					var ialert = talert.indexOf(this.config.alerttruncatestring);
-					talert = talert.substring(1,ialert);
+					if ( ialert > 0 ) {
+						talert = talert.substring(1,ialert);
+					}
 				}
 				this.alertmsg = this.alertmsg + talert;
 	
