@@ -1,9 +1,9 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: WeatherForecast
+ * Module: WunderGround
  *
- * By Michael Teeuw http://michaelteeuw.nl
+ * By RedNax
  * MIT Licensed.
  */
 
@@ -37,7 +37,6 @@ Module.register("MMM-WunderGround",{
 		initialLoadDelay: 2500, // 2.5 seconds delay. This delay is used to keep the OpenWeather API happy.
 		retryDelay: 2500,
 
-		apiVersion: "2.5",
 		apiBase: "http://api.wunderground.com/api/",
 
 		iconTable: {                        
@@ -195,7 +194,6 @@ Module.register("MMM-WunderGround",{
 		
 		var maxtempHeader = document.createElement("th");
 		maxtempHeader.className = "align-center bright tableheader"
-//		maxtempHeader.innerHTML = "max"
 		row.appendChild(maxtempHeader);
 
         var maxtempicon = document.createElement("span");
@@ -205,7 +203,6 @@ Module.register("MMM-WunderGround",{
 	
 		var mintempHeader = document.createElement("th");
 		mintempHeader.className = "align-center bright tableheader"
-//		mintempHeader.innerHTML = "min"
 		row.appendChild(mintempHeader);
 
         var mintempicon = document.createElement("span");
@@ -222,18 +219,6 @@ Module.register("MMM-WunderGround",{
         popicon.className = "wi wi-umbrella";
 		popicon.setAttribute("colSpan", "10");
         popiconHeader.appendChild(popicon);
-		
-		
-/*		var maxtempHeader = document.createElement("th");
-		maxtempHeader.className = "align-center tableheader"
-		maxtempHeader.innerHTML = "%"
-		row.appendChild(maxtempHeader);
-
-		var aopHeader = document.createElement("th");
-		aopHeader.className = "align-center tableheader"
-		aopHeader.innerHTML = "mm"
-		row.appendChild(aopHeader);
-*/
 		
 		table.appendChild(row);
 
@@ -439,7 +424,6 @@ Module.register("MMM-WunderGround",{
 		
 		if ( this.alertmsg != "" ) {
 			this.sendNotification("SHOW_ALERT", {type: "alert", message: this.alertmsg, title: this.alerttext, timer: this.config.alerttime });
-			//this.alerttext = this.wordwrap(this.alerttext,30+28,'<BR>');
 		}
 			
 		this.weatherType = this.config.iconTable[data.current_observation.icon];
@@ -538,17 +522,13 @@ Module.register("MMM-WunderGround",{
 		var timeString = moment(sunriseSunsetDateObject).format('HH:mm');
 
 		if (this.config.timeFormat !== 24) {
-			//var hours = sunriseSunsetDateObject.getHours() % 12 || 12;
 			if (this.config.showPeriod) {
 				if (this.config.showPeriodUpper) {
-					//timeString = hours + moment(sunriseSunsetDateObject).format(':mm A');
 					timeString = moment(sunriseSunsetDateObject).format('h:mm A');
 				} else {
-					//timeString = hours + moment(sunriseSunsetDateObject).format(':mm a');
 					timeString = moment(sunriseSunsetDateObject).format('h:mm a');
 				}
 			} else {
-				//timeString = hours + moment(sunriseSunsetDateObject).format(':mm');
 				timeString = moment(sunriseSunsetDateObject).format('h:mm');
 			}
 		}
