@@ -407,6 +407,10 @@ Module.register("MMM-WunderGround",{
 		for (var i = 0, count = data.alerts.length; i < count; i++) {
 			
 				var talert = data.alerts[i].description;
+				var malert = data.alerts[i].message;
+				if ( talert.length < malert.length ) {
+					talert =  malert;
+				}
 			    if ( this.config.alerttruncatestring != "" ) { 
 					var ialert = talert.indexOf(this.config.alerttruncatestring);
 					if ( ialert > 0 ) {
