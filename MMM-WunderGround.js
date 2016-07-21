@@ -39,7 +39,7 @@ Module.register("MMM-WunderGround",{
 
 		apiBase: "http://api.wunderground.com/api/",
 
-		iconTable: {                        
+		iconTableDay: {                        
             "chanceflurries": "wi-day-snow-wind",
             "chancerain": "wi-day-showers",
             "chancesleet": "wi-day-sleet",
@@ -54,6 +54,27 @@ Module.register("MMM-WunderGround",{
             "mostlysunny": "wi-day-sunny-overcast",
             "partlycloudy": "wi-day-cloudy",
             "partlysunny": "wi-day-cloudy-high",
+            "rain": "wi-rain",
+            "sleet": "wi-sleet",
+            "snow": "wi-snow",
+            "tstorms": "wi-thunderstorm"
+		},
+		
+		iconTableNight: {                        
+            "chanceflurries": "wi-night-snow-wind",
+            "chancerain": "wi-night-showers",
+            "chancesleet": "wi-night-sleet",
+            "chancesnow": "wi-night-snow",
+            "chancetstorms": "wi-night-storm-showers",
+            "clear": "wi-night-clear",
+            "cloudy": "wi-cloud",
+            "flurries": "wi-snow-wind",
+            "fog": "wi-fog",
+            "haze": "wi-night-haze",
+            "mostlycloudy": "wi-cloudy",
+            "mostlysunny": "wi-night-sunny-overcast",
+            "partlycloudy": "wi-night-cloudy",
+            "partlysunny": "wi-night-cloudy-high",
             "rain": "wi-rain",
             "sleet": "wi-sleet",
             "snow": "wi-snow",
@@ -399,10 +420,46 @@ Module.register("MMM-WunderGround",{
 	 */
 	 
 	processWeather: function(data) {
-	
 		
+		
+		var iconTable = this.config.iconTableDay;
 		this.alerttext = "";
 		this.alertmsg = "";
+		
+		var now = new Date();
+        		
+		var sunrise = new Date();
+		sunrise.setHours(data.sun_phase.sunrise.hour);
+		sunrise.setMinutes(data.sun_phase.sunrise.minute);
+		
+		var sunset = new Date();
+		sunset.setHours(data.sun_phase.sunset.hour);
+		sunset.setMinutes(data.sun_phase.sunset.minute);
+		
+		
+		// The moment().format('h') method has a bug on the Raspberry Pi.
+		// So we need to generate the timestring manually.
+		// See issue: https://github.com/MichMich/MagicMirror/issues/181
+
+		var sunriseSunsetDateObject = (sunrise < now && sunset > now) ? sunset : sunrise;
+		var timeString = moment(sunriseSunsetDateObject).format('HH:mm');
+
+		if (this.config.timeFormat !== 24) {
+			if (this.config.showPeriod) {
+				if (this.config.showPeriodUpper) {
+					timeString = moment(sunriseSunsetDateObject).format('h:mm A');
+				} else {
+					timeString = moment(sunriseSunsetDateObject).format('h:mm a');
+				}
+			} else {
+				timeString = moment(sunriseSunsetDateObject).format('h:mm');
+			}
+		}
+
+		this.sunriseSunsetTime = timeString;
+		this.sunriseSunsetIcon = (sunrise < now && sunset > now) ? "wi-sunset" : "wi-sunrise";
+		this.iconTable = (sunrise < now && sunset > now) ? this.config.iconTableDay : this.config.iconTableNight;
+
 		
 		for (var i = 0, count = data.alerts.length; i < count; i++) {
 			
@@ -430,7 +487,7 @@ Module.register("MMM-WunderGround",{
 			this.sendNotification("SHOW_ALERT", {type: "alert", message: this.alertmsg, title: this.alerttext, timer: this.config.alerttime });
 		}
 			
-		this.weatherType = this.config.iconTable[data.current_observation.icon];
+		this.weatherType = this.iconTable[data.current_observation.icon];
 		this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
 		this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
 
@@ -467,7 +524,7 @@ Module.register("MMM-WunderGround",{
 				day:     forecast.date.weekday_short,
 				maxTemp: this.tmaxTemp,
 				minTemp: this.tminTemp,
-				icon:    this.config.iconTable[forecast.icon],
+				icon:    this.iconTable[forecast.icon],
 				pop:	 forecast.pop,
 				mm:		 this.tmm
 			});
@@ -498,7 +555,7 @@ Module.register("MMM-WunderGround",{
 				hour:    this.thour,
 				maxTemp: this.tmaxTemp,
 				minTemp: this.tminTemp,
-				icon:    this.config.iconTable[hourlyforecast.icon],
+				icon:    this.iconTable[hourlyforecast.icon],
 				pop:	 hourlyforecast.pop,
 				mm:		 this.tmm
 			});
@@ -507,39 +564,6 @@ Module.register("MMM-WunderGround",{
 		
 		
 		
-		var now = new Date();
-        		
-		var sunrise = new Date();
-		sunrise.setHours(data.sun_phase.sunrise.hour);
-		sunrise.setMinutes(data.sun_phase.sunrise.minute);
-		
-		var sunset = new Date();
-		sunset.setHours(data.sun_phase.sunset.hour);
-		sunset.setMinutes(data.sun_phase.sunset.minute);
-		
-		
-		// The moment().format('h') method has a bug on the Raspberry Pi.
-		// So we need to generate the timestring manually.
-		// See issue: https://github.com/MichMich/MagicMirror/issues/181
-
-		var sunriseSunsetDateObject = (sunrise < now && sunset > now) ? sunset : sunrise;
-		var timeString = moment(sunriseSunsetDateObject).format('HH:mm');
-
-		if (this.config.timeFormat !== 24) {
-			if (this.config.showPeriod) {
-				if (this.config.showPeriodUpper) {
-					timeString = moment(sunriseSunsetDateObject).format('h:mm A');
-				} else {
-					timeString = moment(sunriseSunsetDateObject).format('h:mm a');
-				}
-			} else {
-				timeString = moment(sunriseSunsetDateObject).format('h:mm');
-			}
-		}
-
-		this.sunriseSunsetTime = timeString;
-		this.sunriseSunsetIcon = (sunrise < now && sunset > now) ? "wi-sunset" : "wi-sunrise";
-
 		
 		Log.log(this.forecast);
 
