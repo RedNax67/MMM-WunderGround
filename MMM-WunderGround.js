@@ -99,7 +99,7 @@ Module.register("MMM-WunderGround",{
 
 	// Define required scripts.
 	getStyles: function() {
-		return [this.file('weather-icons.css'), this.file('weather-icons-wind.css'), this.file('MMM-WunderGround.css') ];
+		return ['weather-icons.css','weather-icons-wind.css','MMM-WunderGround.css' ];
 	},
 
 	// Define start sequence.
