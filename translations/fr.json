@@ -1,0 +1,24 @@
+{
+  /* GENERAL */
+  "APIKEY": "Veuillez entrer un clé API correct <i>appid</i> dans la configuration du module : ",
+  
+	"HUR": 	"Déclaration locale d'ouragan",
+	"TOR": 	"Avertissement de tornade",
+	"TOW": 	"Surveillance de tornade",
+	"WRN": 	"Avertissement d'orage violent",
+	"SEW": 	"Surveillance d'orage violent",
+	"WIN": 	"Bulletin météorologique hivernal",
+	"FLO": 	"Alerte d'inondation",
+	"WAT": 	"Surveillance d'inondation / Déclaration d'inondation",
+	"WND": 	"Avis de vent fort",
+	"SVR": 	"Bulletin météorologique sévère",
+	"HEA": 	"Avis de canicule",
+	"FOG": 	"Avis de brouillard épais",
+	"SPE": 	"Bulletin météorologique spécial",
+	"FIR": 	"Avis météorologique de temps propice aux incendies",
+	"VOL": 	"Avis d'activité volcanique",
+	"HWW": 	"Avertissement de vent d'orage",
+	"REC": 	"Record atteint",
+	"REP": 	"Rapports publics",
+	"PUB": 	"Avis d'information publique"
+}
