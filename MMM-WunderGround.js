@@ -85,10 +85,11 @@ Module.register("MMM-WunderGround",{
 // Define required translations.
 	getTranslations: function() {
 		return {
-            en: "translations/en.json",
-            nl: "translations/nl.json",
+                        en: "translations/en.json",
+                        nl: "translations/nl.json",
 			de: "translations/de.json",
-			dl: "translations/de.json"			
+			dl: "translations/de.json",
+			fr: "translations/fr.json"
 		}
 	},
 	
