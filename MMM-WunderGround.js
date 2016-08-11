@@ -61,25 +61,25 @@ Module.register("MMM-WunderGround",{
 		},
 		
 		iconTableNight: {                        
-            "chanceflurries": "wi-night-snow-wind",
-            "chancerain": "wi-night-showers",
-            "chancesleet": "wi-night-sleet",
-            "chancesnow": "wi-night-snow",
-            "chancetstorms": "wi-night-storm-showers",
-            "clear": "wi-night-clear",
-            "cloudy": "wi-cloud",
-            "flurries": "wi-snow-wind",
-            "fog": "wi-fog",
-            "haze": "wi-night-haze",
-            "mostlycloudy": "wi-cloudy",
-            "mostlysunny": "wi-night-sunny-overcast",
-            "partlycloudy": "wi-night-cloudy",
-            "partlysunny": "wi-night-cloudy-high",
-            "rain": "wi-rain",
-            "sleet": "wi-sleet",
-            "snow": "wi-snow",
-            "tstorms": "wi-thunderstorm"
-		},
+			"chanceflurries": "wi-night-snow-wind",
+			"chancerain": "wi-night-showers",
+			"chancesleet": "wi-night-sleet",
+			"chancesnow": "wi-night-alt-snow",
+			"chancetstorms": "wi-night-alt-storm-showers",
+			"clear": "wi-night-clear",
+			"cloudy": "wi-night-alt-cloudy",
+			"flurries": "wi-night-alt-snow-wind",
+			"fog": "wi-night-fog",
+			"haze": "wi-night-alt-cloudy-windy",
+			"mostlycloudy": "wi-night-alt-cloudy",
+			"mostlysunny": "wi-night-alt-partly-cloudy",
+			"partlycloudy": "wi-night-alt-partly-cloudy",
+			"partlysunny": "wi-night-alt-partly-cloudy",
+			"rain": "wi-night-alt-rain",
+			"sleet": "wi-night-alt-sleet",
+			"snow": "wi-night-alt-snow",
+			"tstorms": "wi-night-alt-thunderstorm"
+		}
 	},
 
 // Define required translations.
@@ -429,10 +429,12 @@ Module.register("MMM-WunderGround",{
 		var now = new Date();
         		
 		var sunrise = new Date();
+		this.sunrhour = Number(data.sun_phase.sunrise.hour);
 		sunrise.setHours(data.sun_phase.sunrise.hour);
 		sunrise.setMinutes(data.sun_phase.sunrise.minute);
 		
 		var sunset = new Date();
+		this.sunshour = Number(data.sun_phase.sunset.hour);
 		sunset.setHours(data.sun_phase.sunset.hour);
 		sunset.setMinutes(data.sun_phase.sunset.minute);
 		
@@ -518,6 +520,8 @@ Module.register("MMM-WunderGround",{
 					this.tminTemp = forecast.low.fahrenheit,
 					this.tmm = forecast.qpf_allday.in
 			}
+			
+			var fcticon = 
 
 			this.forecast.push({
 
@@ -549,13 +553,17 @@ Module.register("MMM-WunderGround",{
 					this.tmm = hourlyforecast.qpf.english
 					this.thour = hourlyforecast.FCTTIME.civil
 			}
+			this.tthour=Number(hourlyforecast.FCTTIME.hour);
+			this.ForecastIcon = (this.sunrhour < this.tthour && this.sunshour > this.tthour) ? this.config.iconTableDay[hourlyforecast.icon] : this.config.iconTableNight[hourlyforecast.icon];
+			
+
 
 			this.hourlyforecast.push({
 
 				hour:    this.thour,
 				maxTemp: this.tmaxTemp,
 				minTemp: this.tminTemp,
-				icon:    this.iconTable[hourlyforecast.icon],
+				icon:    this.ForecastIcon,
 				pop:	 hourlyforecast.pop,
 				mm:		 this.tmm
 			});
