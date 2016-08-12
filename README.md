@@ -10,26 +10,22 @@ The Weather Icons used in this module are created and maintained by Erik Flowers
 To use this module, add it to the modules array in the `config/config.js` file:
 ````javascript
 modules: [
-	{
-		module: 'MMM-WunderGround',
-		position: 'top_right',	// This can be any of the regions.
-									// Best results in left or right regions.
-		config: {
-			// See 'Configuration options' for more information.
-			apikey: 'xxxxxxxxxxx', // private; don't share!
-			pws: 'locid:NLXX8014;loctype:1',
-			lang: 'NL', 
-			fctext: '1',
-                	fcdaycount: "5",
-		        fcdaystart: "0",
-		        hourly: '1',
-		        hourlyinterval: "3",
-                	hourlycount: "2",
-                	alerttime: 10000,
-                	alerttruncatestring: "english:" // truncate the alertstring ath this word
-                	
-		}
-	}
+{
+    module: 'MMM-WunderGround',
+    position: 'top_right',
+    config: {
+        apikey: 'xxxxxxxxxxxxx', // private; don't share!
+        pws: 'pws:IGELDERL219', //culemborg
+        hourly: '1',
+        fctext: '1',
+        fcdaycount: "5",
+        fcdaystart: "0",
+        hourlyinterval: "3",
+        hourlycount: "2",
+        alerttime: 10000,
+        alerttruncatestring: "english:"
+    }
+};
 ]
 ````
 
