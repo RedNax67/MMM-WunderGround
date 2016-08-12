@@ -85,10 +85,11 @@ Module.register("MMM-WunderGround",{
 // Define required translations.
 	getTranslations: function() {
 		return {
-            en: "translations/en.json",
-            nl: "translations/nl.json",
+                        en: "translations/en.json",
+                        nl: "translations/nl.json",
 			de: "translations/de.json",
-			dl: "translations/de.json"			
+			dl: "translations/de.json",
+			fr: "translations/fr.json"
 		}
 	},
 	
@@ -520,6 +521,8 @@ Module.register("MMM-WunderGround",{
 					this.tminTemp = forecast.low.fahrenheit,
 					this.tmm = forecast.qpf_allday.in
 			}
+			
+			var fcticon = 
 
 			this.forecast.push({
 
@@ -553,6 +556,10 @@ Module.register("MMM-WunderGround",{
 			}
 			this.tthour=Number(hourlyforecast.FCTTIME.hour);
 			this.ForecastIcon = (this.sunrhour < this.tthour && this.sunshour > this.tthour) ? this.config.iconTableDay[hourlyforecast.icon] : this.config.iconTableNight[hourlyforecast.icon];
+<<<<<<< HEAD
+=======
+			
+>>>>>>> origin/master
 
 
 			this.hourlyforecast.push({
