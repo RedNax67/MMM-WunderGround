@@ -100,7 +100,7 @@ Module.register("MMM-WunderGround",{
 
 	// Define required scripts.
 	getStyles: function() {
-		return [this.file('weather-icons.css'), this.file('weather-icons-wind.css'), this.file('MMM-WunderGround.css') ];
+		return ['weather-icons.css','weather-icons-wind.css','MMM-WunderGround.css' ];
 	},
 
 	// Define start sequence.
@@ -556,7 +556,10 @@ Module.register("MMM-WunderGround",{
 			}
 			this.tthour=Number(hourlyforecast.FCTTIME.hour);
 			this.ForecastIcon = (this.sunrhour < this.tthour && this.sunshour > this.tthour) ? this.config.iconTableDay[hourlyforecast.icon] : this.config.iconTableNight[hourlyforecast.icon];
+<<<<<<< HEAD
+=======
 			
+>>>>>>> origin/master
 
 
 			this.hourlyforecast.push({
