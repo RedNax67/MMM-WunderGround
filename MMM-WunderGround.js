@@ -111,6 +111,8 @@ Module.register("MMM-WunderGround", {
         this.forecast = [];
         this.hourlyforecast = [];
         this.loaded = false;
+        this.error = false;
+        this.errorDescription = "";
         this.scheduleUpdate(this.config.initialLoadDelay);
 
         this.updateTimer = null;
@@ -146,7 +148,12 @@ Module.register("MMM-WunderGround", {
             return wrapper;
         }
 
-
+        if (this.error) {
+            wrapper.innerHTML = "Error: " + this.errorDescription;
+            wrapper.className = "dimmed light small";
+            return wrapper;
+        }
+        
         if (!this.loaded) {
             wrapper.innerHTML = this.translate("LOADING");
             wrapper.className = "dimmed light small";
@@ -443,186 +450,193 @@ Module.register("MMM-WunderGround", {
 
     processWeather: function(data) {
 
-        var forecast;
-        var i;
-        var count;
-        var iconTable = this.config.iconTableDay;
-        this.alerttext = "";
-        this.alertmsg = "";
-
-        var now = new Date();
-
-        var sunrise = new Date();
-        this.sunrhour = Number(data.sun_phase.sunrise.hour);
-        sunrise.setHours(data.sun_phase.sunrise.hour);
-        sunrise.setMinutes(data.sun_phase.sunrise.minute);
-
-        var sunset = new Date();
-        this.sunshour = Number(data.sun_phase.sunset.hour);
-        sunset.setHours(data.sun_phase.sunset.hour);
-        sunset.setMinutes(data.sun_phase.sunset.minute);
-
-
-        // The moment().format("h") method has a bug on the Raspberry Pi.
-        // So we need to generate the timestring manually.
-        // See issue: https://github.com/MichMich/MagicMirror/issues/181
-
-        var sunriseSunsetDateObject = (sunrise < now && sunset >
-            now) ? sunset : sunrise;
-        var timeString = moment(sunriseSunsetDateObject).format(
-            "HH:mm");
-
-        if (this.config.timeFormat !== 24) {
-            if (this.config.showPeriod) {
-                if (this.config.showPeriodUpper) {
-                    timeString = moment(sunriseSunsetDateObject).format(
-                        "h:mm A");
-                } else {
-                    timeString = moment(sunriseSunsetDateObject).format(
-                        "h:mm a");
-                }
-            } else {
-                timeString = moment(sunriseSunsetDateObject).format(
-                    "h:mm");
-            }
-        }
-
-        this.sunriseSunsetTime = timeString;
-        this.sunriseSunsetIcon = (sunrise < now && sunset > now) ?
-            "wi-sunset" : "wi-sunrise";
-        this.iconTable = (sunrise < now && sunset > now) ? this.config
-            .iconTableDay : this.config.iconTableNight;
-
-
-        for (i = 0, count = data.alerts.length; i < count; i++) {
-
-            var talert = data.alerts[i].description;
-            var malert = data.alerts[i].message;
-            if (talert.length < malert.length) {
-                talert = malert;
-            }
-            if (this.config.alerttruncatestring !== "") {
-                var ialert = talert.indexOf(this.config.alerttruncatestring);
-                if (ialert > 0) {
-                    talert = talert.substring(1, ialert);
-                }
-            }
-            this.alertmsg = this.alertmsg + talert;
-
-            this.alerttext = this.alerttext + "<B style=\"color:" +
-                data.alerts[i].level_meteoalarm_name + "\">" + this
-                .translate(data.alerts[i].type) + "</B>";
-            if (i < (count - 1)) {
-                this.alerttext = this.alerttext + "<BR>";
-            }
-
-        }
-
-        if (this.alertmsg !== "") {
-            this.sendNotification("SHOW_ALERT", {
-                type: "alert",
-                message: this.alertmsg,
-                title: this.alerttext,
-                timer: this.config.alerttime
-            });
-        }
-
-        this.weatherType = this.iconTable[data.current_observation.icon];
-        this.windDirection = this.deg2Cardinal(data.current_observation
-            .wind_degrees);
-        this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(
-            data.current_observation.wind_kph);
-
-        if (this.config.units == "metric") {
-            this.temperature = data.current_observation.temp_c;
-            this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                .forecastday[0].fcttext_metric, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+        if (data.response.hasOwnProperty('error')) {
+            this.errorDescription = data.response.error.description;
+            this.error = true;
+            this.updateDom(this.config.animationSpeed);
         } else {
-            this.temperature = data.current_observation.temp_f;
-            this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                .forecastday[0].fcttext, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
-        }
+            this.error = false;
+            var forecast;
+            var i;
+            var count;
+            var iconTable = this.config.iconTableDay;
+            this.alerttext = "";
+            this.alertmsg = "";
 
-        this.forecastText = "<B>" + this.alerttext + "</B><BR>" +
-            this.forecastText;
+            var now = new Date();
+
+            var sunrise = new Date();
+            this.sunrhour = Number(data.sun_phase.sunrise.hour);
+            sunrise.setHours(data.sun_phase.sunrise.hour);
+            sunrise.setMinutes(data.sun_phase.sunrise.minute);
+
+            var sunset = new Date();
+            this.sunshour = Number(data.sun_phase.sunset.hour);
+            sunset.setHours(data.sun_phase.sunset.hour);
+            sunset.setMinutes(data.sun_phase.sunset.minute);
 
 
-        this.forecast = [];
-        for (i = this.config.fcdaystart, count = data.forecast.simpleforecast
-            .forecastday.length; i < this.config.fcdaycount; i++) {
+            // The moment().format("h") method has a bug on the Raspberry Pi.
+            // So we need to generate the timestring manually.
+            // See issue: https://github.com/MichMich/MagicMirror/issues/181
 
+            var sunriseSunsetDateObject = (sunrise < now && sunset >
+                now) ? sunset : sunrise;
+            var timeString = moment(sunriseSunsetDateObject).format(
+                "HH:mm");
 
-
-            forecast = data.forecast.simpleforecast.forecastday[i];
-
-            if (this.config.units == "metric") {
-                this.tmaxTemp = forecast.high.celsius;
-                this.tminTemp = forecast.low.celsius;
-                this.tmm = forecast.qpf_allday.mm;
-            } else {
-                this.tmaxTemp = forecast.high.fahrenheit;
-                this.tminTemp = forecast.low.fahrenheit;
-                this.tmm = forecast.qpf_allday.in;
+            if (this.config.timeFormat !== 24) {
+                if (this.config.showPeriod) {
+                    if (this.config.showPeriodUpper) {
+                        timeString = moment(sunriseSunsetDateObject).format(
+                            "h:mm A");
+                    } else {
+                        timeString = moment(sunriseSunsetDateObject).format(
+                            "h:mm a");
+                    }
+                } else {
+                    timeString = moment(sunriseSunsetDateObject).format(
+                        "h:mm");
+                }
             }
 
-
-            this.forecast.push({
-
-                day: forecast.date.weekday_short,
-                maxTemp: this.tmaxTemp,
-                minTemp: this.tminTemp,
-                icon: this.iconTable[forecast.icon],
-                pop: forecast.pop,
-                mm: this.tmm
-            });
+            this.sunriseSunsetTime = timeString;
+            this.sunriseSunsetIcon = (sunrise < now && sunset > now) ?
+                "wi-sunset" : "wi-sunrise";
+            this.iconTable = (sunrise < now && sunset > now) ? this.config
+                .iconTableDay : this.config.iconTableNight;
 
 
-        }
+            for (i = 0, count = data.alerts.length; i < count; i++) {
 
-        if (this.config.hourly == 1) {
-            this.hourlyforecast = [];
-            for (i = 0, count = data.hourly_forecast.length; i <
-                count; i++) {
-
-                var hourlyforecast = data.hourly_forecast[i];
-
-                if (this.config.units == "metric") {
-                    this.tmaxTemp = hourlyforecast.temp.metric;
-                    this.tminTemp = hourlyforecast.feelslike.metric;
-                    this.tmm = hourlyforecast.qpf.metric;
-                    this.thour = hourlyforecast.FCTTIME.hour +
-                        ":00";
-                } else {
-                    this.tmaxTemp = hourlyforecast.temp.english;
-                    this.tminTemp = hourlyforecast.feelslike.english;
-                    this.tmm = hourlyforecast.qpf.english;
-                    this.thour = hourlyforecast.FCTTIME.civil;
+                var talert = data.alerts[i].description;
+                var malert = data.alerts[i].message;
+                if (talert.length < malert.length) {
+                    talert = malert;
                 }
-                this.tthour = Number(hourlyforecast.FCTTIME.hour);
-                this.ForecastIcon = (this.sunrhour < this.tthour &&
-                    this.sunshour > this.tthour) ? this.config.iconTableDay[
-                    hourlyforecast.icon] : this.config.iconTableNight[
-                    hourlyforecast.icon];
+                if (this.config.alerttruncatestring !== "") {
+                    var ialert = talert.indexOf(this.config.alerttruncatestring);
+                    if (ialert > 0) {
+                        talert = talert.substring(1, ialert);
+                    }
+                }
+                this.alertmsg = this.alertmsg + talert;
 
-                this.hourlyforecast.push({
+                this.alerttext = this.alerttext + "<B style=\"color:" +
+                    data.alerts[i].level_meteoalarm_name + "\">" + this
+                    .translate(data.alerts[i].type) + "</B>";
+                if (i < (count - 1)) {
+                    this.alerttext = this.alerttext + "<BR>";
+                }
 
-                    hour: this.thour,
-                    maxTemp: this.tmaxTemp,
-                    minTemp: this.tminTemp,
-                    icon: this.ForecastIcon,
-                    pop: hourlyforecast.pop,
-                    mm: this.tmm
+            }
+
+            if (this.alertmsg !== "") {
+                this.sendNotification("SHOW_ALERT", {
+                    type: "alert",
+                    message: this.alertmsg,
+                    title: this.alerttext,
+                    timer: this.config.alerttime
                 });
             }
+
+            this.weatherType = this.iconTable[data.current_observation.icon];
+            this.windDirection = this.deg2Cardinal(data.current_observation
+                .wind_degrees);
+            this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(
+                data.current_observation.wind_kph);
+
+            if (this.config.units == "metric") {
+                this.temperature = data.current_observation.temp_c;
+                this.forecastText = this.wordwrap(data.forecast.txt_forecast
+                    .forecastday[0].fcttext_metric, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+            } else {
+                this.temperature = data.current_observation.temp_f;
+                this.forecastText = this.wordwrap(data.forecast.txt_forecast
+                    .forecastday[0].fcttext, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+            }
+
+            this.forecastText = "<B>" + this.alerttext + "</B><BR>" +
+                this.forecastText;
+
+
+            this.forecast = [];
+            for (i = this.config.fcdaystart, count = data.forecast.simpleforecast
+                .forecastday.length; i < this.config.fcdaycount; i++) {
+
+
+
+                forecast = data.forecast.simpleforecast.forecastday[i];
+
+                if (this.config.units == "metric") {
+                    this.tmaxTemp = forecast.high.celsius;
+                    this.tminTemp = forecast.low.celsius;
+                    this.tmm = forecast.qpf_allday.mm;
+                } else {
+                    this.tmaxTemp = forecast.high.fahrenheit;
+                    this.tminTemp = forecast.low.fahrenheit;
+                    this.tmm = forecast.qpf_allday.in;
+                }
+
+
+                this.forecast.push({
+
+                    day: forecast.date.weekday_short,
+                    maxTemp: this.tmaxTemp,
+                    minTemp: this.tminTemp,
+                    icon: this.iconTable[forecast.icon],
+                    pop: forecast.pop,
+                    mm: this.tmm
+                });
+
+
+            }
+
+            if (this.config.hourly == 1) {
+                this.hourlyforecast = [];
+                for (i = 0, count = data.hourly_forecast.length; i <
+                    count; i++) {
+
+                    var hourlyforecast = data.hourly_forecast[i];
+
+                    if (this.config.units == "metric") {
+                        this.tmaxTemp = hourlyforecast.temp.metric;
+                        this.tminTemp = hourlyforecast.feelslike.metric;
+                        this.tmm = hourlyforecast.qpf.metric;
+                        this.thour = hourlyforecast.FCTTIME.hour +
+                            ":00";
+                    } else {
+                        this.tmaxTemp = hourlyforecast.temp.english;
+                        this.tminTemp = hourlyforecast.feelslike.english;
+                        this.tmm = hourlyforecast.qpf.english;
+                        this.thour = hourlyforecast.FCTTIME.civil;
+                    }
+                    this.tthour = Number(hourlyforecast.FCTTIME.hour);
+                    this.ForecastIcon = (this.sunrhour < this.tthour &&
+                        this.sunshour > this.tthour) ? this.config.iconTableDay[
+                        hourlyforecast.icon] : this.config.iconTableNight[
+                        hourlyforecast.icon];
+
+                    this.hourlyforecast.push({
+
+                        hour: this.thour,
+                        maxTemp: this.tmaxTemp,
+                        minTemp: this.tminTemp,
+                        icon: this.ForecastIcon,
+                        pop: hourlyforecast.pop,
+                        mm: this.tmm
+                    });
+                }
+            }
+
+
+
+
+            Log.log(this.forecast);
+
+            this.loaded = true;
+            this.updateDom(this.config.animationSpeed);
         }
-
-
-
-
-        Log.log(this.forecast);
-
-        this.loaded = true;
-        this.updateDom(this.config.animationSpeed);
     },
 
     /* scheduleUpdate()
