@@ -189,7 +189,7 @@ Module.register("MMM-WunderGround", {
         large.className = "large light";
 
         var weatherIcon = document.createElement("span");
-        weatherIcon.className = "wi weathericon " + this.weatherType;
+        weatherIcon.className = "wi " + this.weatherType;
         large.appendChild(weatherIcon);
 
         var temperature = document.createElement("span");
