@@ -155,7 +155,7 @@ Module.register("MMM-WunderGround", {
             wrapper.className = "dimmed light small";
             return wrapper;
         }
-        
+
         if (!this.loaded) {
             wrapper.innerHTML = this.translate("LOADING");
             wrapper.className = "dimmed light small";
@@ -452,7 +452,7 @@ Module.register("MMM-WunderGround", {
 
     processWeather: function(data) {
 
-        if (data.response.hasOwnProperty('error')) {
+        if (data.response.hasOwnProperty("error")) {
             this.errorDescription = data.response.error.description;
             this.error = true;
             this.updateDom(this.config.animationSpeed);
