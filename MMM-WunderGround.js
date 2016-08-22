@@ -27,8 +27,8 @@ Module.register("MMM-WunderGround", {
         hourlycount: "2",
         fctext: "1",
         alerttime: 5000,
-		roundTmpDecs: 1,
-		UseCardinals: 0,
+        roundTmpDecs: 1,
+        UseCardinals: 0,
 		
 
 
@@ -178,7 +178,7 @@ Module.register("MMM-WunderGround", {
         small.appendChild(spacer);
 
         var windDirectionIcon = document.createElement("span");
-		if (this.config.UseCardinals == 0 ) {
+		if (this.config.UseCardinals === 0 ) {
 			windDirectionIcon.className = "wi wi-wind " + this.windDirection;
 		} else {
 			windDirectionIcon.innerHTML = this.windDirectionTxt;
