@@ -23,7 +23,9 @@ modules: [
         hourlyinterval: "3",
         hourlycount: "2",
         alerttime: 10000,
-        alerttruncatestring: "english:"
+        alerttruncatestring: "english:",
+	roundTmpDecs: 1,
+	UseCardinals: 0
     }
 };
 ]
