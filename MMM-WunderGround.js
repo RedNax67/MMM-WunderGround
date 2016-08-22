@@ -758,6 +758,6 @@ Module.register("MMM-WunderGround", {
      * return number - Rounded Temperature.
      */
     roundValue: function(temperature) {
-        return parseFloat(temperature).toFixed(config.roundTmpDecs);
+        return parseFloat(temperature).toFixed(this.config.roundTmpDecs);
     }
 });
