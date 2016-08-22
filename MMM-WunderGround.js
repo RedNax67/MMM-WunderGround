@@ -27,6 +27,9 @@ Module.register("MMM-WunderGround", {
         hourlycount: "2",
         fctext: "1",
         alerttime: 5000,
+		roundTmpDecs: 1,
+		UseCardinals: 0,
+		
 
 
 
@@ -175,7 +178,11 @@ Module.register("MMM-WunderGround", {
         small.appendChild(spacer);
 
         var windDirectionIcon = document.createElement("span");
-        windDirectionIcon.className = "wi wi-wind " + this.windDirection;
+		if (this.config.UseCardinals == 0 ) {
+			windDirectionIcon.className = "wi wi-wind " + this.windDirection;
+		} else {
+			windDirectionIcon.innerHTML = this.windDirectionTxt;
+		}
         small.appendChild(windDirectionIcon);
 
         spacer = document.createElement("span");
@@ -543,10 +550,9 @@ Module.register("MMM-WunderGround", {
             }
 
             this.weatherType = this.iconTable[data.current_observation.icon];
-            this.windDirection = this.deg2Cardinal(data.current_observation
-                .wind_degrees);
-            this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(
-                data.current_observation.wind_kph);
+            this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
+            this.windDirectionTxt = data.current_observation.wind_dir;
+            this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
 
             if (this.config.units == "metric") {
                 this.temperature = data.current_observation.temp_c;
@@ -558,6 +564,8 @@ Module.register("MMM-WunderGround", {
                     .forecastday[0].fcttext, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
             }
 
+			this.temperature = this.roundValue(this.temperature);
+			
             this.forecastText = "<B>" + this.alerttext + "</B><BR>" +
                 this.forecastText;
 
@@ -579,6 +587,9 @@ Module.register("MMM-WunderGround", {
                     this.tminTemp = forecast.low.fahrenheit;
                     this.tmm = forecast.qpf_allday.in;
                 }
+				
+				this.maxTemp = this.roundValue(this.maxTemp);
+				this.minTemp = this.roundValue(this.minTemp);
 
 
                 this.forecast.push({
@@ -747,6 +758,6 @@ Module.register("MMM-WunderGround", {
      * return number - Rounded Temperature.
      */
     roundValue: function(temperature) {
-        return parseFloat(temperature).toFixed(1);
+        return parseFloat(temperature).toFixed(config.roundTmpDecs);
     }
 });
