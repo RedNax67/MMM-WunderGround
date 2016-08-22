@@ -179,6 +179,29 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>roundTmpDecs</code></td>
+			<td>Rounds off the current temperature display<br>
+				<br><b>Possible values:</b> <code>number</code>
+				<br><b>Default value:</b>  <code>1</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>UseCardinals</code></td>
+			<td>Toggles the use of winddirection arrow or cardinals<br>
+				<br><b>Possible values:</b> <code>0 or 1</code>
+				<br><b>Default value:</b>  <code>0</code>
+			</td>
+		</tr>
+		<tr>
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 	</tbody>
 </table>
