@@ -25,7 +25,8 @@ modules: [
         alerttime: 10000,
         alerttruncatestring: "english:",
 	roundTmpDecs: 1,
-	UseCardinals: 0
+	UseCardinals: 0,
+	layout: "horizontal"
     }
 };
 ]
@@ -195,6 +196,13 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>layout</code></td>
+			<td>Toggles the use of winddirection arrow or cardinals<br>
+				<br><b>Possible values:</b> <code>"horizontal" or "vertical"</code>
+				<br><b>Default value:</b>  <code>"vertical"</code>
+			</td>
+		</tr>
+
 		
 		
 		
