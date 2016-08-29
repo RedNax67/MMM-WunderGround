@@ -197,7 +197,7 @@ The following properties can be configured:
 		</tr>
 		<tr>
 			<td><code>layout</code></td>
-			<td>Toggles the use of winddirection arrow or cardinals<br>
+			<td>Chooses the layout option<br>
 				<br><b>Possible values:</b> <code>"horizontal" or "vertical"</code>
 				<br><b>Default value:</b>  <code>"vertical"</code>
 			</td>
