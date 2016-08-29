@@ -498,6 +498,18 @@ Module.register("MMM-WunderGround", {
 
                     row_pop.appendChild(mmCell);
 
+                    var nl = Number(f) + 1;
+                    if (( nl % 4 ) === 0 ) {
+                            table.appendChild(row_time);
+                            table.appendChild(row_icon);
+                            table.appendChild(row_temp);
+                            table.appendChild(row_pop);
+                            row_time = document.createElement("tr");
+                            row_icon = document.createElement("tr");
+                            row_temp = document.createElement("tr");
+                            row_pop = document.createElement("tr");
+                    }
+
                     if (f > this.config.hourlycount) {
                         break;
                     }
@@ -556,6 +568,18 @@ Module.register("MMM-WunderGround", {
                 }
 
                 row_pop.appendChild(mmCell);
+                
+                var nl = Number(f) + 1;
+                if (( nl % 4 ) === 0 ) {
+                    table.appendChild(row_time);
+                    table.appendChild(row_icon);
+                    table.appendChild(row_temp);
+                    table.appendChild(row_pop);
+                    row_time = document.createElement("tr");
+                    row_icon = document.createElement("tr");
+                    row_temp = document.createElement("tr");
+                    row_pop = document.createElement("tr");
+                }
 
             }
 
