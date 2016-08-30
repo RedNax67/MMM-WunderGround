@@ -1,0 +1,24 @@
+{
+  /* GENERAL */
+  "APIKEY": "Please set the correct openweather <i>appid</i> in the config for module: ",
+  
+	"HUR": 	"Komunikat lokalny: huragan", //"Hurricane Local Statement"
+	"TOR": 	"UWAGA: tornado", //"Tornado Warning"
+	"TOW": 	"Zagrożenie: Tornado", //"Tornado Watch"
+	"WRN": 	"UWAGA: silne burze", //"Severe Thunderstorm Warning"
+	"SEW": 	"Zagrożenie: silne burze", //"Severe Thunderstorm Watch"
+	"WIN": 	"Zimowa pogoda", //"Winter Weather Advisory"
+	"FLO": 	"UWAGA: powódź", //"Flood Warning"
+	"WAT": 	"Zagrożenie: powódź", //Flood Watch / Statement"
+	"WND": 	"Silny wiatr", //"High Wind Advisory"
+	"SVR": 	"Zła pogoda", //"Severe Weather Statement"
+	"HEA": 	"Upały", //"Heat Advisory"
+	"FOG": 	"Gęsta mgła", //"Dense Fog Advisory"
+	"SPE": 	"Specjalne warunki pogodowe", //"Special Weather Statement"
+	"FIR": 	"Zagrożenie pożarowe", //	"Fire Weather Advisory"
+	"VOL": 	"Aktywność wulkaniczna", //"Volcanic Activity Statement"
+	"HWW": 	"Wiatry huraganowe", //"Hurricane Wind Warning"
+	"REC": 	"Ustanowiono rekord", //"Record Set"
+	"REP": 	"Raport publiczny", //"Public Reports"
+	"PUB": 	"Komunikat publiczny" //"Public Information Statement"
+}
