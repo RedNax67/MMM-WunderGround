@@ -122,7 +122,9 @@ Module.register("MMM-WunderGround", {
             nl: "translations/nl.json",
             de: "translations/de.json",
             dl: "translations/de.json",
-            fr: "translations/fr.json"
+            fr: "translations/fr.json",
+            pl: "translations/pl.json"
+            
         };
     },
 
