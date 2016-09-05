@@ -26,7 +26,8 @@ modules: [
         alerttruncatestring: "english:",
 	roundTmpDecs: 1,
 	UseCardinals: 0,
-	layout: "horizontal"
+	layout: "horizontal",
+	sysstat: 0
     }
 };
 ]
@@ -200,6 +201,13 @@ The following properties can be configured:
 			<td>Chooses the layout option<br>
 				<br><b>Possible values:</b> <code>"horizontal" or "vertical"</code>
 				<br><b>Default value:</b>  <code>"vertical"</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>sysstat</code></td>
+			<td>Toggle sysinfo display<br>
+				<br><b>Possible values:</b> <code>0 or 1</code>
+				<br><b>Default value:</b>  <code>0</code>
 			</td>
 		</tr>
 
