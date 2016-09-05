@@ -30,6 +30,7 @@ Module.register("MMM-WunderGround", {
         roundTmpDecs: 1,
         UseCardinals: 0,
         layout: "vertical",
+		sysstat: 0,
 
 
 
@@ -155,6 +156,17 @@ Module.register("MMM-WunderGround", {
         this.scheduleUpdate(this.config.initialLoadDelay);
 
         this.updateTimer = null;
+		this.systemp = "";
+		this.wifiap = "";
+		this.wifistrength = "";
+		this.storage_size = 0;
+		this.storage_used = 0;
+		this.storage_free = 0;
+		this.storage_pcent = 0;
+		this.mem_used =  0;
+		this.mem_size = 0;
+		this.mem_free = 0;
+		
 
     },
 
@@ -459,6 +471,99 @@ Module.register("MMM-WunderGround", {
             table.className = "small";
             table.setAttribute("width", "25%");
 
+            if (this.config.sysstat == 1) {
+
+				row_mem = document.createElement("tr");
+				row_storage = document.createElement("tr");
+				row_stemp = document.createElement("tr");
+				row_wifi = document.createElement("tr");
+				
+				iconCell = document.createElement("td");
+                iconCell.className = "align-right bright weather-icon";
+				
+                icon = document.createElement("span");
+                icon.className = "wi wi-thermometer";
+                
+				iconCell.appendChild(icon);
+                row_stemp.appendChild(iconCell);
+				
+				sysTempCell = document.createElement("td");
+                sysTempCell.innerHTML = this.systemp;
+				sysTempCell.className = "align-left";
+                row_stemp.appendChild(sysTempCell);
+				
+				iconCell = document.createElement("td");
+                iconCell.className = "align-right bright weather-icon";
+                icon = document.createElement("span");
+
+                icon.className = "fa fa-wifi ";
+                iconCell.appendChild(icon);
+                row_stemp.appendChild(iconCell);
+
+				WifiCell = document.createElement("td");
+                WifiCell.innerHTML = this.wifiap + " @ " + this.wifistrength + "%";
+				WifiCell.className = "align-left";
+								
+                row_stemp.appendChild(WifiCell);
+				table.appendChild(row_stemp);
+
+				
+				FillCell = document.createElement("td");
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = "Size";
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = "Used";
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = "Free";
+                row_mem.appendChild(FillCell);
+				table.appendChild(row_mem);
+
+				row_mem = document.createElement("tr");
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = "Memory";
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = this.mem_size;
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = this.mem_used;
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = this.mem_free;
+                row_mem.appendChild(FillCell);
+				table.appendChild(row_mem);
+
+				row_mem = document.createElement("tr");
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = "Storage";
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = this.storage_size;
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = this.storage_used;
+                row_mem.appendChild(FillCell);
+				FillCell = document.createElement("td");
+				FillCell.innerHTML = this.storage_free;
+                row_mem.appendChild(FillCell);
+				table.appendChild(row_mem);
+				
+										
+				fctable.appendChild(table);
+				fctable.appendChild(document.createElement("hr"));
+				
+				table = document.createElement("table");
+				table.className = "small";
+				table.setAttribute("width", "25%");
+
+
+			}	
+				
+			
+
             if (this.config.hourly == 1) {
 
                 row_time = document.createElement("tr");
@@ -607,6 +712,13 @@ Module.register("MMM-WunderGround", {
         var self = this;
         var retry = true;
 
+        if (this.config.sysstat == 1) {
+			self.sendSocketNotification('GET_WIFI');
+			self.sendSocketNotification('GET_SYSTEM_TEMP');
+			self.sendSocketNotification('GET_SYSTEM_MEM');
+			self.sendSocketNotification('GET_SYSTEM_STORAGE');
+		}
+		
         var weatherRequest = new XMLHttpRequest();
         weatherRequest.open("GET", url, true);
         weatherRequest.onreadystatechange = function () {
@@ -766,11 +878,11 @@ Module.register("MMM-WunderGround", {
             if (this.config.units == "metric") {
                 this.temperature = data.current_observation.temp_c;
                 this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                    .forecastday[0].fcttext_metric, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+                    .forecastday[0].fcttext_metric, 35, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
             } else {
                 this.temperature = data.current_observation.temp_f;
                 this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                    .forecastday[0].fcttext, 30, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+                    .forecastday[0].fcttext, 35, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
             }
 
             this.temperature = this.roundValue(this.temperature);
@@ -968,5 +1080,41 @@ Module.register("MMM-WunderGround", {
      */
     roundValue: function (temperature) {
         return parseFloat(temperature).toFixed(this.config.roundTmpDecs);
-    }
+    },
+    
+    socketNotificationReceived: function(notification, payload) {
+		var self = this;
+
+		Log.info('received ' + notification)
+        if (notification === 'WIFI_STRENGTH') {
+            Log.info('received WIFI_STRENGTH');
+			Log.info(payload.wifi_strength);
+			this.wifiap = payload.wifi_ap;
+			this.wifistrength=payload.wifi_strength;
+			self.updateDom(self.config.animationSpeed);
+        }
+        if (notification === 'SYSTEM_TEMP') {
+            Log.info('received SYSTEM_TEMP');
+			Log.info(payload.system_temp);
+			this.systemp=payload.system_temp;
+			self.updateDom(self.config.animationSpeed);
+        }
+        if (notification === 'SYSTEM_MEM') {
+            Log.info('received SYSTEM_MEM');
+			Log.info(payload);
+			this.mem_size=payload.mem_size;
+			this.mem_used=payload.mem_used;
+			this.mem_free=payload.mem_free;
+			self.updateDom(self.config.animationSpeed);
+		}
+        if (notification === 'SYSTEM_STORAGE') {
+            Log.info('received SYSTEM_STORAGE');
+			Log.info(payload);
+			this.storage_size=payload.store_size;
+			this.storage_used=payload.store_used;
+			this.storage_free=payload.store_avail;
+			self.updateDom(self.config.animationSpeed);
+        }
+	}
+
 });
