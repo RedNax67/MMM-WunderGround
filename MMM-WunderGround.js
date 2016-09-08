@@ -273,6 +273,8 @@ Module.register("MMM-WunderGround", {
         table.className = "small";
         table.setAttribute("width", "25%");
 
+        // this.config.layout = "vertical";
+        
         if (this.config.layout == "vertical") {
 
             var row = document.createElement("tr");
@@ -337,7 +339,7 @@ Module.register("MMM-WunderGround", {
                     table.appendChild(row);
 
                     hourCell = document.createElement("td");
-                    hourCell.className = "hour";
+                    hourCell.className = "hourv";
                     hourCell.innerHTML = forecast.hour;
                     row.appendChild(hourCell);
 
