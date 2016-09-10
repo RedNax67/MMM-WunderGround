@@ -5,6 +5,13 @@ This is similar to the default `weatherforecast` module, however it has addition
 
 The Weather Icons used in this module are created and maintained by Erik Flowers. v1.0 artwork by Lukas Bischoff. v1.1 - 2.0 artwork by Erik Flowers www.weathericons.io
 
+
+## Installing the module
+Clone this repository in your `~/MagicMirror/modules/` folder `( $ cd ~MagicMirror/modules/ )`:
+````javascript
+git clone https://github.com/RedNax67/MMM-WunderGround.git
+````
+
 ## Using the module
 
 To use this module, add it to the modules array in the `config/config.js` file:
