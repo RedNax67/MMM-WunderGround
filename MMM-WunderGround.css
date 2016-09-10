@@ -12,7 +12,7 @@
 }
 
 .MMM-WunderGround .weather-icon {
-  padding-left: 20px;
+  padding-left: 0px;
   text-align: center;
 }
 
@@ -41,7 +41,8 @@
 
 .MMM-WunderGround .hour {
   font-size: 75%;
-} 
+  text-align: center;
+ } 
 
 .MMM-WunderGround .pop {
   font-size: 75%;
