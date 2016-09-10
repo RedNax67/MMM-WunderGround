@@ -20,7 +20,7 @@ Module.register("MMM-WunderGround", {
         fade: true,
         fadePoint: 0.25, // Start on 1/4th of the list.
         tz: "",
-        fcdaycount: "5",
+        fcdaycount: "4",
         fcdaystart: "0",
         hourly: "0",
         hourlyinterval: "3",
@@ -30,7 +30,10 @@ Module.register("MMM-WunderGround", {
         roundTmpDecs: 1,
         UseCardinals: 0,
         layout: "vertical",
-		sysstat: 0,
+        hourlylayout: "horizontal",
+        dailylayout: "vertical",
+        showpop: 0,
+        sysstat: 0,
 
 
 
@@ -117,7 +120,7 @@ Module.register("MMM-WunderGround", {
     },
 
     // Define required translations.
-    getTranslations: function () {
+    getTranslations: function() {
         return {
             en: "translations/en.json",
             nl: "translations/nl.json",
@@ -125,24 +128,24 @@ Module.register("MMM-WunderGround", {
             dl: "translations/de.json",
             fr: "translations/fr.json",
             pl: "translations/pl.json"
-            
+
         };
     },
 
     // Define required scripts.
-    getScripts: function () {
+    getScripts: function() {
         return ["moment.js"];
     },
 
     // Define required scripts.
-    getStyles: function () {
+    getStyles: function() {
         return ["weather-icons.css", "weather-icons-wind.css",
             "MMM-WunderGround.css"
         ];
     },
 
     // Define start sequence.
-    start: function () {
+    start: function() {
         Log.info("Starting module: " + this.name);
 
         // Set locale.
@@ -156,22 +159,22 @@ Module.register("MMM-WunderGround", {
         this.scheduleUpdate(this.config.initialLoadDelay);
 
         this.updateTimer = null;
-		this.systemp = "";
-		this.wifiap = "";
-		this.wifistrength = "";
-		this.storage_size = 0;
-		this.storage_used = 0;
-		this.storage_free = 0;
-		this.storage_pcent = 0;
-		this.mem_used =  0;
-		this.mem_size = 0;
-		this.mem_free = 0;
-		
+        this.systemp = "";
+        this.wifiap = "";
+        this.wifistrength = "";
+        this.storage_size = 0;
+        this.storage_used = 0;
+        this.storage_free = 0;
+        this.storage_pcent = 0;
+        this.mem_used = 0;
+        this.mem_size = 0;
+        this.mem_free = 0;
+
 
     },
 
     // Override dom generator.
-    getDom: function () {
+    getDom: function() {
         var wrapper = document.createElement("div");
         var f;
         var forecast;
@@ -269,69 +272,82 @@ Module.register("MMM-WunderGround", {
 
         // Forecast table
 
+        var fctable = document.createElement("table");
         var table = document.createElement("table");
         table.className = "small";
         table.setAttribute("width", "25%");
 
-        // this.config.layout = "vertical";
+        var hrrow = document.createElement("tr");
+        var hrrowCell = document.createElement("td");
+        hrrowCell.setAttribute("colSpan", "10");
+        hrrowCell.appendChild(document.createElement("hr"));
+        hrrow.appendChild(hrrowCell);
+
+        table.appendChild(hrrowCell);
+        var row = document.createElement("tr");
+
+        if (this.config.fctext == 1) {
+            var forecastTextCell = document.createElement("td");
+            forecastTextCell.className = "forecastText";
+            forecastTextCell.setAttribute("colSpan", "10");
+            forecastTextCell.innerHTML = this.forecastText;
+            row.appendChild(forecastTextCell);
+        }
+
+        table.appendChild(row);
+        wrapper.appendChild(table);
+
+        table = document.createElement("table");
+        table.className = "small";
+        table.setAttribute("width", "25%");
         
-        if (this.config.layout == "vertical") {
+        if (this.config.hourly == 1) {
+            if (this.config.hourlylayout == "vertical") {
 
-            var row = document.createElement("tr");
-            table.appendChild(row);
+                row = document.createElement("tr");
 
-            if (this.config.fctext == 1) {
-                var forecastTextCell = document.createElement("td");
-                forecastTextCell.className = "forecastText";
-                forecastTextCell.setAttribute("colSpan", "10");
-                forecastTextCell.innerHTML = this.forecastText;
+                var dayHeader = document.createElement("th");
+                dayHeader.className = "day";
+                dayHeader.innerHTML = "";
+                row.appendChild(dayHeader);
 
-                row.appendChild(forecastTextCell);
-            }
+                var iconHeader = document.createElement("th");
+                iconHeader.className = "tableheader icon";
+                iconHeader.innerHTML = "";
+                row.appendChild(iconHeader);
 
-            row = document.createElement("tr");
+                var maxtempHeader = document.createElement("th");
+                maxtempHeader.className = "align-center bright tableheader";
+                row.appendChild(maxtempHeader);
 
-            var dayHeader = document.createElement("th");
-            dayHeader.className = "day";
-            dayHeader.innerHTML = "";
-            row.appendChild(dayHeader);
-
-            var iconHeader = document.createElement("th");
-            iconHeader.className = "tableheader icon";
-            iconHeader.innerHTML = "";
-            row.appendChild(iconHeader);
-
-            var maxtempHeader = document.createElement("th");
-            maxtempHeader.className = "align-center bright tableheader";
-            row.appendChild(maxtempHeader);
-
-            var maxtempicon = document.createElement("span");
-            maxtempicon.className = "wi wi-thermometer";
-            maxtempHeader.appendChild(maxtempicon);
+                var maxtempicon = document.createElement("span");
+                maxtempicon.className = "wi wi-thermometer";
+                maxtempHeader.appendChild(maxtempicon);
 
 
-            var mintempHeader = document.createElement("th");
-            mintempHeader.className = "align-center bright tableheader";
-            row.appendChild(mintempHeader);
+                var mintempHeader = document.createElement("th");
+                mintempHeader.className = "align-center bright tableheader";
+                row.appendChild(mintempHeader);
 
-            var mintempicon = document.createElement("span");
-            mintempicon.className = "wi wi-thermometer-exterior";
-            mintempHeader.appendChild(mintempicon);
+                var mintempicon = document.createElement("span");
+                mintempicon.className = "wi wi-thermometer-exterior";
+                mintempHeader.appendChild(mintempicon);
 
 
-            var popiconHeader = document.createElement("th");
-            popiconHeader.className = "align-center bright tableheader";
-            popiconHeader.setAttribute("colSpan", "10");
-            row.appendChild(popiconHeader);
+                if (this.config.showpop == 1) {
+                    var popiconHeader = document.createElement("th");
+                    popiconHeader.className = "align-center bright tableheader";
+                    popiconHeader.setAttribute("colSpan", "10");
+                    row.appendChild(popiconHeader);
 
-            var popicon = document.createElement("span");
-            popicon.className = "wi wi-umbrella";
-            popicon.setAttribute("colSpan", "10");
-            popiconHeader.appendChild(popicon);
+                    var popicon = document.createElement("span");
+                    popicon.className = "wi wi-umbrella";
+                    popicon.setAttribute("colSpan", "10");
+                    popiconHeader.appendChild(popicon);
+                }
 
-            table.appendChild(row);
+                table.appendChild(row);
 
-            if (this.config.hourly == 1) {
                 for (f in this.forecast) {
                     forecast = this.hourlyforecast[f * this.config.hourlyinterval];
 
@@ -362,218 +378,45 @@ Module.register("MMM-WunderGround", {
                     minTempCell.className = "align-right min-temp";
                     row.appendChild(minTempCell);
 
-                    popCell = document.createElement("td");
-                    popCell.innerHTML = forecast.pop + "%";
-                    popCell.className = "align-right pop";
-                    row.appendChild(popCell);
+                    if (this.config.showpop == 1) {
+                        popCell = document.createElement("td");
+                        popCell.innerHTML = forecast.pop + "%";
+                        popCell.className = "align-right pop";
+                        row.appendChild(popCell);
 
-                    mmCell = document.createElement("td");
-                    if (this.config.units == "metric") {
-                        mmCell.innerHTML = forecast.mm + "mm";
-                        mmCell.className = "align-right mm";
-                    } else {
-                        mmCell.innerHTML = forecast.mm + "in";
-                        mmCell.className = "align-right mm";
-
+                        mmCell = document.createElement("td");
+                        if (this.config.units == "metric") {
+                            mmCell.innerHTML = forecast.mm + "mm";
+                            mmCell.className = "align-right mm";
+                        } else {
+                            mmCell.innerHTML = forecast.mm + "in";
+                            mmCell.className = "align-right mm";
+                        }
+                        row.appendChild(mmCell);
                     }
-                    row.appendChild(mmCell);
 
                     if (f > this.config.hourlycount) {
                         break;
                     }
 
-
-                }
-            }
-
-
-            for (f in this.forecast) {
-                forecast = this.forecast[f];
-
-                row = document.createElement("tr");
-                table.appendChild(row);
-
-                dayCell = document.createElement("td");
-                dayCell.className = "day";
-                dayCell.innerHTML = forecast.day;
-                row.appendChild(dayCell);
-
-                iconCell = document.createElement("td");
-                iconCell.className = "align-center bright weather-icon";
-                row.appendChild(iconCell);
-
-                icon = document.createElement("span");
-                icon.className = "wi " + forecast.icon;
-                iconCell.appendChild(icon);
-
-                maxTempCell = document.createElement("td");
-                maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
-                maxTempCell.className = "align-right max-temp";
-                row.appendChild(maxTempCell);
-
-                minTempCell = document.createElement("td");
-                minTempCell.innerHTML = forecast.minTemp + "&deg;";
-                minTempCell.className = "align-right min-temp";
-                row.appendChild(minTempCell);
-
-                popCell = document.createElement("td");
-                popCell.innerHTML = forecast.pop + "%";
-                popCell.className = "align-right pop";
-                row.appendChild(popCell);
-
-                mmCell = document.createElement("td");
-                if (this.config.units == "metric") {
-                    mmCell.innerHTML = forecast.mm + "mm";
-                    mmCell.className = "align-right mm";
-                } else {
-                    mmCell.innerHTML = forecast.mm + "in";
-                    mmCell.className = "align-right mm";
-
-                }
-                row.appendChild(mmCell);
-
-                if (this.config.fade && this.config.fadePoint < 1) {
-                    if (this.config.fadePoint < 0) {
-                        this.config.fadePoint = 0;
-                    }
-                    startingPoint = this.forecast.length * this.config.fadePoint;
-                    steps = this.forecast.length - startingPoint;
-                    if (f >= startingPoint) {
-                        currentStep = f - startingPoint;
-                        row.style.opacity = 1 - (1 / steps *
-                            currentStep);
-                    }
                 }
 
-            }
 
+            } else { //horizontal
 
-            wrapper.appendChild(table);
-
-        } else {
-
-            var fctable = document.createElement("div");
-            fctable.appendChild(document.createElement("hr"));
-
-            if (this.config.fctext == 1) {
-                var row = document.createElement("tr");
-                var forecastTextCell = document.createElement("td");
-
-                forecastTextCell.className = "forecastText";
-                forecastTextCell.setAttribute("colSpan", "10");
-                forecastTextCell.innerHTML = this.forecastText;
-
-                row.appendChild(forecastTextCell);
-                table.appendChild(row);
-                fctable.appendChild(table);
-                fctable.appendChild(document.createElement("hr"));
-            }
-
-            table = document.createElement("table");
-            table.className = "small";
-            table.setAttribute("width", "25%");
-
-            if (this.config.sysstat == 1) {
-
-				row_mem = document.createElement("tr");
-				row_storage = document.createElement("tr");
-				row_stemp = document.createElement("tr");
-				row_wifi = document.createElement("tr");
-				
-				iconCell = document.createElement("td");
-                iconCell.className = "align-right bright weather-icon";
-				
-                icon = document.createElement("span");
-                icon.className = "wi wi-thermometer";
-                
-				iconCell.appendChild(icon);
-                row_stemp.appendChild(iconCell);
-				
-				sysTempCell = document.createElement("td");
-                sysTempCell.innerHTML = this.systemp;
-				sysTempCell.className = "align-left";
-                row_stemp.appendChild(sysTempCell);
-				
-				iconCell = document.createElement("td");
-                iconCell.className = "align-right bright weather-icon";
-                icon = document.createElement("span");
-
-                icon.className = "fa fa-wifi ";
-                iconCell.appendChild(icon);
-                row_stemp.appendChild(iconCell);
-
-				WifiCell = document.createElement("td");
-                WifiCell.innerHTML = this.wifiap + " @ " + this.wifistrength + "%";
-				WifiCell.className = "align-left";
-								
-                row_stemp.appendChild(WifiCell);
-				table.appendChild(row_stemp);
-
-				
-				FillCell = document.createElement("td");
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Size";
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Used";
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Free";
-                row_mem.appendChild(FillCell);
-				table.appendChild(row_mem);
-
-				row_mem = document.createElement("tr");
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Memory";
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.mem_size;
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.mem_used;
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.mem_free;
-                row_mem.appendChild(FillCell);
-				table.appendChild(row_mem);
-
-				row_mem = document.createElement("tr");
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Storage";
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.storage_size;
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.storage_used;
-                row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.storage_free;
-                row_mem.appendChild(FillCell);
-				table.appendChild(row_mem);
-				
-										
-				fctable.appendChild(table);
-				fctable.appendChild(document.createElement("hr"));
-				
-				table = document.createElement("table");
-				table.className = "small";
-				table.setAttribute("width", "25%");
-
-
-			}	
-				
-			
-
-            if (this.config.hourly == 1) {
+                var hrrow = document.createElement("tr");
+                var hrrowCell = document.createElement("td");
+                hrrowCell.setAttribute("colSpan", "10");
+                hrrowCell.appendChild(document.createElement("hr"));
+                hrrow.appendChild(hrrowCell);
+        
+                table.appendChild(hrrowCell);
 
                 row_time = document.createElement("tr");
                 row_icon = document.createElement("tr");
                 row_temp = document.createElement("tr");
                 row_pop = document.createElement("tr");
                 row_wind = document.createElement("tr");
-                
 
                 for (f in this.forecast) {
                     forecast = this.hourlyforecast[f * this.config.hourlyinterval];
@@ -582,7 +425,6 @@ Module.register("MMM-WunderGround", {
                     hourCell.className = "hour";
                     hourCell.innerHTML = forecast.hour;
                     row_time.appendChild(hourCell);
-
 
                     iconCell = document.createElement("td");
                     iconCell.className = "align-center bright weather-icon";
@@ -608,21 +450,20 @@ Module.register("MMM-WunderGround", {
                     }
 
                     row_pop.appendChild(mmCell);
-                    
+
                     windDirectionIcon = document.createElement("td");
                     windDirectionIcon.className = "center";
-
                     windDirectionIconCell = document.createElement("i");
                     windDirectionIconCell.className = "wi " + forecast.windSpd;
                     windDirectionIcon.appendChild(windDirectionIconCell);
-                    
+
                     spacer = document.createElement("i");
                     spacer.innerHTML = "&nbsp;&nbsp;";
                     windDirectionIcon.appendChild(spacer);
 
 
                     windDirectionIconCell = document.createElement("i");
-                    
+
                     if (this.config.UseCardinals === 0) {
                         windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
                     } else {
@@ -632,21 +473,21 @@ Module.register("MMM-WunderGround", {
 
                     row_wind.appendChild(windDirectionIcon);
 
-                                       
-                    
 
                     var nl = Number(f) + 1;
-                    if (( nl % 4 ) === 0 ) {
-                            table.appendChild(row_time);
-                            table.appendChild(row_icon);
-                            table.appendChild(row_temp);
+                    if ((nl % 4) === 0) {
+                        table.appendChild(row_time);
+                        table.appendChild(row_icon);
+                        table.appendChild(row_temp);
+                        if (this.config.showpop == 1) {
                             table.appendChild(row_pop);
-                            table.appendChild(row_wind);
-                            row_time = document.createElement("tr");
-                            row_icon = document.createElement("tr");
-                            row_temp = document.createElement("tr");
-                            row_pop = document.createElement("tr");
-                            row_wind = document.createElement("tr");
+                        }
+                        table.appendChild(row_wind);
+                        row_time = document.createElement("tr");
+                        row_icon = document.createElement("tr");
+                        row_temp = document.createElement("tr");
+                        row_pop = document.createElement("tr");
+                        row_wind = document.createElement("tr");
                     }
 
                     if (f > this.config.hourlycount) {
@@ -654,28 +495,151 @@ Module.register("MMM-WunderGround", {
                     }
                 }
 
-
                 table.appendChild(row_time);
                 table.appendChild(row_icon);
                 table.appendChild(row_temp);
-                table.appendChild(row_pop);
+                if (this.config.showpop == 1) {
+                    table.appendChild(row_pop);
+                }
                 table.appendChild(row_wind);
-                fctable.appendChild(table);
-                fctable.appendChild(document.createElement("hr"));
+                
+            }
+        }
+
+        if (this.config.dailylayout == "vertical") {
+            if (this.config.hourlylayout == "horizontal") {
+
+                var hrrow = document.createElement("tr");
+                var hrrowCell = document.createElement("td");
+                hrrowCell.setAttribute("colSpan", "10");
+                hrrowCell.appendChild(document.createElement("hr"));
+                hrrow.appendChild(hrrowCell);
+        
+                table.appendChild(hrrowCell);
+                row = document.createElement("tr");
+
+                var dayHeader = document.createElement("th");
+                dayHeader.className = "day";
+                dayHeader.innerHTML = "";
+                row.appendChild(dayHeader);
+
+                var iconHeader = document.createElement("th");
+                iconHeader.className = "tableheader icon";
+                iconHeader.innerHTML = "";
+                row.appendChild(iconHeader);
+
+                var maxtempHeader = document.createElement("th");
+                maxtempHeader.className = "align-center bright tableheader";
+                row.appendChild(maxtempHeader);
+
+                var maxtempicon = document.createElement("span");
+                maxtempicon.className = "wi wi-thermometer";
+                maxtempHeader.appendChild(maxtempicon);
+
+
+                var mintempHeader = document.createElement("th");
+                mintempHeader.className = "align-center bright tableheader";
+                row.appendChild(mintempHeader);
+
+                var mintempicon = document.createElement("span");
+                mintempicon.className = "wi wi-thermometer-exterior";
+                mintempHeader.appendChild(mintempicon);
+
+
+                if (this.config.showpop == 1) {
+                    var popiconHeader = document.createElement("th");
+                    popiconHeader.className = "align-center bright tableheader";
+                    popiconHeader.setAttribute("colSpan", "10");
+                    row.appendChild(popiconHeader);
+
+                    var popicon = document.createElement("span");
+                    popicon.className = "wi wi-umbrella";
+                    popicon.setAttribute("colSpan", "10");
+                    popiconHeader.appendChild(popicon);
+                }
+
+                table.appendChild(row);
+            }
+
+            for (f in this.forecast) {
+                forecast = this.forecast[f];
+
+                row = document.createElement("tr");
+                table.appendChild(row);
+
+                dayCell = document.createElement("td");
+                dayCell.className = "day";
+                dayCell.innerHTML = forecast.day;
+                row.appendChild(dayCell);
+
+                iconCell = document.createElement("td");
+                iconCell.className = "align-center bright weather-icon";
+                row.appendChild(iconCell);
+
+                icon = document.createElement("span");
+                icon.className = "wi " + forecast.icon;
+                iconCell.appendChild(icon);
+
+                maxTempCell = document.createElement("td");
+                maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
+                maxTempCell.className = "center max-temp";
+                row.appendChild(maxTempCell);
+
+                minTempCell = document.createElement("td");
+                minTempCell.innerHTML = forecast.minTemp + "&deg;";
+                minTempCell.className = "center";
+                row.appendChild(minTempCell);
+
+                if (this.config.showpop == 1) {
+                    popCell = document.createElement("td");
+                    popCell.innerHTML = forecast.pop + "%";
+                    popCell.className = "align-right pop";
+                    row.appendChild(popCell);
+
+                    mmCell = document.createElement("td");
+                    if (this.config.units == "metric") {
+                        mmCell.innerHTML = forecast.mm + "mm";
+                        mmCell.className = "align-right mm";
+                    } else {
+                        mmCell.innerHTML = forecast.mm + "in";
+                        mmCell.className = "align-right mm";
+    
+                    }
+                    row.appendChild(mmCell);
+                }
+
+                if (this.config.fade && this.config.fadePoint < 1) {
+                    if (this.config.fadePoint < 0) {
+                        this.config.fadePoint = 0;
+                    }
+                    startingPoint = this.forecast.length * this.config.fadePoint;
+                    steps = this.forecast.length - startingPoint;
+                    if (f >= startingPoint) {
+                        currentStep = f - startingPoint;
+                        row.style.opacity = 1 - (1 / steps *
+                            currentStep);
+                    }
+                }
+
 
             }
 
-            table = document.createElement("table");
-            table.className = "small";
-            table.setAttribute("width", "25%");
+        } else { // horizontal
+
+
+            var hrrow = document.createElement("tr");
+            var hrrowCell = document.createElement("td");
+            hrrowCell.setAttribute("colSpan", "10");
+            hrrowCell.appendChild(document.createElement("hr"));
+            hrrow.appendChild(hrrowCell);
+
+            table.appendChild(hrrowCell);
 
             row_time = document.createElement("tr");
             row_icon = document.createElement("tr");
             row_temp = document.createElement("tr");
             row_pop = document.createElement("tr");
             row_wind = document.createElement("tr");
-            
-
 
             for (f in this.forecast) {
                 forecast = this.forecast[f];
@@ -710,13 +674,15 @@ Module.register("MMM-WunderGround", {
                 }
 
                 row_pop.appendChild(mmCell);
-                
+
                 var nl = Number(f) + 1;
-                if (( nl % 4 ) === 0 ) {
+                if ((nl % 4) === 0) {
                     table.appendChild(row_time);
                     table.appendChild(row_icon);
                     table.appendChild(row_temp);
-                    table.appendChild(row_pop);
+                    if (this.config.showpop == 1) {
+                        table.appendChild(row_pop);
+                    }
                     row_time = document.createElement("tr");
                     row_icon = document.createElement("tr");
                     row_temp = document.createElement("tr");
@@ -728,12 +694,130 @@ Module.register("MMM-WunderGround", {
             table.appendChild(row_time);
             table.appendChild(row_icon);
             table.appendChild(row_temp);
-            table.appendChild(row_pop);
-            fctable.appendChild(table);
-            wrapper.appendChild(fctable);
+            if (this.config.showpop == 1) {
+                table.appendChild(row_pop);
+            }
+//            fctable.appendChild(table);
+//            wrapper.appendChild(fctable);
 
 
         }
+        wrapper.appendChild(table);
+
+
+        /*           var fctable = document.createElement("div");
+                    fctable.appendChild(document.createElement("hr"));
+
+                    if (this.config.fctext == 1) {
+                        var row = document.createElement("tr");
+                        var forecastTextCell = document.createElement("td");
+
+                        forecastTextCell.className = "forecastText";
+                        forecastTextCell.setAttribute("colSpan", "10");
+                        forecastTextCell.innerHTML = this.forecastText;
+
+                        row.appendChild(forecastTextCell);
+                        table.appendChild(row);
+                        fctable.appendChild(table);
+                        fctable.appendChild(document.createElement("hr"));
+                    }
+
+        */
+        if (this.config.sysstat == 1) {
+            table = document.createElement("table");
+            table.className = "small";
+            table.setAttribute("width", "25%");
+
+            row_mem = document.createElement("tr");
+            row_storage = document.createElement("tr");
+            row_stemp = document.createElement("tr");
+            row_wifi = document.createElement("tr");
+
+            iconCell = document.createElement("td");
+            iconCell.className = "align-right bright weather-icon";
+
+            icon = document.createElement("span");
+            icon.className = "wi wi-thermometer";
+
+            iconCell.appendChild(icon);
+            row_stemp.appendChild(iconCell);
+
+            sysTempCell = document.createElement("td");
+            sysTempCell.innerHTML = this.systemp;
+            sysTempCell.className = "align-left";
+            row_stemp.appendChild(sysTempCell);
+
+            iconCell = document.createElement("td");
+            iconCell.className = "align-right bright weather-icon";
+            icon = document.createElement("span");
+
+            icon.className = "fa fa-wifi ";
+            iconCell.appendChild(icon);
+            row_stemp.appendChild(iconCell);
+
+            WifiCell = document.createElement("td");
+            WifiCell.innerHTML = this.wifiap + " @ " + this.wifistrength + "%";
+            WifiCell.className = "align-left";
+
+            row_stemp.appendChild(WifiCell);
+            table.appendChild(row_stemp);
+
+
+            FillCell = document.createElement("td");
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = "Size";
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = "Used";
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = "Free";
+            row_mem.appendChild(FillCell);
+            table.appendChild(row_mem);
+
+            row_mem = document.createElement("tr");
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = "Memory";
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = this.mem_size;
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = this.mem_used;
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = this.mem_free;
+            row_mem.appendChild(FillCell);
+            table.appendChild(row_mem);
+
+            row_mem = document.createElement("tr");
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = "Storage";
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = this.storage_size;
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = this.storage_used;
+            row_mem.appendChild(FillCell);
+            FillCell = document.createElement("td");
+            FillCell.innerHTML = this.storage_free;
+            row_mem.appendChild(FillCell);
+            table.appendChild(row_mem);
+
+
+            fctable.appendChild(table);
+            fctable.appendChild(document.createElement("hr"));
+
+            table = document.createElement("table");
+            table.className = "small";
+            table.setAttribute("width", "25%");
+
+
+        }
+
+
         return wrapper;
 
     },
@@ -742,21 +826,21 @@ Module.register("MMM-WunderGround", {
      * Requests new data from openweather.org.
      * Calls processWeather on succesfull response.
      */
-    updateWeather: function () {
+    updateWeather: function() {
         var url = this.config.apiBase + this.getParams();
         var self = this;
         var retry = true;
 
         if (this.config.sysstat == 1) {
-			self.sendSocketNotification('GET_WIFI');
-			self.sendSocketNotification('GET_SYSTEM_TEMP');
-			self.sendSocketNotification('GET_SYSTEM_MEM');
-			self.sendSocketNotification('GET_SYSTEM_STORAGE');
-		}
-		
+            self.sendSocketNotification('GET_WIFI');
+            self.sendSocketNotification('GET_SYSTEM_TEMP');
+            self.sendSocketNotification('GET_SYSTEM_MEM');
+            self.sendSocketNotification('GET_SYSTEM_STORAGE');
+        }
+
         var weatherRequest = new XMLHttpRequest();
         weatherRequest.open("GET", url, true);
-        weatherRequest.onreadystatechange = function () {
+        weatherRequest.onreadystatechange = function() {
             if (this.readyState === 4) {
                 if (this.status === 200) {
                     self.processWeather(JSON.parse(this.response));
@@ -785,7 +869,7 @@ Module.register("MMM-WunderGround", {
      *
      * return String - URL params.
      */
-    getParams: function () {
+    getParams: function() {
         var params = this.config.apikey;
         var wulang = this.config.lang.toUpperCase();
         if (wulang == "DE") {
@@ -809,7 +893,7 @@ Module.register("MMM-WunderGround", {
      * argument data object - Weather information received form openweather.org.
      */
 
-    processWeather: function (data) {
+    processWeather: function(data) {
 
         if (data.response.hasOwnProperty("error")) {
             this.errorDescription = data.response.error.description;
@@ -946,7 +1030,7 @@ Module.register("MMM-WunderGround", {
 
                 this.maxTemp = this.roundValue(this.maxTemp);
                 this.minTemp = this.roundValue(this.minTemp);
-                
+
 
 
                 this.forecast.push({
@@ -990,7 +1074,7 @@ Module.register("MMM-WunderGround", {
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);
                     this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(hourlyforecast.wspd.metric);
 
-                        
+
                     this.hourlyforecast.push({
 
                         hour: this.thour,
@@ -1020,7 +1104,7 @@ Module.register("MMM-WunderGround", {
      *
      * argument delay number - Milliseconds before next update. If empty, this.config.updateInterval is used.
      */
-    scheduleUpdate: function (delay) {
+    scheduleUpdate: function(delay) {
         var nextLoad = this.config.updateInterval;
         if (typeof delay !== "undefined" && delay >= 0) {
             nextLoad = delay;
@@ -1028,7 +1112,7 @@ Module.register("MMM-WunderGround", {
 
         var self = this;
         clearTimeout(this.updateTimer);
-        this.updateTimer = setTimeout(function () {
+        this.updateTimer = setTimeout(function() {
             self.updateWeather();
         }, nextLoad);
     },
@@ -1040,7 +1124,7 @@ Module.register("MMM-WunderGround", {
      *
      * return number - Windspeed in beaufort.
      */
-    ms2Beaufort: function (kmh) {
+    ms2Beaufort: function(kmh) {
         var speeds = [1, 5, 11, 19, 28, 38, 49, 61, 74, 88, 102,
             117, 1000
         ];
@@ -1053,7 +1137,7 @@ Module.register("MMM-WunderGround", {
         return 12;
     },
 
-    wordwrap: function (str, width, brk) {
+    wordwrap: function(str, width, brk) {
 
         brk = brk || "n";
         width = width || 75;
@@ -1077,7 +1161,7 @@ Module.register("MMM-WunderGround", {
      * return number - Rounded Temperature.
      */
 
-    deg2Cardinal: function (deg) {
+    deg2Cardinal: function(deg) {
         if (deg > 11.25 && deg <= 33.75) {
             return "wi-from-nne";
         } else if (deg > 33.75 && deg <= 56.25) {
@@ -1120,43 +1204,43 @@ Module.register("MMM-WunderGround", {
      *
      * return number - Rounded Temperature.
      */
-    roundValue: function (temperature) {
+    roundValue: function(temperature) {
         return parseFloat(temperature).toFixed(this.config.roundTmpDecs);
     },
-    
-    socketNotificationReceived: function(notification, payload) {
-		var self = this;
 
-		Log.info('received ' + notification)
+    socketNotificationReceived: function(notification, payload) {
+        var self = this;
+
+        Log.info('received ' + notification);
         if (notification === 'WIFI_STRENGTH') {
             Log.info('received WIFI_STRENGTH');
-			Log.info(payload.wifi_strength);
-			this.wifiap = payload.wifi_ap;
-			this.wifistrength=payload.wifi_strength;
-			self.updateDom(self.config.animationSpeed);
+            Log.info(payload.wifi_strength);
+            this.wifiap = payload.wifi_ap;
+            this.wifistrength = payload.wifi_strength;
+            self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_TEMP') {
             Log.info('received SYSTEM_TEMP');
-			Log.info(payload.system_temp);
-			this.systemp=payload.system_temp;
-			self.updateDom(self.config.animationSpeed);
+            Log.info(payload.system_temp);
+            this.systemp = payload.system_temp;
+            self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_MEM') {
             Log.info('received SYSTEM_MEM');
-			Log.info(payload);
-			this.mem_size=payload.mem_size;
-			this.mem_used=payload.mem_used;
-			this.mem_free=payload.mem_free;
-			self.updateDom(self.config.animationSpeed);
-		}
+            Log.info(payload);
+            this.mem_size = payload.mem_size;
+            this.mem_used = payload.mem_used;
+            this.mem_free = payload.mem_free;
+            self.updateDom(self.config.animationSpeed);
+        }
         if (notification === 'SYSTEM_STORAGE') {
             Log.info('received SYSTEM_STORAGE');
-			Log.info(payload);
-			this.storage_size=payload.store_size;
-			this.storage_used=payload.store_used;
-			this.storage_free=payload.store_avail;
-			self.updateDom(self.config.animationSpeed);
+            Log.info(payload);
+            this.storage_size = payload.store_size;
+            this.storage_used = payload.store_used;
+            this.storage_free = payload.store_avail;
+            self.updateDom(self.config.animationSpeed);
         }
-	}
+    }
 
 });
