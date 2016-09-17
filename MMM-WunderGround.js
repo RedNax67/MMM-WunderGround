@@ -11,6 +11,7 @@ Module.register("MMM-WunderGround", {
     defaults: {
         apikey: "",
         pws: "",
+        currentweather: 1,
         units: config.units,
         updateInterval: 10 * 60 * 1000, // every 10 minutes
         animationSpeed: 1000,
@@ -207,66 +208,67 @@ Module.register("MMM-WunderGround", {
             wrapper.className = "dimmed light small";
             return wrapper;
         }
+        if (this.config.currentweather === 1) {
+            var small = document.createElement("div");
+            small.className = "normal medium";
 
-        var small = document.createElement("div");
-        small.className = "normal medium";
+            var windIcon = document.createElement("span");
+            windIcon.className = "wi " + this.windSpeed;
+            small.appendChild(windIcon);
 
-        var windIcon = document.createElement("span");
-        windIcon.className = "wi " + this.windSpeed;
-        small.appendChild(windIcon);
+            var spacer = document.createElement("span");
+            spacer.innerHTML = "&nbsp;";
+            small.appendChild(spacer);
+            small.appendChild(spacer);
+    
+            var windDirectionIcon = document.createElement("span");
+            if (this.config.UseCardinals === 0) {
+                windDirectionIcon.className = "wi wi-wind " + this.windDirection;
+            } else {
+                windDirectionIcon.innerHTML = this.windDirectionTxt;
+            }
+            small.appendChild(windDirectionIcon);
+    
+            spacer = document.createElement("span");
+            spacer.innerHTML = "&nbsp;";
+            small.appendChild(spacer);
 
-        var spacer = document.createElement("span");
-        spacer.innerHTML = "&nbsp;";
-        small.appendChild(spacer);
-        small.appendChild(spacer);
+            spacer = document.createElement("span");
+            spacer.innerHTML = "&nbsp;";
+            small.appendChild(spacer);
 
-        var windDirectionIcon = document.createElement("span");
-        if (this.config.UseCardinals === 0) {
-            windDirectionIcon.className = "wi wi-wind " + this.windDirection;
-        } else {
-            windDirectionIcon.innerHTML = this.windDirectionTxt;
+            var sunriseSunsetIcon = document.createElement("span");
+            sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon;
+            small.appendChild(sunriseSunsetIcon);
+    
+            var sunriseSunsetTime = document.createElement("span");
+            sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
+            small.appendChild(sunriseSunsetTime);
+
+            small.appendChild(spacer);
+            small.appendChild(spacer);
+
+            var moonPhaseIcon = document.createElement("span");
+            moonPhaseIcon.className = "wi dimmed " + this.moonPhaseIcon;
+            small.appendChild(moonPhaseIcon);
+
+            var large = document.createElement("div");
+            large.className = "large light";
+
+            var weatherIcon = document.createElement("span");
+            weatherIcon.className = "wi " + this.weatherType;
+            large.appendChild(weatherIcon);
+
+            var temperature = document.createElement("span");
+            temperature.className = "bright";
+            temperature.innerHTML = " " + this.temperature + "&deg;";
+            large.appendChild(temperature);
+
+            wrapper.appendChild(small);
+            wrapper.appendChild(large);
+
         }
-        small.appendChild(windDirectionIcon);
-
-        spacer = document.createElement("span");
-        spacer.innerHTML = "&nbsp;";
-        small.appendChild(spacer);
-
-        spacer = document.createElement("span");
-        spacer.innerHTML = "&nbsp;";
-        small.appendChild(spacer);
-
-        var sunriseSunsetIcon = document.createElement("span");
-        sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon;
-        small.appendChild(sunriseSunsetIcon);
-
-        var sunriseSunsetTime = document.createElement("span");
-        sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
-        small.appendChild(sunriseSunsetTime);
-
-        small.appendChild(spacer);
-        small.appendChild(spacer);
-
-        var moonPhaseIcon = document.createElement("span");
-        moonPhaseIcon.className = "wi dimmed " + this.moonPhaseIcon;
-        small.appendChild(moonPhaseIcon);
-
-        var large = document.createElement("div");
-        large.className = "large light";
-
-        var weatherIcon = document.createElement("span");
-        weatherIcon.className = "wi " + this.weatherType;
-        large.appendChild(weatherIcon);
-
-        var temperature = document.createElement("span");
-        temperature.className = "bright";
-        temperature.innerHTML = " " + this.temperature + "&deg;";
-        large.appendChild(temperature);
-
-        wrapper.appendChild(small);
-        wrapper.appendChild(large);
-
-
+        
         // Forecast table
 
         var table = document.createElement("table");
@@ -284,7 +286,10 @@ Module.register("MMM-WunderGround", {
                 var forecastTextCell = document.createElement("td");
                 forecastTextCell.className = "forecastText";
                 forecastTextCell.setAttribute("colSpan", "10");
-                forecastTextCell.innerHTML = this.forecastText;
+            
+
+
+            forecastTextCell.innerHTML = this.forecastText;
 
                 row.appendChild(forecastTextCell);
             }
