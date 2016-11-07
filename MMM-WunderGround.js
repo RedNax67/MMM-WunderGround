@@ -154,8 +154,8 @@ Module.register("MMM-WunderGround", {
         this.loaded = false;
         this.error = false;
         this.errorDescription = "";
-        this.scheduleUpdate(this.config.initialLoadDelay);
-
+        //this.scheduleUpdate(this.config.initialLoadDelay);
+		this.getWunder();
         this.updateTimer = null;
 		this.systemp = "";
 		this.wifiap = "";
@@ -170,6 +170,11 @@ Module.register("MMM-WunderGround", {
 		
 
     },
+    
+    getWunder: function() {
+		Log.info("WunderGround: Getting weather.");
+		this.sendSocketNotification("GET_WUNDERGROUND",this.config);
+	}, 
 
     // Override dom generator.
     getDom: function () {
@@ -758,7 +763,7 @@ Module.register("MMM-WunderGround", {
 			self.sendSocketNotification('GET_SYSTEM_MEM');
 			self.sendSocketNotification('GET_SYSTEM_STORAGE');
 		}
-		
+		Log.info(moment().format() + ": " + this.name + " updating weather.");
         var weatherRequest = new XMLHttpRequest();
         weatherRequest.open("GET", url, true);
         weatherRequest.onreadystatechange = function () {
@@ -1033,6 +1038,7 @@ Module.register("MMM-WunderGround", {
 
         var self = this;
         clearTimeout(this.updateTimer);
+        Log.info(moment().format() + ": " + this.name + " scheduling next update in " + nextLoad + " seconds.");
         this.updateTimer = setTimeout(function () {
             self.updateWeather();
         }, nextLoad);
@@ -1132,7 +1138,7 @@ Module.register("MMM-WunderGround", {
     socketNotificationReceived: function(notification, payload) {
 		var self = this;
 
-		Log.info('received ' + notification)
+		Log.info('Wunderground received ' + notification)
         if (notification === 'WIFI_STRENGTH') {
             Log.info('received WIFI_STRENGTH');
 			Log.info(payload.wifi_strength);
@@ -1162,6 +1168,12 @@ Module.register("MMM-WunderGround", {
 			this.storage_free=payload.store_avail;
 			self.updateDom(self.config.animationSpeed);
         }
+        if (notification === 'WUNDERGROUND') {
+            Log.info('received WUNDERGROUND');
+			Log.info(payload);
+			self.processWeather(JSON.parse(payload));
+        }
+
 	}
 
 });

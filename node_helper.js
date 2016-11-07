@@ -11,9 +11,11 @@ var request = require('request');
 const exec = require('child_process').exec; 
 
 
+
 module.exports = NodeHelper.create({
   start: function () {
     console.log('MMM-WunderGround helper started ...');
+	this.fetcherRunning = false;
   },
 
   getWifi: function() {
@@ -86,11 +88,63 @@ module.exports = NodeHelper.create({
         });
   },
   
-  
+  fetchWunderground: function() {
+        var self = this;
+        this.fetcherRunning = true; 
+        
+        var params = this.config.apikey;
+        var wulang = this.config.lang.toUpperCase();
+        if (wulang == "DE") {
+            wulang = "DL";
+        }
+        params +=
+            "/conditions/hourly/forecast10day/astronomy/alerts/lang:" +
+            wulang;
+        params += "/q/" + this.config.pws;
+        params += ".json";
+        
+        var Wurl = this.config.apiBase + params;
+        console.log(Wurl);
+        request({
+            url: Wurl,
+            method: 'GET'
+                }, function(error, response, body) {
+
+                    if (!error && response.statusCode == 200) {
+
+                            self.sendSocketNotification('WUNDERGROUND',body);
+                        
+                    }
+                        
+                    setTimeout(function() {
+                        self.fetchWunderground();
+                    }, self.config.updateInterval);
+
+                }
+        );
+        
+        
+
+
+  },
   
   //Subclass socketNotificationReceived received.
-  socketNotificationReceived: function(notification, payloads) {
+  socketNotificationReceived: function(notification, payload) {
     console.log(notification);
+    
+    var self = this;
+    
+    if(notification === "GET_WUNDERGROUND"){
+            
+        this.config = payload;
+        console.log('Lets get WunderGround');
+
+        if (!this.fetcherRunning) {
+            this.fetchWunderground();
+        }
+			
+    }
+    
     if (notification === 'GET_WIFI') {
       this.getWifi();
     }
