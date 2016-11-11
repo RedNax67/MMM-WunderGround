@@ -820,7 +820,10 @@ Module.register("MMM-WunderGround", {
      */
 
     processWeather: function (data) {
-
+        if (data.current_observation.estimated.hasOwnProperty("estimated")) {
+            return;
+        }
+        
         if (data.response.hasOwnProperty("error")) {
             this.errorDescription = data.response.error.description;
             this.error = true;
