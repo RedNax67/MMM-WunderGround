@@ -218,7 +218,7 @@ Module.register("MMM-WunderGround", {
             small.className = "normal medium";
 
             var windIcon = document.createElement("span");
-            windIcon.className = "wi " + this.windSpeed;
+            windIcon.className = "wi " + this.windSpeed  + " vcen";
             small.appendChild(windIcon);
 
             var spacer = document.createElement("span");
@@ -228,7 +228,7 @@ Module.register("MMM-WunderGround", {
     
             var windDirectionIcon = document.createElement("span");
             if (this.config.UseCardinals === 0) {
-                windDirectionIcon.className = "wi wi-wind " + this.windDirection;
+                windDirectionIcon.className = "wi wi-wind " + this.windDirection  + " vcen";
             } else {
                 windDirectionIcon.innerHTML = this.windDirectionTxt;
             }
@@ -243,18 +243,20 @@ Module.register("MMM-WunderGround", {
             small.appendChild(spacer);
 
             var sunriseSunsetIcon = document.createElement("span");
-            sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon;
+            sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon  + " vcen";
             small.appendChild(sunriseSunsetIcon);
     
             var sunriseSunsetTime = document.createElement("span");
             sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
+			sunriseSunsetTime.className = "vcen";
             small.appendChild(sunriseSunsetTime);
 
             small.appendChild(spacer);
             small.appendChild(spacer);
 
             var moonPhaseIcon = document.createElement("span");
-            moonPhaseIcon.className = "wi dimmed " + this.moonPhaseIcon;
+            //moonPhaseIcon.className = "wi dimmed " + this.moonPhaseIcon;
+			moonPhaseIcon.innerHTML = this.moonPhaseIcon;
             small.appendChild(moonPhaseIcon);
 
             var large = document.createElement("div");
@@ -921,6 +923,7 @@ Module.register("MMM-WunderGround", {
             this.windDirectionTxt = data.current_observation.wind_dir;
             this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
             this.moonPhaseIcon = this.config.moonPhaseTable[data.moon_phase.ageOfMoon];
+			this.moonPhaseIcon = "<img height='40' width='40' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif' style='align='center';'>";
 
 
             if (this.config.units == "metric") {

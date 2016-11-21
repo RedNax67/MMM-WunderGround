@@ -114,7 +114,7 @@ module.exports = NodeHelper.create({
 
                     if (!error && response.statusCode == 200) {
                         this.wunderPayload = body;
-                        console.log(moment().format() + " 5 " + self.name + ": " + body);
+                        // console.log(moment().format() + " 5 " + self.name + ": " + body);
                         self.sendSocketNotification('WUNDERGROUND',body);
                     } else {
                         console.log(moment().format() + " 6 " + self.name + ": " + error);
@@ -168,7 +168,7 @@ module.exports = NodeHelper.create({
 	
 						if (!error && response.statusCode == 200) {
 								this.wunderPayload = body;
-                                console.log(moment().format() + " 1 " + self.name + ": " + body);
+                                // console.log(moment().format() + " 1 " + self.name + ": " + body);
                                 self.sendSocketNotification('WUNDERGROUND',body);
 						} else {
                             console.log(moment().format() + " 2 " + self.name + ": " + error);
