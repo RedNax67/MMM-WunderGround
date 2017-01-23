@@ -941,8 +941,8 @@ Module.register("MMM-WunderGround", {
                 if (this.config.units == "metric") {
                     this.tmaxTemp = forecast.high.celsius;
                     this.tminTemp = forecast.low.celsius;
-                    if (Number(forecast.snow_allday.mm) >  0 ) {
-						this.tmm = forecast.snow_allday.mm + "cm";
+                    if (Number(forecast.snow_allday.cm) >  0 ) {
+						this.tmm = forecast.snow_allday.cm + "cm";
 					} else {
 						this.tmm = forecast.qpf_allday.mm + "mm";
 					}
@@ -984,8 +984,8 @@ Module.register("MMM-WunderGround", {
                     if (this.config.units == "metric") {
                         this.tmaxTemp = hourlyforecast.temp.metric;
                         this.tminTemp = hourlyforecast.feelslike.metric;
-						if (Number(forecast.snow_allday.mm) >  0 ) {
-							this.tmm = forecast.snow_allday.mm + "cm";
+						if (Number(forecast.snow_allday.cm) >  0 ) {
+							this.tmm = forecast.snow_allday.cm + "cm";
 						} else {
 							this.tmm = forecast.qpf_allday.mm + "mm";
 						}
