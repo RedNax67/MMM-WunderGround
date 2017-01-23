@@ -380,14 +380,8 @@ Module.register("MMM-WunderGround", {
                     row.appendChild(popCell);
 
                     mmCell = document.createElement("td");
-                    if (this.config.units == "metric") {
-                        mmCell.innerHTML = forecast.mm + "mm";
-                        mmCell.className = "align-right mm";
-                    } else {
-                        mmCell.innerHTML = forecast.mm + "in";
-                        mmCell.className = "align-right mm";
-
-                    }
+                    mmCell.innerHTML = forecast.mm ;
+                    mmCell.className = "align-right mm";
                     row.appendChild(mmCell);
 
                     if (f > this.config.hourlycount) {
@@ -434,14 +428,8 @@ Module.register("MMM-WunderGround", {
                 row.appendChild(popCell);
 
                 mmCell = document.createElement("td");
-                if (this.config.units == "metric") {
-                    mmCell.innerHTML = forecast.mm + "mm";
-                    mmCell.className = "align-right mm";
-                } else {
-                    mmCell.innerHTML = forecast.mm + "in";
-                    mmCell.className = "align-right mm";
-
-                }
+                mmCell.innerHTML = forecast.mm ;
+                mmCell.className = "align-right mm";
                 row.appendChild(mmCell);
 
                 if (this.config.fade && this.config.fadePoint < 1) {
@@ -611,10 +599,10 @@ Module.register("MMM-WunderGround", {
                     mmCell = document.createElement("td");
 
                     if (this.config.units == "metric") {
-                        mmCell.innerHTML = forecast.pop + "%/" + forecast.mm + "mm";
+                        mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
                         mmCell.className = "hour";
                     } else {
-                        mmCell.innerHTML = forecast.pop + "%/" + forecast.mm + "in";
+                        mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
                         mmCell.className = "hour";
 
                     }
@@ -713,10 +701,10 @@ Module.register("MMM-WunderGround", {
 
                 mmCell = document.createElement("td");
                 if (this.config.units == "metric") {
-                    mmCell.innerHTML = forecast.pop + "%/" + forecast.mm + "mm";
+                    mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
                     mmCell.className = "hour";
                 } else {
-                    mmCell.innerHTML = forecast.pop + "%/" + forecast.mm + "in";
+                    mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
                     mmCell.className = "hour";
 
                 }
@@ -953,11 +941,19 @@ Module.register("MMM-WunderGround", {
                 if (this.config.units == "metric") {
                     this.tmaxTemp = forecast.high.celsius;
                     this.tminTemp = forecast.low.celsius;
-                    this.tmm = forecast.qpf_allday.mm;
+                    if (Number(forecast.snow_allday.mm) >  0 ) {
+						this.tmm = forecast.snow_allday.mm + "cm";
+					} else {
+						this.tmm = forecast.qpf_allday.mm + "mm";
+					}
                 } else {
                     this.tmaxTemp = forecast.high.fahrenheit;
                     this.tminTemp = forecast.low.fahrenheit;
-                    this.tmm = forecast.qpf_allday.in;
+                    if (Number(forecast.snow_allday.in) >  0 ) {
+						this.tmm = forecast.snow_allday.in + "in";
+					} else {
+						this.tmm = forecast.qpf_allday.in + "in";
+					}
                 }
 
                 this.maxTemp = this.roundValue(this.maxTemp);
@@ -988,13 +984,20 @@ Module.register("MMM-WunderGround", {
                     if (this.config.units == "metric") {
                         this.tmaxTemp = hourlyforecast.temp.metric;
                         this.tminTemp = hourlyforecast.feelslike.metric;
-                        this.tmm = hourlyforecast.qpf.metric;
-                        this.thour = hourlyforecast.FCTTIME.hour +
-                            ":00";
+						if (Number(forecast.snow_allday.mm) >  0 ) {
+							this.tmm = forecast.snow_allday.mm + "cm";
+						} else {
+							this.tmm = forecast.qpf_allday.mm + "mm";
+						}
+						this.thour = hourlyforecast.FCTTIME.hour + ":00";
                     } else {
                         this.tmaxTemp = hourlyforecast.temp.english;
                         this.tminTemp = hourlyforecast.feelslike.english;
-                        this.tmm = hourlyforecast.qpf.english;
+						if (Number(forecast.snow_allday.in) >  0 ) {
+							this.tmm = forecast.snow_allday.in + "in";
+						} else {
+							this.tmm = forecast.qpf_allday.in + "in";
+						}
                         this.thour = hourlyforecast.FCTTIME.civil;
                     }
                     this.tthour = Number(hourlyforecast.FCTTIME.hour);
