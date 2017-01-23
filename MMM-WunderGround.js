@@ -917,7 +917,7 @@ Module.register("MMM-WunderGround", {
             if (this.config.units == "metric") {
                 this.temperature = data.current_observation.temp_c;
                 this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                    .forecastday[0].fcttext_metric, 35, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+                    .forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3"), 35, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
             } else {
                 this.temperature = data.current_observation.temp_f;
                 this.forecastText = this.wordwrap(data.forecast.txt_forecast
