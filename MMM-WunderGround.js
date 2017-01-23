@@ -897,7 +897,7 @@ Module.register("MMM-WunderGround", {
 
             }
 
-            if (this.alertmsg !== "") {
+            if (this.alertmsg !== "" && this.config.show_popup == 1 ) {
                 this.sendNotification("SHOW_ALERT", {
                     type: "alert",
                     message: this.alertmsg,
