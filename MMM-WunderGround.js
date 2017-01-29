@@ -214,50 +214,76 @@ Module.register("MMM-WunderGround", {
             return wrapper;
         }
         if (this.config.currentweather === 1) {
-            var small = document.createElement("div");
+            var small = document.createElement("span");
             small.className = "normal medium";
-
-            var windIcon = document.createElement("span");
-            windIcon.className = "wi " + this.windSpeed  + " vcen";
-            small.appendChild(windIcon);
 
             var spacer = document.createElement("span");
             spacer.innerHTML = "&nbsp;";
-            small.appendChild(spacer);
-            small.appendChild(spacer);
+
+            var table_sitrep = document.createElement("table");
+            var row_sitrep = document.createElement("tr");
+            table_sitrep.appendChild(row_sitrep);
+
+            var windIcon = document.createElement("td");
+            windIcon.className = "wi " + this.windSpeed  + " vcen center";
+            windIcon.innerHTML = "  ";
+            
+            row_sitrep.appendChild(windIcon);
+            //small.appendChild(spacer);
     
-            var windDirectionIcon = document.createElement("span");
+            var windDirectionIcon = document.createElement("td");
             if (this.config.UseCardinals === 0) {
-                windDirectionIcon.className = "wi wi-wind " + this.windDirection  + " vcen";
+                windDirectionIcon.className = "wi wi-wind " + this.windDirection  + " vcen center";
+                windDirectionIcon.innerHTML = " ";
             } else {
                 windDirectionIcon.innerHTML = this.windDirectionTxt;
             }
-            small.appendChild(windDirectionIcon);
+            row_sitrep.appendChild(windDirectionIcon);
+            //small.appendChild(spacer);
+
+            var Humidity = document.createElement("td");
+            Humidity.className = "wi wi-humidity vcen pop center";
+            Humidity.innerHTML = this.Humidity + " ";
+            row_sitrep.appendChild(Humidity);
+
+            
+            //var HumidityIcon = document.createElement("td");
+            //HumidityIcon.className = "wi wi-humidity vcen medium pop align-left";
+            //row_sitrep.appendChild(HumidityIcon);
+            //small.appendChild(spacer);
+            
+            
+            
+         
     
-            spacer = document.createElement("span");
+            /*spacer = document.createElement("span");
             spacer.innerHTML = "&nbsp;";
             small.appendChild(spacer);
 
             spacer = document.createElement("span");
             spacer.innerHTML = "&nbsp;";
             small.appendChild(spacer);
-
-            var sunriseSunsetIcon = document.createElement("span");
-            sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon  + " vcen";
-            small.appendChild(sunriseSunsetIcon);
+*/
+            var sunriseSunsetIcon = document.createElement("td");
+            sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon  + " vcen pop left";
+            sunriseSunsetIcon.innerHTML = " " + this.sunriseSunsetTime;
+            row_sitrep.appendChild(sunriseSunsetIcon);
     
-            var sunriseSunsetTime = document.createElement("span");
-            sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
-			sunriseSunsetTime.className = "vcen";
-            small.appendChild(sunriseSunsetTime);
+//            var sunriseSunsetTime = document.createElement("td");
+ //           sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
+//			sunriseSunsetTime.className = "vcen";
+ //           row_sitrep.appendChild(sunriseSunsetTime);
 
-            small.appendChild(spacer);
-            small.appendChild(spacer);
+            //small.appendChild(spacer);
+            //small.appendChild(spacer);
 
-            var moonPhaseIcon = document.createElement("span");
+            var moonPhaseIcon = document.createElement("td");
             //moonPhaseIcon.className = "wi dimmed " + this.moonPhaseIcon;
 			moonPhaseIcon.innerHTML = this.moonPhaseIcon;
-            small.appendChild(moonPhaseIcon);
+            row_sitrep.appendChild(moonPhaseIcon);
+            
+            small.appendChild(table_sitrep);
+            
 
             var large = document.createElement("div");
             large.className = "large light";
@@ -909,6 +935,8 @@ Module.register("MMM-WunderGround", {
             this.weatherType = this.iconTable[data.current_observation.icon];
             this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
             this.windDirectionTxt = data.current_observation.wind_dir;
+            this.Humidity = data.current_observation.relative_humidity;
+            this.Humidity = this.Humidity.substring(0,this.Humidity.length -1);
             this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
             this.moonPhaseIcon = this.config.moonPhaseTable[data.moon_phase.ageOfMoon];
 			this.moonPhaseIcon = "<img height='40' width='40' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif' style='align='center';'>";
