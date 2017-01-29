@@ -221,67 +221,40 @@ Module.register("MMM-WunderGround", {
             spacer.innerHTML = "&nbsp;";
 
             var table_sitrep = document.createElement("table");
+            table_sitrep.className = "medium vcen pop";
+            // table_sitrep.setAttribute("width", "25%");
+
             var row_sitrep = document.createElement("tr");
-            table_sitrep.appendChild(row_sitrep);
 
             var windIcon = document.createElement("td");
-            windIcon.className = "wi " + this.windSpeed  + " vcen center";
-            windIcon.innerHTML = "  ";
+            windIcon.className = "wi " + this.windSpeed;
             
             row_sitrep.appendChild(windIcon);
-            //small.appendChild(spacer);
     
             var windDirectionIcon = document.createElement("td");
             if (this.config.UseCardinals === 0) {
-                windDirectionIcon.className = "wi wi-wind " + this.windDirection  + " vcen center";
-                windDirectionIcon.innerHTML = " ";
+                windDirectionIcon.className = "wi wi-wind " + this.windDirection;
+                windDirectionIcon.innerHTML = "&nbsp;";
             } else {
                 windDirectionIcon.innerHTML = this.windDirectionTxt;
             }
             row_sitrep.appendChild(windDirectionIcon);
-            //small.appendChild(spacer);
-
+            
             var Humidity = document.createElement("td");
-            Humidity.className = "wi wi-humidity vcen pop center";
-            Humidity.innerHTML = this.Humidity + " ";
+            Humidity.className = "wi wi-humidity";
+            Humidity.innerHTML = this.Humidity + "&nbsp;";
             row_sitrep.appendChild(Humidity);
 
-            
-            //var HumidityIcon = document.createElement("td");
-            //HumidityIcon.className = "wi wi-humidity vcen medium pop align-left";
-            //row_sitrep.appendChild(HumidityIcon);
-            //small.appendChild(spacer);
-            
-            
-            
-         
-    
-            /*spacer = document.createElement("span");
-            spacer.innerHTML = "&nbsp;";
-            small.appendChild(spacer);
-
-            spacer = document.createElement("span");
-            spacer.innerHTML = "&nbsp;";
-            small.appendChild(spacer);
-*/
             var sunriseSunsetIcon = document.createElement("td");
-            sunriseSunsetIcon.className = "wi dimmed " + this.sunriseSunsetIcon  + " vcen pop left";
-            sunriseSunsetIcon.innerHTML = " " + this.sunriseSunsetTime;
+            sunriseSunsetIcon.className = "wi " + this.sunriseSunsetIcon;
+            sunriseSunsetIcon.innerHTML = this.sunriseSunsetTime;
             row_sitrep.appendChild(sunriseSunsetIcon);
     
-//            var sunriseSunsetTime = document.createElement("td");
- //           sunriseSunsetTime.innerHTML = " " + this.sunriseSunsetTime;
-//			sunriseSunsetTime.className = "vcen";
- //           row_sitrep.appendChild(sunriseSunsetTime);
-
-            //small.appendChild(spacer);
-            //small.appendChild(spacer);
-
             var moonPhaseIcon = document.createElement("td");
-            //moonPhaseIcon.className = "wi dimmed " + this.moonPhaseIcon;
 			moonPhaseIcon.innerHTML = this.moonPhaseIcon;
             row_sitrep.appendChild(moonPhaseIcon);
             
+            table_sitrep.appendChild(row_sitrep);
             small.appendChild(table_sitrep);
             
 
@@ -320,9 +293,7 @@ Module.register("MMM-WunderGround", {
                 forecastTextCell.className = "forecastText";
                 forecastTextCell.setAttribute("colSpan", "10");
             
-
-
-            forecastTextCell.innerHTML = this.forecastText;
+                forecastTextCell.innerHTML = this.forecastText;
 
                 row.appendChild(forecastTextCell);
             }
