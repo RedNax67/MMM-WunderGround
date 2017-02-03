@@ -458,6 +458,8 @@ Module.register("MMM-WunderGround", {
 
         } else {
 
+		// horizontal
+		
             var fctable = document.createElement("div");
             fctable.appendChild(document.createElement("hr"));
 
@@ -716,6 +718,30 @@ Module.register("MMM-WunderGround", {
                 }
 
                 row_pop.appendChild(mmCell);
+				
+				windDirectionIcon = document.createElement("td");
+                windDirectionIcon.className = "center";
+                windDirectionIconCell = document.createElement("i");
+                windDirectionIconCell.className = "wi " + forecast.windSpd;
+                windDirectionIcon.appendChild(windDirectionIconCell);
+                    
+                spacer = document.createElement("i");
+                spacer.innerHTML = "&nbsp;&nbsp;";
+                windDirectionIcon.appendChild(spacer);
+
+
+                    windDirectionIconCell = document.createElement("i");
+                    
+                    if (this.config.UseCardinals === 0) {
+                        windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
+                    } else {
+                        windDirectionIcon.innerHTML = this.windDir;
+                    }
+                    windDirectionIcon.appendChild(windDirectionIconCell);
+
+                    row_wind.appendChild(windDirectionIcon);
+
+
                 
                 var nl = Number(f) + 1;
                 if (( nl % 4 ) === 0 ) {
@@ -723,10 +749,12 @@ Module.register("MMM-WunderGround", {
                     table.appendChild(row_icon);
                     table.appendChild(row_temp);
                     table.appendChild(row_pop);
+					table.appendChild(row_wind);
                     row_time = document.createElement("tr");
                     row_icon = document.createElement("tr");
                     row_temp = document.createElement("tr");
                     row_pop = document.createElement("tr");
+					row_wind = document.createElement("tr");
                 }
 
             }
@@ -735,6 +763,7 @@ Module.register("MMM-WunderGround", {
             table.appendChild(row_icon);
             table.appendChild(row_temp);
             table.appendChild(row_pop);
+            table.appendChild(row_wind);
             fctable.appendChild(table);
             wrapper.appendChild(fctable);
 
@@ -968,6 +997,11 @@ Module.register("MMM-WunderGround", {
 
                 this.maxTemp = this.roundValue(this.maxTemp);
                 this.minTemp = this.roundValue(this.minTemp);
+				
+                this.windDir = this.deg2Cardinal(forecast.maxwind.degrees);
+                this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(forecast.maxwind.kph);
+
+
                 
 
 
@@ -978,7 +1012,10 @@ Module.register("MMM-WunderGround", {
                     minTemp: this.tminTemp,
                     icon: this.config.iconTableDay[forecast.icon],
                     pop: forecast.pop,
+					windDir: this.windDir,
+					windSpd: this.windSpd, 
                     mm: this.tmm
+					
                 });
 
 
