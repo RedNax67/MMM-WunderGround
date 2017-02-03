@@ -12,7 +12,7 @@
 }
 
 .MMM-WunderGround .vcen {
-   vertical-align: center;
+   vertical-align: top;
 }
 
 .MMM-WunderGround .weather-icon {
@@ -67,4 +67,16 @@
   color: #FF4C4C;
 }
 
+.MMM-WunderGround .center {
+	text-align: center;
+	padding-right: 10px; 
+}
+	
+.MMM-WunderGround .left {
+	text-align: left;
+}
 
+.MMM-WunderGround .lpad {
+	padding-left: 10px; 
+}
+	
