@@ -643,8 +643,11 @@ Module.register("MMM-WunderGround", {
                     iconCell = document.createElement("td");
                     iconCell.className = "align-center bright weather-icon";
                     icon = document.createElement("span");
-                    //icon.className = "wi " + forecast.icon;
-					icon.innerHTML = forecast.icon_url;
+					if (this.config.coloricon) {
+						icon.innerHTML = forecast.icon_url;
+					} else {
+						icon.className = "wi " + forecast.icon;
+					}
                     iconCell.appendChild(icon);
                     row_icon.appendChild(iconCell);
 
@@ -746,7 +749,11 @@ Module.register("MMM-WunderGround", {
                 iconCell.className = "align-center bright weather-icon";
 
                 icon = document.createElement("span");
-                icon.className = "wi " + forecast.icon;
+				if (this.config.coloricon) {
+					icon.innerHTML = forecast.icon_url;
+				} else {
+					icon.className = "wi " + forecast.icon;
+				}
                 iconCell.appendChild(icon);
 
                 row_icon.appendChild(iconCell);
@@ -1062,16 +1069,15 @@ Module.register("MMM-WunderGround", {
                 this.windDir = this.deg2Cardinal(forecast.maxwind.degrees);
                 this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(forecast.maxwind.kph);
 
-
+				this.icon_url = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + forecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"'>";
                 
-
-
                 this.forecast.push({
 
                     day: forecast.date.weekday_short,
                     maxTemp: this.tmaxTemp,
                     minTemp: this.tminTemp,
                     icon: this.config.iconTableDay[forecast.icon],
+					icon_url: this.icon_url,
                     pop: forecast.pop,
 					windDir: this.windDir,
 					windSpd: this.windSpd, 
