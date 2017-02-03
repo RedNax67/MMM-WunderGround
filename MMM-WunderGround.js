@@ -41,7 +41,7 @@ Module.register("MMM-WunderGround", {
         retryDelay: 2500,
 
         apiBase: "http://api.wunderground.com/api/",
-	colorIconBase: "./modules/MMM-WunderGround/img/VCloudsWeatherIcons/",
+		colorIconBase: "./modules/MMM-WunderGround/img/VCloudsWeatherIcons/",
 
         iconTableDay: {
             "chanceflurries": "wi-day-snow-wind",
@@ -318,16 +318,16 @@ Module.register("MMM-WunderGround", {
 
             var weatherIcon = document.createElement("span");
             if (this.config.coloricon) {
-                weatherIcon.innerHTML = '<img width="30%" height="30%" src="' + this.config.colorIconBase + this.weatherType + '">';
+                weatherIcon.innerHTML = this.weatherTypeTxt;
             } else {
                 weatherIcon.className = "wi " + this.weatherType;
             }
-            large.appendChild(weatherIcon);
 
-            var temperature = document.createElement("span");
-            temperature.className = "bright";
-            temperature.innerHTML = " " + this.temperature + "&deg;";
-            large.appendChild(temperature);
+			var temperature = document.createElement("span");
+			temperature.className = "bright";
+			temperature.innerHTML = " " + this.temperature + "&deg;";
+			large.appendChild(weatherIcon);
+			large.appendChild(temperature);
 
             wrapper.appendChild(small);
             wrapper.appendChild(large);
@@ -643,7 +643,8 @@ Module.register("MMM-WunderGround", {
                     iconCell = document.createElement("td");
                     iconCell.className = "align-center bright weather-icon";
                     icon = document.createElement("span");
-                    icon.className = "wi " + forecast.icon;
+                    //icon.className = "wi " + forecast.icon;
+					icon.innerHTML = forecast.icon_url;
                     iconCell.appendChild(icon);
                     row_icon.appendChild(iconCell);
 
@@ -1022,6 +1023,8 @@ Module.register("MMM-WunderGround", {
             }
 
             this.temperature = this.roundValue(this.temperature);
+			this.weatherTypeTxt = "<img src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + data.current_observation.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+
+									"' style='vertical-align:middle'>";
 
             if (this.alerttext !== "") {
                 this.forecastText = "<B>" + this.alerttext + "</B><BR>" +
@@ -1118,6 +1121,8 @@ Module.register("MMM-WunderGround", {
                         hourlyforecast.icon];
                     }
                     
+					this.ForecastIconUrl = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + hourlyforecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"'>";
+			
 
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);
                     this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(hourlyforecast.wspd.metric);
@@ -1129,6 +1134,7 @@ Module.register("MMM-WunderGround", {
                         maxTemp: this.tmaxTemp,
                         minTemp: this.tminTemp,
                         icon: this.ForecastIcon,
+						icon_url: this.ForecastIconUrl,
                         pop: hourlyforecast.pop,
                         windDir: this.windDir,
                         windSpd: this.windSpd,
