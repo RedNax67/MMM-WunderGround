@@ -767,7 +767,7 @@ Module.register("MMM-WunderGround", {
 
                 row_pop.appendChild(mmCell);
 				
-		windDirectionIcon = document.createElement("td");
+        				windDirectionIcon = document.createElement("td");
                 windDirectionIcon.className = "center";
                 windDirectionIconCell = document.createElement("i");
                 windDirectionIconCell.className = "wi " + forecast.windSpd;
