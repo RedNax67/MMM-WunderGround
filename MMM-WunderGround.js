@@ -12,6 +12,7 @@ Module.register("MMM-WunderGround", {
         apikey: "",
         pws: "",
         currentweather: 1,
+        coloricon: false,
         units: config.units,
         updateInterval: 10 * 60 * 1000, // every 10 minutes
         animationSpeed: 1000,
@@ -31,7 +32,7 @@ Module.register("MMM-WunderGround", {
         roundTmpDecs: 1,
         UseCardinals: 0,
         layout: "vertical",
-		sysstat: 0,
+        sysstat: 0,
 
 
 
@@ -40,6 +41,7 @@ Module.register("MMM-WunderGround", {
         retryDelay: 2500,
 
         apiBase: "http://api.wunderground.com/api/",
+	colorIconBase: "./modules/MMM-WunderGround/img/VCloudsWeatherIcons/",
 
         iconTableDay: {
             "chanceflurries": "wi-day-snow-wind",
@@ -83,6 +85,50 @@ Module.register("MMM-WunderGround", {
             "sleet": "wi-night-alt-sleet",
             "snow": "wi-night-alt-snow",
             "tstorms": "wi-night-alt-thunderstorm"
+        },
+
+        iconTableDayColor: {
+            "chanceflurries": "chanceflurries.png",
+            "chancerain": "chancerain.png",
+            "chancesleet": "chancesleet.png",
+            "chancesnow": "chancesnow.png",
+            "chancetstorms": "chancestorms.png",
+            "clear": "clear.png",
+            "cloudy": "cloudy.png",
+            "flurries": "flurries.png",
+            "fog": "fog.png",
+            "haze": "hazy.png",
+            "hazy": "hazy.png",
+            "mostlycloudy": "mostlycloudy.png",
+            "mostlysunny": "mostlysunny.png",
+            "partlycloudy": "partlycloudy.png",
+            "partlysunny": "partlysunny.png",
+            "rain": "rain.png",
+            "sleet": "sleet.png",
+            "snow": "snow.png",
+            "tstorms": "tsstorms.png"
+        },
+
+        iconTableNightColor: {
+            "chanceflurries": "nt_chanceflurries.png",
+            "chancerain": "nt_chancerain.png",
+            "chancesleet": "nt_chancesleet.png",
+            "chancesnow": "nt_chancesnow.png",
+            "chancetstorms": "nt_chancestorms.png",
+            "clear": "nt_clear.png",
+            "cloudy": "nt_cloudy.png",
+            "flurries": "nt_flurries.png",
+            "fog": "nt_fog.png",
+            "haze": "nt_hazy.png",
+            "hazy": "nt_hazy.png",
+            "mostlycloudy": "nt_mostlycloudy.png",
+            "mostlysunny": "nt_mostlysunny.png",
+            "partlycloudy": "nt_partlycloudy.png",
+            "partlysunny": "nt_partlysunny.png",
+            "rain": "nt_rain.png",
+            "sleet": "nt_sleet.png",
+            "snow": "nt_snow.png",
+            "tstorms": "nt_tsstorms.png"
         },
 
         moonPhaseTable: {
@@ -271,7 +317,11 @@ Module.register("MMM-WunderGround", {
             large.className = "large light";
 
             var weatherIcon = document.createElement("span");
-            weatherIcon.className = "wi " + this.weatherType;
+            if (this.config.coloricon) {
+                weatherIcon.innerHTML = '<img width="30%" height="30%" src="' + this.config.colorIconBase + this.weatherType + '">';
+            } else {
+                weatherIcon.className = "wi " + this.weatherType;
+            }
             large.appendChild(weatherIcon);
 
             var temperature = document.createElement("span");
@@ -393,8 +443,6 @@ Module.register("MMM-WunderGround", {
                     if (f > this.config.hourlycount) {
                         break;
                     }
-
-
                 }
             }
 
@@ -719,7 +767,7 @@ Module.register("MMM-WunderGround", {
 
                 row_pop.appendChild(mmCell);
 				
-				windDirectionIcon = document.createElement("td");
+        				windDirectionIcon = document.createElement("td");
                 windDirectionIcon.className = "center";
                 windDirectionIconCell = document.createElement("i");
                 windDirectionIconCell.className = "wi " + forecast.windSpd;
@@ -860,7 +908,11 @@ Module.register("MMM-WunderGround", {
             var forecast;
             var i;
             var count;
+		if (this.config.coloricon) {
+            var iconTable = this.config.iconTableDayColor;
+		} else {
             var iconTable = this.config.iconTableDay;
+		}
             this.alerttext = "";
             this.alertmsg = "";
 
@@ -906,8 +958,13 @@ Module.register("MMM-WunderGround", {
             this.sunriseSunsetTime = timeString;
             this.sunriseSunsetIcon = (sunrise < now && sunset > now) ?
                 "wi-sunset" : "wi-sunrise";
-            this.iconTable = (sunrise < now && sunset > now) ? this.config
+            if (this.config.coloricon) {
+		this.iconTable = (sunrise < now && sunset > now) ? this.config
+                .iconTableDayColor : this.config.iconTableNightColor;
+                    } else {
+		this.iconTable = (sunrise < now && sunset > now) ? this.config
                 .iconTableDay : this.config.iconTableNight;
+		}
 
 
             for (i = 0, count = data.alerts.length; i < count; i++) {
@@ -944,6 +1001,7 @@ Module.register("MMM-WunderGround", {
             }
 
             this.weatherType = this.iconTable[data.current_observation.icon];
+            //Log.info("observation logo " + this.weatherType)
             this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
             this.windDirectionTxt = data.current_observation.wind_dir;
             this.Humidity = data.current_observation.relative_humidity;
@@ -1048,10 +1106,18 @@ Module.register("MMM-WunderGround", {
                         this.thour = hourlyforecast.FCTTIME.civil;
                     }
                     this.tthour = Number(hourlyforecast.FCTTIME.hour);
-                    this.ForecastIcon = (this.sunrhour < this.tthour &&
+                    if (this.config.coloricon) {
+                        this.ForecastIcon = (this.sunrhour < this.tthour &&
+                        this.sunshour > this.tthour) ? this.config.iconTableDayColor[
+                        hourlyforecast.icon] : this.config.iconTableNightColor[
+                        hourlyforecast.icon];
+                    } else {
+                        this.ForecastIcon = (this.sunrhour < this.tthour &&
                         this.sunshour > this.tthour) ? this.config.iconTableDay[
                         hourlyforecast.icon] : this.config.iconTableNight[
                         hourlyforecast.icon];
+                    }
+                    
 
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);
                     this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(hourlyforecast.wspd.metric);

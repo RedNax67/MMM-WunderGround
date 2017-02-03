@@ -77,6 +77,13 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>coloricon</code></td>
+			<td>show Current Weather Icon in color<br>
+				<br><b>Possible values:</b> <code>true</code>, <code>false</code>
+				<br><b>Default value:</b> <code>false</code>
+			</td>
+		</tr>
+		<tr>
 			<td><code>fcdaycount</code></td>
 			<td>How many days of forecast to return. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>1</code> - <code>10</code>
