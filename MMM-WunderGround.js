@@ -268,7 +268,7 @@ Module.register("MMM-WunderGround", {
             spacer.innerHTML = "&nbsp;";
 
             var table_sitrep = document.createElement("table");
-            table_sitrep.className = "middle";
+            //table_sitrep.className = "middle";
 			//table_sitrep.setAttribute("width", "25%");
 
             var row_sitrep = document.createElement("tr");
@@ -509,7 +509,9 @@ Module.register("MMM-WunderGround", {
 		// horizontal
 		
             var fctable = document.createElement("div");
-            fctable.appendChild(document.createElement("hr"));
+            var divider = document.createElement("hr");
+            divider.className = "hrDivider";
+            fctable.appendChild(divider);
 
             if (this.config.fctext == 1) {
                 var row = document.createElement("tr");
@@ -522,7 +524,7 @@ Module.register("MMM-WunderGround", {
                 row.appendChild(forecastTextCell);
                 table.appendChild(row);
                 fctable.appendChild(table);
-                fctable.appendChild(document.createElement("hr"));
+                fctable.appendChild(divider.cloneNode(true));
             }
 
             table = document.createElement("table");
@@ -721,7 +723,7 @@ Module.register("MMM-WunderGround", {
                 table.appendChild(row_pop);
                 table.appendChild(row_wind);
                 fctable.appendChild(table);
-                fctable.appendChild(document.createElement("hr"));
+                fctable.appendChild(divider.cloneNode(true));
 
             }
 
@@ -1016,7 +1018,7 @@ Module.register("MMM-WunderGround", {
             this.Humidity = this.Humidity.substring(0,this.Humidity.length -1);
             this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
             this.moonPhaseIcon = this.config.moonPhaseTable[data.moon_phase.ageOfMoon];
-			this.moonPhaseIcon = "<img height='40' width='40' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif' style='align='center';'>";
+			this.moonPhaseIcon = "<img class='moonPhaseIcon' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif'>";
 
 
             if (this.config.units == "metric") {
@@ -1030,8 +1032,9 @@ Module.register("MMM-WunderGround", {
             }
 
             this.temperature = this.roundValue(this.temperature);
-			this.weatherTypeTxt = "<img src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + data.current_observation.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+
-									"' style='vertical-align:middle'>";
+			this.weatherTypeTxt = "<img src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
+                                    data.current_observation.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png') +
+									"' style='vertical-align:middle' class='currentWeatherIcon'>";
 
             if (this.alerttext !== "") {
                 this.forecastText = "<B>" + this.alerttext + "</B><BR>" +
@@ -1069,7 +1072,8 @@ Module.register("MMM-WunderGround", {
                 this.windDir = this.deg2Cardinal(forecast.maxwind.degrees);
                 this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(forecast.maxwind.kph);
 
-				this.icon_url = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + forecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"'>";
+				this.icon_url = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
+                                forecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"' class='forecastWeatherIcon'>";
                 
                 this.forecast.push({
 
@@ -1127,7 +1131,8 @@ Module.register("MMM-WunderGround", {
                         hourlyforecast.icon];
                     }
                     
-					this.ForecastIconUrl = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + hourlyforecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"'>";
+					this.ForecastIconUrl = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
+                                            hourlyforecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"' class='forecastWeatherIcon'>";
 			
 
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);

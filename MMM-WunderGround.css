@@ -1,6 +1,6 @@
 .MMM-WunderGround .weathericon {
-  font-size: 75%;
-  line-height: 65px;
+  font-size: 45%;
+  line-height: 5px;
   display: inline-block;
   -ms-transform: translate(0, -3px); /* IE 9 */
   -webkit-transform: translate(0, -3px); /* Safari */
@@ -19,7 +19,6 @@
   padding-left: 0px;
   text-align: center;
   width:50px; 
-  height:50px;
 }
 
 .MMM-WunderGround .max-temp {
@@ -51,7 +50,7 @@
  } 
 
 .MMM-WunderGround .pop {
-  font-size: 75%;
+  font-size: 86%;
 } 
 .MMM-WunderGround .mm {
   font-size: 75%;
@@ -81,4 +80,33 @@
 .MMM-WunderGround .lpad {
 	padding-left: 10px; 
 }
-	
+
+.MMM-WunderGround .currentWeatherIcon {
+  font-size: 75%;
+  line-height: 45px;
+  display: inline-block;
+  -ms-transform: translate(0, -3px); /* IE 9 */
+  -webkit-transform: translate(0, -3px); /* Safari */
+  transform: translate(0, -3px);
+  width: 40%;
+  height: 40%;
+} 
+
+.MMM-WunderGround .forecastWeatherIcon {
+  font-size: 75%;
+  line-height: 65px;
+  display: inline-block;
+  -ms-transform: translate(0, -3px); /* IE 9 */
+  -webkit-transform: translate(0, -3px); /* Safari */
+  transform: translate(0, -3px);
+  width: 50%;
+} 
+
+.MMM-WunderGround .moonPhaseIcon {
+  height: 34px;
+  vertical-align: middle;
+} 
+
+.MMM-WunderGround .hrDivider {
+        font-size: 10px;
+}
