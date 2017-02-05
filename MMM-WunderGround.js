@@ -417,7 +417,11 @@ Module.register("MMM-WunderGround", {
                     row.appendChild(iconCell);
 
                     icon = document.createElement("span");
-                    icon.className = "wi " + forecast.icon;
+   					if (this.config.coloricon) {
+						icon.innerHTML = forecast.icon_url;
+					} else {
+						icon.className = "wi " + forecast.icon;
+					}
                     iconCell.appendChild(icon);
 
                     maxTempCell = document.createElement("td");
@@ -463,7 +467,11 @@ Module.register("MMM-WunderGround", {
                 row.appendChild(iconCell);
 
                 icon = document.createElement("span");
-                icon.className = "wi " + forecast.icon;
+                if (this.config.coloricon) {
+					icon.innerHTML = forecast.icon_url;
+				} else {
+					icon.className = "wi " + forecast.icon;
+				}
                 iconCell.appendChild(icon);
 
                 maxTempCell = document.createElement("td");
