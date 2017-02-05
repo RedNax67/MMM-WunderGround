@@ -918,11 +918,11 @@ Module.register("MMM-WunderGround", {
             var forecast;
             var i;
             var count;
-		if (this.config.coloricon) {
-            var iconTable = this.config.iconTableDayColor;
-		} else {
+		//if (this.config.coloricon) {
+        //    var iconTable = this.config.iconTableDayColor;
+		//} else {
             var iconTable = this.config.iconTableDay;
-		}
+		//}
             this.alerttext = "";
             this.alertmsg = "";
 
@@ -1119,17 +1119,17 @@ Module.register("MMM-WunderGround", {
                         this.thour = hourlyforecast.FCTTIME.civil;
                     }
                     this.tthour = Number(hourlyforecast.FCTTIME.hour);
-                    if (this.config.coloricon) {
-                        this.ForecastIcon = (this.sunrhour < this.tthour &&
-                        this.sunshour > this.tthour) ? this.config.iconTableDayColor[
-                        hourlyforecast.icon] : this.config.iconTableNightColor[
-                        hourlyforecast.icon];
-                    } else {
+                    //if (this.config.coloricon) {
+                    //    this.ForecastIcon = (this.sunrhour < this.tthour &&
+                    //    this.sunshour > this.tthour) ? this.config.iconTableDayColor[
+                    //    hourlyforecast.icon] : this.config.iconTableNightColor[
+                    //    hourlyforecast.icon];
+                    //} else {
                         this.ForecastIcon = (this.sunrhour < this.tthour &&
                         this.sunshour > this.tthour) ? this.config.iconTableDay[
                         hourlyforecast.icon] : this.config.iconTableNight[
                         hourlyforecast.icon];
-                    }
+                    //}
                     
 					this.ForecastIconUrl = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
                                             hourlyforecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"' class='forecastWeatherIcon'>";
