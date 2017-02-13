@@ -14,7 +14,7 @@ Module.register("MMM-WunderGround", {
         currentweather: 1,
         coloricon: false,
         units: config.units,
-        windunits: "mph", // choose from mph, bft
+        windunits: "bft", // choose from mph, bft
         updateInterval: 10 * 60 * 1000, // every 10 minutes
         animationSpeed: 1000,
         timeFormat: config.timeFormat,
