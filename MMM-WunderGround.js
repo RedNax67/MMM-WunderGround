@@ -14,6 +14,7 @@ Module.register("MMM-WunderGround", {
         currentweather: 1,
         coloricon: false,
         units: config.units,
+        windunits: "mph", // choose from mph, bft
         updateInterval: 10 * 60 * 1000, // every 10 minutes
         animationSpeed: 1000,
         timeFormat: config.timeFormat,
@@ -275,7 +276,11 @@ Module.register("MMM-WunderGround", {
 			
 
             var windIcon = document.createElement("td");
-            windIcon.className = "wi " + this.windSpeed;
+            if (this.config.windunits == "mph") {
+                windIcon.innerHTML = this.windSpeedMph + "<sub>mph</sub>";
+            } else {
+                windIcon.className = "wi " + this.windSpeed;
+            }
             row_sitrep.appendChild(windIcon);
             row_sitrep.className = "pop";
     
@@ -683,7 +688,11 @@ Module.register("MMM-WunderGround", {
                     windDirectionIcon.className = "center";
 
                     windDirectionIconCell = document.createElement("i");
-                    windDirectionIconCell.className = "wi " + forecast.windSpd;
+                    if (this.config.windunits == "mph") {
+                        windDirectionIconCell.innerHTML = forecast.windSpdMph + "<sub>mph</sub>";
+                    } else {
+                        windDirectionIconCell.className = "wi " + forecast.windSpd;
+                    }
                     windDirectionIcon.appendChild(windDirectionIconCell);
                     
                     spacer = document.createElement("i");
@@ -785,10 +794,14 @@ Module.register("MMM-WunderGround", {
 
                 row_pop.appendChild(mmCell);
 				
-        				windDirectionIcon = document.createElement("td");
+   				windDirectionIcon = document.createElement("td");
                 windDirectionIcon.className = "center";
                 windDirectionIconCell = document.createElement("i");
-                windDirectionIconCell.className = "wi " + forecast.windSpd;
+                if (this.config.windunits == "mph") {
+                    windDirectionIconCell.innerHTML = forecast.windSpdMph + "<sub>mph</sub>";
+                } else {
+                    windDirectionIconCell.className = "wi " + forecast.windSpd;
+                }
                 windDirectionIcon.appendChild(windDirectionIconCell);
                     
                 spacer = document.createElement("i");
@@ -1025,6 +1038,7 @@ Module.register("MMM-WunderGround", {
             this.Humidity = data.current_observation.relative_humidity;
             this.Humidity = this.Humidity.substring(0,this.Humidity.length -1);
             this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
+            this.windSpeedMph = data.current_observation.wind_mph;
             this.moonPhaseIcon = this.config.moonPhaseTable[data.moon_phase.ageOfMoon];
 			this.moonPhaseIcon = "<img class='moonPhaseIcon' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif'>";
 
@@ -1079,6 +1093,7 @@ Module.register("MMM-WunderGround", {
 				
                 this.windDir = this.deg2Cardinal(forecast.maxwind.degrees);
                 this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(forecast.maxwind.kph);
+                this.windSpdMph = forecast.maxwind.mph;
 
 				this.icon_url = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
                                 forecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"' class='forecastWeatherIcon'>";
@@ -1093,6 +1108,7 @@ Module.register("MMM-WunderGround", {
                     pop: forecast.pop,
 					windDir: this.windDir,
 					windSpd: this.windSpd, 
+                    windSpdMph: this.windSpdMph,
                     mm: this.tmm
 					
                 });
@@ -1145,6 +1161,7 @@ Module.register("MMM-WunderGround", {
 
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);
                     this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(hourlyforecast.wspd.metric);
+                    this.windSpdMph = hourlyforecast.wspd.english;
 
                         
                     this.hourlyforecast.push({
@@ -1157,6 +1174,7 @@ Module.register("MMM-WunderGround", {
                         pop: hourlyforecast.pop,
                         windDir: this.windDir,
                         windSpd: this.windSpd,
+                        windSpdMph: this.windSpdMph,
                         mm: this.tmm
                     });
                 }

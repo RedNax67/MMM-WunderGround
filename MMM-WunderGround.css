@@ -110,3 +110,8 @@
 .MMM-WunderGround .hrDivider {
         font-size: 10px;
 }
+
+.MMM-WunderGround .sub {
+    vertical-align: sub;
+    font-size: smaller;
+}

@@ -204,6 +204,13 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>windunits</code></td>
+			<td>Which units to use for windspeed<br>
+				<br><b>Possible values:</b> <code>"mph" or "bft"</code>
+				<br><b>Default value:</b>  <code>"bft"</code>
+			</td>
+		</tr>
+		<tr>
 			<td><code>UseCardinals</code></td>
 			<td>Toggles the use of winddirection arrow or cardinals<br>
 				<br><b>Possible values:</b> <code>0 or 1</code>
@@ -224,17 +231,6 @@ The following properties can be configured:
 				<br><b>Default value:</b>  <code>0</code>
 			</td>
 		</tr>
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 	</tbody>
 </table>
 
