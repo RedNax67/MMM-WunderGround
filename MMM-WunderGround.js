@@ -705,7 +705,8 @@ Module.register("MMM-WunderGround", {
                     if (this.config.UseCardinals === 0) {
                         windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
                     } else {
-                        windDirectionIcon.innerHTML = this.windDir;
+                        windDirectionIconCell.className = "smaller";
+                        windDirectionIconCell.innerHTML = this.windDirImp;
                     }
                     windDirectionIcon.appendChild(windDirectionIconCell);
 
@@ -814,7 +815,8 @@ Module.register("MMM-WunderGround", {
                     if (this.config.UseCardinals === 0) {
                         windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
                     } else {
-                        windDirectionIcon.innerHTML = this.windDir;
+                        windDirectionIconCell.className = "smaller";
+                        windDirectionIconCell.innerHTML = this.windDirImp;
                     }
                     windDirectionIcon.appendChild(windDirectionIconCell);
 
@@ -1104,6 +1106,7 @@ Module.register("MMM-WunderGround", {
                 this.minTemp = this.roundValue(this.minTemp);
 				
                 this.windDir = this.deg2Cardinal(forecast.maxwind.degrees);
+                this.windDirImp = forecast.maxwind.dir;
                 this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(forecast.maxwind.kph);
                 this.windSpdMph = forecast.maxwind.mph;
 
@@ -1119,6 +1122,7 @@ Module.register("MMM-WunderGround", {
 					icon_url: this.icon_url,
                     pop: forecast.pop,
 					windDir: this.windDir,
+                    windDirImp: this.windDirImp,
 					windSpd: this.windSpd, 
                     windSpdMph: this.windSpdMph,
                     mm: this.tmm
@@ -1172,6 +1176,7 @@ Module.register("MMM-WunderGround", {
 			
 
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);
+                    this.windDirImp = hourlyforecast.wdir.dir;
                     this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(hourlyforecast.wspd.metric);
                     this.windSpdMph = hourlyforecast.wspd.english;
 
@@ -1185,6 +1190,7 @@ Module.register("MMM-WunderGround", {
 						icon_url: this.ForecastIconUrl,
                         pop: hourlyforecast.pop,
                         windDir: this.windDir,
+                        windDirImp: this.windDirImp,
                         windSpd: this.windSpd,
                         windSpdMph: this.windSpdMph,
                         mm: this.tmm
