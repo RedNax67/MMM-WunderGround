@@ -34,6 +34,7 @@ Module.register("MMM-WunderGround", {
         UseCardinals: 0,
         layout: "vertical",
         sysstat: 0,
+        scaletxt: 1,
 
 
 
@@ -354,9 +355,8 @@ Module.register("MMM-WunderGround", {
 
             if (this.config.fctext == 1) {
                 var forecastTextCell = document.createElement("td");
-                forecastTextCell.className = "forecastText";
+                // forecastTextCell.className = "forecastText";
                 forecastTextCell.setAttribute("colSpan", "10");
-            
                 forecastTextCell.innerHTML = this.forecastText;
 
                 row.appendChild(forecastTextCell);
@@ -1045,13 +1045,25 @@ Module.register("MMM-WunderGround", {
 
             if (this.config.units == "metric") {
                 this.temperature = data.current_observation.temp_c;
-                this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                    .forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3"), 35, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+                var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3");
             } else {
                 this.temperature = data.current_observation.temp_f;
-                this.forecastText = this.wordwrap(data.forecast.txt_forecast
-                    .forecastday[0].fcttext, 35, "<BR>"); //  Wordwrap the text so it doesn"t mess up the display
+                var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext;
             }
+            
+            // Attempt to scale txt_forecast in case it results in too many lines
+            var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3");
+            var fc_wrap = 35;
+            var fc_flines = 3;
+            var fc_scale = 100;
+            var fc_lines = fc_text.length / fc_wrap;
+            if ( fc_lines >  fc_flines ) {
+                fc_scale = Math.round((fc_flines / fc_lines) * 100);
+                fc_wrap = Math.round(fc_wrap * (100 / fc_scale));   
+            }
+            this.forecastText = '<span style="font-size:' + fc_scale + '%">';
+            this.forecastText = this.forecastText + this.wordwrap(fc_text, fc_wrap, "<BR>");
+            console.log("Wrap: " + fc_wrap + " Scale: " + fc_scale + " Lines: " + fc_lines + " Length: " + fc_text.length);
 
             this.temperature = this.roundValue(this.temperature);
 			this.weatherTypeTxt = "<img src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
@@ -1233,6 +1245,8 @@ Module.register("MMM-WunderGround", {
 
         brk = brk || "n";
         width = width || 75;
+        cut = false;
+
 
         if (!str) {
             return str;
@@ -1240,7 +1254,7 @@ Module.register("MMM-WunderGround", {
 
         var re = new RegExp(".{1," + width +
             "}(\\s|$)|\\ S+?(\\s|$)", "g");
-
+            
         return str.match(RegExp(re)).join(brk);
 
     },
