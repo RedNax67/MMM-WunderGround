@@ -1052,7 +1052,7 @@ Module.register("MMM-WunderGround", {
             }
             
             // Attempt to scale txt_forecast in case it results in too many lines
-            var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3");
+            // var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3");
             var fc_wrap = 35;
             var fc_flines = 3;
             var fc_scale = 100;
@@ -1061,7 +1061,7 @@ Module.register("MMM-WunderGround", {
                 fc_scale = Math.round((fc_flines / fc_lines) * 100);
                 fc_wrap = Math.round(fc_wrap * (100 / fc_scale));   
             }
-            this.forecastText = '<span style="font-size:' + fc_scale + '%">';
+            this.forecastText = '<div style="font-size:' + fc_scale + '%">';
             this.forecastText = this.forecastText + this.wordwrap(fc_text, fc_wrap, "<BR>");
             console.log("Wrap: " + fc_wrap + " Scale: " + fc_scale + " Lines: " + fc_lines + " Length: " + fc_text.length);
 
@@ -1255,7 +1255,14 @@ Module.register("MMM-WunderGround", {
         var re = new RegExp(".{1," + width +
             "}(\\s|$)|\\ S+?(\\s|$)", "g");
             
-        return str.match(RegExp(re)).join(brk);
+        var wordwrapped = str.trim().match(RegExp(re));
+        for (var i in wordwrapped) {
+            wordwrapped[i] = wordwrapped[i].trim();
+        }
+        
+        return wordwrapped.join(brk);
+            
+        //return str.match(RegExp(re)).join(brk);
 
     },
 
