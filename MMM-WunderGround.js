@@ -832,14 +832,9 @@ Module.register("MMM-WunderGround", {
             this.sunriseSunsetTime = timeString;
             this.sunriseSunsetIcon = (sunrise < now && sunset > now) ?
                 "wi-sunset" : "wi-sunrise";
-            if (this.config.coloricon) {
-                this.iconTable = (sunrise < now && sunset > now) ? this.config
-                    .iconTableDayColor : this.config.iconTableNightColor;
-            } else {
-                this.iconTable = (sunrise < now && sunset > now) ? this.config
+            this.iconTable = (sunrise < now && sunset > now) ? this.config
                     .iconTableDay : this.config.iconTableNight;
-            }
-
+ 
 
             for (i = 0, count = data.alerts.length; i < count; i++) {
 
