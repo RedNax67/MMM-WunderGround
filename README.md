@@ -108,6 +108,14 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>scaletxt</code></td>
+			<td>Scale forecast text when over 3 lines. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
+				<br><b>Default value:</b> <code>1</code> (Will scale text)
+				<br>This value is optional. By default the forecast text will be scaled when needed.
+			</td>
+		</tr>
+        <tr>
 			<td><code>hourly</code></td>
 			<td>Display hourly forecasts. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
