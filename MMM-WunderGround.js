@@ -36,14 +36,9 @@ Module.register("MMM-WunderGround", {
         sysstat: 0,
         scaletxt: 1,
 
-
-
-
-        initialLoadDelay: 2500, // 2.5 seconds delay. This delay is used to keep the OpenWeather API happy.
         retryDelay: 2500,
 
         apiBase: "http://api.wunderground.com/api/",
-		colorIconBase: "./modules/MMM-WunderGround/img/VCloudsWeatherIcons/",
 
         iconTableDay: {
             "chanceflurries": "wi-day-snow-wind",
@@ -87,86 +82,12 @@ Module.register("MMM-WunderGround", {
             "sleet": "wi-night-alt-sleet",
             "snow": "wi-night-alt-snow",
             "tstorms": "wi-night-alt-thunderstorm"
-        },
-
-        iconTableDayColor: {
-            "chanceflurries": "chanceflurries.png",
-            "chancerain": "chancerain.png",
-            "chancesleet": "chancesleet.png",
-            "chancesnow": "chancesnow.png",
-            "chancetstorms": "chancestorms.png",
-            "clear": "clear.png",
-            "cloudy": "cloudy.png",
-            "flurries": "flurries.png",
-            "fog": "fog.png",
-            "haze": "hazy.png",
-            "hazy": "hazy.png",
-            "mostlycloudy": "mostlycloudy.png",
-            "mostlysunny": "mostlysunny.png",
-            "partlycloudy": "partlycloudy.png",
-            "partlysunny": "partlysunny.png",
-            "rain": "rain.png",
-            "sleet": "sleet.png",
-            "snow": "snow.png",
-            "tstorms": "tsstorms.png"
-        },
-
-        iconTableNightColor: {
-            "chanceflurries": "nt_chanceflurries.png",
-            "chancerain": "nt_chancerain.png",
-            "chancesleet": "nt_chancesleet.png",
-            "chancesnow": "nt_chancesnow.png",
-            "chancetstorms": "nt_chancestorms.png",
-            "clear": "nt_clear.png",
-            "cloudy": "nt_cloudy.png",
-            "flurries": "nt_flurries.png",
-            "fog": "nt_fog.png",
-            "haze": "nt_hazy.png",
-            "hazy": "nt_hazy.png",
-            "mostlycloudy": "nt_mostlycloudy.png",
-            "mostlysunny": "nt_mostlysunny.png",
-            "partlycloudy": "nt_partlycloudy.png",
-            "partlysunny": "nt_partlysunny.png",
-            "rain": "nt_rain.png",
-            "sleet": "nt_sleet.png",
-            "snow": "nt_snow.png",
-            "tstorms": "nt_tsstorms.png"
-        },
-
-        moonPhaseTable: {
-            "1": "wi-moon-new",
-            "2": "wi-moon-waxing-crescent-1",
-            "3": "wi-moon-waxing-crescent-2",
-            "4": "wi-moon-waxing-crescent-3",
-            "5": "wi-moon-waxing-crescent-4",
-            "6": "wi-moon-waxing-crescent-5",
-            "7": "wi-moon-waxing-crescent-6",
-            "8": "wi-moon-first-quarter",
-            "9": "wi-moon-waxing-gibbous-1",
-            "10": "wi-moon-waxing-gibbous-2",
-            "11": "wi-moon-waxing-gibbous-3",
-            "12": "wi-moon-waxing-gibbous-4",
-            "13": "wi-moon-waxing-gibbous-5",
-            "14": "wi-moon-waxing-gibbous-6",
-            "15": "wi-moon-full",
-            "16": "wi-moon-waning-gibbous-1",
-            "17": "wi-moon-waning-gibbous-2",
-            "18": "wi-moon-waning-gibbous-3",
-            "19": "wi-moon-waning-gibbous-4",
-            "20": "wi-moon-waning-gibbous-5",
-            "21": "wi-moon-waning-gibbous-6",
-            "22": "wi-moon-third-quarter",
-            "23": "wi-moon-waning-crescent-1",
-            "24": "wi-moon-waning-crescent-2",
-            "25": "wi-moon-waning-crescent-3",
-            "26": "wi-moon-waning-crescent-4",
-            "27": "wi-moon-waning-crescent-5",
-            "28": "wi-moon-waning-crescent-6"
         }
+
     },
 
     // Define required translations.
-    getTranslations: function () {
+    getTranslations: function() {
         return {
             en: "translations/en.json",
             nl: "translations/nl.json",
@@ -174,24 +95,24 @@ Module.register("MMM-WunderGround", {
             dl: "translations/de.json",
             fr: "translations/fr.json",
             pl: "translations/pl.json"
-            
+
         };
     },
 
     // Define required scripts.
-    getScripts: function () {
+    getScripts: function() {
         return ["moment.js"];
     },
 
     // Define required scripts.
-    getStyles: function () {
+    getStyles: function() {
         return ["weather-icons.css", "weather-icons-wind.css",
             "MMM-WunderGround.css"
         ];
     },
 
     // Define start sequence.
-    start: function () {
+    start: function() {
         Log.info("Starting module: " + this.name);
 
         // Set locale.
@@ -202,31 +123,29 @@ Module.register("MMM-WunderGround", {
         this.loaded = false;
         this.error = false;
         this.errorDescription = "";
-        //this.scheduleUpdate(this.config.initialLoadDelay);
-		this.getWunder();
+        this.getWunder();
         this.updateTimer = null;
-		this.systemp = "";
-		this.wifiap = "";
-		this.wifistrength = "";
-		this.storage_size = 0;
-		this.storage_used = 0;
-		this.storage_free = 0;
-		this.storage_pcent = 0;
-		this.mem_used =  0;
-		this.mem_size = 0;
-		this.mem_free = 0;
-		this.haveforecast = 0;
-		
+        this.systemp = "";
+        this.wifiap = "";
+        this.wifistrength = "";
+        this.storage_size = 0;
+        this.storage_used = 0;
+        this.storage_free = 0;
+        this.storage_pcent = 0;
+        this.mem_used = 0;
+        this.mem_size = 0;
+        this.mem_free = 0;
+        this.haveforecast = 0;
 
     },
-    
+
     getWunder: function() {
-		Log.info("WunderGround: Getting weather.");
-		this.sendSocketNotification("GET_WUNDERGROUND",this.config);
-	}, 
+        Log.info("WunderGround: Getting weather.");
+        this.sendSocketNotification("GET_WUNDERGROUND", this.config);
+    },
 
     // Override dom generator.
-    getDom: function () {
+    getDom: function() {
         var wrapper = document.createElement("div");
         var f;
         var forecast;
@@ -242,8 +161,7 @@ Module.register("MMM-WunderGround", {
         var currentStep;
         var steps;
 
-
-
+        
         if (this.config.apikey === "") {
             wrapper.innerHTML = this.translate("APIKEY") + this.name +
                 ".";
@@ -270,11 +188,9 @@ Module.register("MMM-WunderGround", {
             spacer.innerHTML = "&nbsp;";
 
             var table_sitrep = document.createElement("table");
-            //table_sitrep.className = "middle";
-			//table_sitrep.setAttribute("width", "25%");
 
             var row_sitrep = document.createElement("tr");
-			
+
 
             var windIcon = document.createElement("td");
             if (this.config.windunits == "mph") {
@@ -284,7 +200,7 @@ Module.register("MMM-WunderGround", {
             }
             row_sitrep.appendChild(windIcon);
             row_sitrep.className = "pop";
-    
+
             var windDirectionIcon = document.createElement("td");
             if (this.config.UseCardinals === 0) {
                 windDirectionIcon.className = "wi wi-wind " + this.windDirection;
@@ -293,29 +209,29 @@ Module.register("MMM-WunderGround", {
                 windDirectionIcon.innerHTML = this.windDirectionTxt;
             }
             row_sitrep.appendChild(windDirectionIcon);
-            
+
             var HumidityIcon = document.createElement("td");
             HumidityIcon.className = "wi wi-humidity lpad";
             row_sitrep.appendChild(HumidityIcon);
 
             var HumidityTxt = document.createElement("td");
             HumidityTxt.innerHTML = this.Humidity + "&nbsp;";
-			HumidityTxt.className = "vcen left";
+            HumidityTxt.className = "vcen left";
             row_sitrep.appendChild(HumidityTxt);
 
             var sunriseSunsetIcon = document.createElement("td");
             sunriseSunsetIcon.className = "wi " + this.sunriseSunsetIcon;
             row_sitrep.appendChild(sunriseSunsetIcon);
-    
+
             var sunriseSunsetTxt = document.createElement("td");
             sunriseSunsetTxt.innerHTML = this.sunriseSunsetTime;
-			sunriseSunsetTxt.className = "vcen left";
+            sunriseSunsetTxt.className = "vcen left";
             row_sitrep.appendChild(sunriseSunsetTxt);
 
             var moonPhaseIcon = document.createElement("td");
-			moonPhaseIcon.innerHTML = this.moonPhaseIcon;
+            moonPhaseIcon.innerHTML = this.moonPhaseIcon;
             row_sitrep.appendChild(moonPhaseIcon);
-            
+
             table_sitrep.appendChild(row_sitrep);
             small.appendChild(table_sitrep);
 
@@ -329,17 +245,17 @@ Module.register("MMM-WunderGround", {
                 weatherIcon.className = "wi " + this.weatherType;
             }
 
-			var temperature = document.createElement("span");
-			temperature.className = "bright";
-			temperature.innerHTML = " " + this.temperature + "&deg;";
-			large.appendChild(weatherIcon);
-			large.appendChild(temperature);
+            var temperature = document.createElement("span");
+            temperature.className = "bright";
+            temperature.innerHTML = " " + this.temperature + "&deg;";
+            large.appendChild(weatherIcon);
+            large.appendChild(temperature);
 
             wrapper.appendChild(small);
             wrapper.appendChild(large);
 
         }
-        
+
         // Forecast table
 
         var table = document.createElement("table");
@@ -347,7 +263,7 @@ Module.register("MMM-WunderGround", {
         table.setAttribute("width", "25%");
 
         // this.config.layout = "vertical";
-        
+
         if (this.config.layout == "vertical") {
 
             var row = document.createElement("tr");
@@ -422,11 +338,11 @@ Module.register("MMM-WunderGround", {
                     row.appendChild(iconCell);
 
                     icon = document.createElement("span");
-   					if (this.config.coloricon) {
-						icon.innerHTML = forecast.icon_url;
-					} else {
-						icon.className = "wi " + forecast.icon;
-					}
+                    if (this.config.coloricon) {
+                        icon.innerHTML = forecast.icon_url;
+                    } else {
+                        icon.className = "wi " + forecast.icon;
+                    }
                     iconCell.appendChild(icon);
 
                     maxTempCell = document.createElement("td");
@@ -445,7 +361,7 @@ Module.register("MMM-WunderGround", {
                     row.appendChild(popCell);
 
                     mmCell = document.createElement("td");
-                    mmCell.innerHTML = forecast.mm ;
+                    mmCell.innerHTML = forecast.mm;
                     mmCell.className = "align-right mm";
                     row.appendChild(mmCell);
 
@@ -473,10 +389,10 @@ Module.register("MMM-WunderGround", {
 
                 icon = document.createElement("span");
                 if (this.config.coloricon) {
-					icon.innerHTML = forecast.icon_url;
-				} else {
-					icon.className = "wi " + forecast.icon;
-				}
+                    icon.innerHTML = forecast.icon_url;
+                } else {
+                    icon.className = "wi " + forecast.icon;
+                }
                 iconCell.appendChild(icon);
 
                 maxTempCell = document.createElement("td");
@@ -495,7 +411,7 @@ Module.register("MMM-WunderGround", {
                 row.appendChild(popCell);
 
                 mmCell = document.createElement("td");
-                mmCell.innerHTML = forecast.mm ;
+                mmCell.innerHTML = forecast.mm;
                 mmCell.className = "align-right mm";
                 row.appendChild(mmCell);
 
@@ -519,8 +435,8 @@ Module.register("MMM-WunderGround", {
 
         } else {
 
-		// horizontal
-		
+            // horizontal
+
             var fctable = document.createElement("div");
             var divider = document.createElement("hr");
             divider.className = "hrDivider";
@@ -546,26 +462,26 @@ Module.register("MMM-WunderGround", {
 
             if (this.config.sysstat == 1) {
 
-				row_mem = document.createElement("tr");
-				row_storage = document.createElement("tr");
-				row_stemp = document.createElement("tr");
-				row_wifi = document.createElement("tr");
-				
-				iconCell = document.createElement("td");
+                row_mem = document.createElement("tr");
+                row_storage = document.createElement("tr");
+                row_stemp = document.createElement("tr");
+                row_wifi = document.createElement("tr");
+
+                iconCell = document.createElement("td");
                 iconCell.className = "align-right bright weather-icon";
-				
+
                 icon = document.createElement("span");
                 icon.className = "wi wi-thermometer";
-                
-				iconCell.appendChild(icon);
+
+                iconCell.appendChild(icon);
                 row_stemp.appendChild(iconCell);
-				
-				sysTempCell = document.createElement("td");
+
+                sysTempCell = document.createElement("td");
                 sysTempCell.innerHTML = this.systemp;
-				sysTempCell.className = "align-left";
+                sysTempCell.className = "align-left";
                 row_stemp.appendChild(sysTempCell);
-				
-				iconCell = document.createElement("td");
+
+                iconCell = document.createElement("td");
                 iconCell.className = "align-right bright weather-icon";
                 icon = document.createElement("span");
 
@@ -573,69 +489,64 @@ Module.register("MMM-WunderGround", {
                 iconCell.appendChild(icon);
                 row_stemp.appendChild(iconCell);
 
-				WifiCell = document.createElement("td");
+                WifiCell = document.createElement("td");
                 WifiCell.innerHTML = this.wifiap + " @ " + this.wifistrength + "%";
-				WifiCell.className = "align-left";
-								
+                WifiCell.className = "align-left";
+
                 row_stemp.appendChild(WifiCell);
-				table.appendChild(row_stemp);
+                table.appendChild(row_stemp);
 
-				
-				FillCell = document.createElement("td");
+                FillCell = document.createElement("td");
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Size";
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = "Size";
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Used";
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = "Used";
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Free";
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = "Free";
                 row_mem.appendChild(FillCell);
-				table.appendChild(row_mem);
+                table.appendChild(row_mem);
 
-				row_mem = document.createElement("tr");
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Memory";
+                row_mem = document.createElement("tr");
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = "Memory";
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.mem_size;
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = this.mem_size;
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.mem_used;
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = this.mem_used;
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.mem_free;
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = this.mem_free;
                 row_mem.appendChild(FillCell);
-				table.appendChild(row_mem);
+                table.appendChild(row_mem);
 
-				row_mem = document.createElement("tr");
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = "Storage";
+                row_mem = document.createElement("tr");
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = "Storage";
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.storage_size;
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = this.storage_size;
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.storage_used;
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = this.storage_used;
                 row_mem.appendChild(FillCell);
-				FillCell = document.createElement("td");
-				FillCell.innerHTML = this.storage_free;
+                FillCell = document.createElement("td");
+                FillCell.innerHTML = this.storage_free;
                 row_mem.appendChild(FillCell);
-				table.appendChild(row_mem);
-				
-										
-				fctable.appendChild(table);
-				fctable.appendChild(document.createElement("hr"));
-				
-				table = document.createElement("table");
-				table.className = "small";
-				table.setAttribute("width", "25%");
+                table.appendChild(row_mem);
 
+                fctable.appendChild(table);
+                fctable.appendChild(document.createElement("hr"));
 
-			}	
-				
-			
+                table = document.createElement("table");
+                table.className = "small";
+                table.setAttribute("width", "25%");
+
+            }
 
             if (this.config.hourly == 1) {
 
@@ -644,7 +555,7 @@ Module.register("MMM-WunderGround", {
                 row_temp = document.createElement("tr");
                 row_pop = document.createElement("tr");
                 row_wind = document.createElement("tr");
-                
+
 
                 for (f in this.forecast) {
                     forecast = this.hourlyforecast[f * this.config.hourlyinterval];
@@ -658,11 +569,11 @@ Module.register("MMM-WunderGround", {
                     iconCell = document.createElement("td");
                     iconCell.className = "align-center bright weather-icon";
                     icon = document.createElement("span");
-					if (this.config.coloricon) {
-						icon.innerHTML = forecast.icon_url;
-					} else {
-						icon.className = "wi " + forecast.icon;
-					}
+                    if (this.config.coloricon) {
+                        icon.innerHTML = forecast.icon_url;
+                    } else {
+                        icon.className = "wi " + forecast.icon;
+                    }
                     iconCell.appendChild(icon);
                     row_icon.appendChild(iconCell);
 
@@ -683,8 +594,8 @@ Module.register("MMM-WunderGround", {
                     }
 
                     row_pop.appendChild(mmCell);
-                    
-                    windDirectionIcon = document.createElement("td");
+
+                    var windDirectionIcon = document.createElement("td");
                     windDirectionIcon.className = "center";
 
                     windDirectionIconCell = document.createElement("i");
@@ -694,14 +605,14 @@ Module.register("MMM-WunderGround", {
                         windDirectionIconCell.className = "wi " + forecast.windSpd;
                     }
                     windDirectionIcon.appendChild(windDirectionIconCell);
-                    
-                    spacer = document.createElement("i");
+
+                    var spacer = document.createElement("i");
                     spacer.innerHTML = "&nbsp;&nbsp;";
                     windDirectionIcon.appendChild(spacer);
 
 
                     windDirectionIconCell = document.createElement("i");
-                    
+
                     if (this.config.UseCardinals === 0) {
                         windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
                     } else {
@@ -712,21 +623,21 @@ Module.register("MMM-WunderGround", {
 
                     row_wind.appendChild(windDirectionIcon);
 
-                                       
-                    
+
+
 
                     var nl = Number(f) + 1;
-                    if (( nl % 4 ) === 0 ) {
-                            table.appendChild(row_time);
-                            table.appendChild(row_icon);
-                            table.appendChild(row_temp);
-                            table.appendChild(row_pop);
-                            table.appendChild(row_wind);
-                            row_time = document.createElement("tr");
-                            row_icon = document.createElement("tr");
-                            row_temp = document.createElement("tr");
-                            row_pop = document.createElement("tr");
-                            row_wind = document.createElement("tr");
+                    if ((nl % 4) === 0) {
+                        table.appendChild(row_time);
+                        table.appendChild(row_icon);
+                        table.appendChild(row_temp);
+                        table.appendChild(row_pop);
+                        table.appendChild(row_wind);
+                        row_time = document.createElement("tr");
+                        row_icon = document.createElement("tr");
+                        row_temp = document.createElement("tr");
+                        row_pop = document.createElement("tr");
+                        row_wind = document.createElement("tr");
                     }
 
                     if (f > this.config.hourlycount) {
@@ -754,7 +665,7 @@ Module.register("MMM-WunderGround", {
             row_temp = document.createElement("tr");
             row_pop = document.createElement("tr");
             row_wind = document.createElement("tr");
-            
+
 
 
             for (f in this.forecast) {
@@ -769,11 +680,11 @@ Module.register("MMM-WunderGround", {
                 iconCell.className = "align-center bright weather-icon";
 
                 icon = document.createElement("span");
-				if (this.config.coloricon) {
-					icon.innerHTML = forecast.icon_url;
-				} else {
-					icon.className = "wi " + forecast.icon;
-				}
+                if (this.config.coloricon) {
+                    icon.innerHTML = forecast.icon_url;
+                } else {
+                    icon.className = "wi " + forecast.icon;
+                }
                 iconCell.appendChild(icon);
 
                 row_icon.appendChild(iconCell);
@@ -794,8 +705,8 @@ Module.register("MMM-WunderGround", {
                 }
 
                 row_pop.appendChild(mmCell);
-				
-   				windDirectionIcon = document.createElement("td");
+
+                windDirectionIcon = document.createElement("td");
                 windDirectionIcon.className = "center";
                 windDirectionIconCell = document.createElement("i");
                 if (this.config.windunits == "mph") {
@@ -804,38 +715,38 @@ Module.register("MMM-WunderGround", {
                     windDirectionIconCell.className = "wi " + forecast.windSpd;
                 }
                 windDirectionIcon.appendChild(windDirectionIconCell);
-                    
+
                 spacer = document.createElement("i");
                 spacer.innerHTML = "&nbsp;&nbsp;";
                 windDirectionIcon.appendChild(spacer);
 
 
-                    windDirectionIconCell = document.createElement("i");
-                    
-                    if (this.config.UseCardinals === 0) {
-                        windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
-                    } else {
-                        windDirectionIconCell.className = "smaller";
-                        windDirectionIconCell.innerHTML = this.windDirImp;
-                    }
-                    windDirectionIcon.appendChild(windDirectionIconCell);
+                windDirectionIconCell = document.createElement("i");
 
-                    row_wind.appendChild(windDirectionIcon);
+                if (this.config.UseCardinals === 0) {
+                    windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
+                } else {
+                    windDirectionIconCell.className = "smaller";
+                    windDirectionIconCell.innerHTML = this.windDirImp;
+                }
+                windDirectionIcon.appendChild(windDirectionIconCell);
+
+                row_wind.appendChild(windDirectionIcon);
 
 
-                
+
                 var nl = Number(f) + 1;
-                if (( nl % 4 ) === 0 ) {
+                if ((nl % 4) === 0) {
                     table.appendChild(row_time);
                     table.appendChild(row_icon);
                     table.appendChild(row_temp);
                     table.appendChild(row_pop);
-					table.appendChild(row_wind);
+                    table.appendChild(row_wind);
                     row_time = document.createElement("tr");
                     row_icon = document.createElement("tr");
                     row_temp = document.createElement("tr");
                     row_pop = document.createElement("tr");
-					row_wind = document.createElement("tr");
+                    row_wind = document.createElement("tr");
                 }
 
             }
@@ -854,70 +765,6 @@ Module.register("MMM-WunderGround", {
 
     },
 
-    /* updateWeather(compliments)
-     * Requests new data from openweather.org.
-     * Calls processWeather on succesfull response.
-     */
-    updateWeather: function () {
-        var url = this.config.apiBase + this.getParams();
-        var self = this;
-        var retry = true;
-
-        if (this.config.sysstat == 1) {
-			self.sendSocketNotification('GET_WIFI');
-			self.sendSocketNotification('GET_SYSTEM_TEMP');
-			self.sendSocketNotification('GET_SYSTEM_MEM');
-			self.sendSocketNotification('GET_SYSTEM_STORAGE');
-		}
-		Log.info(moment().format() + ": " + this.name + " updating weather.");
-        var weatherRequest = new XMLHttpRequest();
-        weatherRequest.open("GET", url, true);
-        weatherRequest.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                if (this.status === 200) {
-                    self.processWeather(JSON.parse(this.response));
-                } else if (this.status === 401) {
-                    self.config.appid = "";
-                    self.updateDom(self.config.animationSpeed);
-
-                    Log.error(self.name + ": Incorrect APPID.");
-                    retry = false;
-                } else {
-                    Log.error(self.name +
-                        ":* Could not load weather.");
-                }
-
-                if (retry) {
-                    self.scheduleUpdate((self.loaded) ? -1 :
-                        self.config.retryDelay);
-                }
-            }
-        };
-        weatherRequest.send();
-    },
-
-    /* getParams(compliments)
-     * Generates an url with api parameters based on the config.
-     *
-     * return String - URL params.
-     */
-    getParams: function () {
-        var params = this.config.apikey;
-        var wulang = this.config.lang.toUpperCase();
-        if (wulang == "DE") {
-            wulang = "DL";
-        }
-        params +=
-            "/conditions/hourly/forecast10day/astronomy/alerts/lang:" +
-            wulang;
-        params += "/q/" + this.config.pws;
-        params += ".json";
-
-        console.log(params);
-
-
-        return params;
-    },
 
     /* processWeather(data)
      * Uses the received data to set the various values.
@@ -925,13 +772,13 @@ Module.register("MMM-WunderGround", {
      * argument data object - Weather information received form openweather.org.
      */
 
-    processWeather: function (data) {
-        if (data.current_observation.estimated.hasOwnProperty("estimated") && this.haveforecast == 1 ) {
+    processWeather: function(data) {
+        if (data.current_observation.estimated.hasOwnProperty("estimated") && this.haveforecast == 1) {
             return;
         }
-		
-		this.haveforecast = 1;
-        
+
+        this.haveforecast = 1;
+
         if (data.response.hasOwnProperty("error")) {
             this.errorDescription = data.response.error.description;
             this.error = true;
@@ -941,11 +788,7 @@ Module.register("MMM-WunderGround", {
             var forecast;
             var i;
             var count;
-		//if (this.config.coloricon) {
-        //    var iconTable = this.config.iconTableDayColor;
-		//} else {
             var iconTable = this.config.iconTableDay;
-		//}
             this.alerttext = "";
             this.alertmsg = "";
 
@@ -960,9 +803,6 @@ Module.register("MMM-WunderGround", {
             this.sunshour = Number(data.sun_phase.sunset.hour);
             sunset.setHours(data.sun_phase.sunset.hour);
             sunset.setMinutes(data.sun_phase.sunset.minute);
-
-
-
 
             // The moment().format("h") method has a bug on the Raspberry Pi.
             // So we need to generate the timestring manually.
@@ -992,12 +832,12 @@ Module.register("MMM-WunderGround", {
             this.sunriseSunsetIcon = (sunrise < now && sunset > now) ?
                 "wi-sunset" : "wi-sunrise";
             if (this.config.coloricon) {
-		this.iconTable = (sunrise < now && sunset > now) ? this.config
-                .iconTableDayColor : this.config.iconTableNightColor;
-                    } else {
-		this.iconTable = (sunrise < now && sunset > now) ? this.config
-                .iconTableDay : this.config.iconTableNight;
-		}
+                this.iconTable = (sunrise < now && sunset > now) ? this.config
+                    .iconTableDayColor : this.config.iconTableNightColor;
+            } else {
+                this.iconTable = (sunrise < now && sunset > now) ? this.config
+                    .iconTableDay : this.config.iconTableNight;
+            }
 
 
             for (i = 0, count = data.alerts.length; i < count; i++) {
@@ -1024,7 +864,7 @@ Module.register("MMM-WunderGround", {
 
             }
 
-            if (this.alertmsg !== "" && this.config.show_popup == 1 ) {
+            if (this.alertmsg !== "" && this.config.show_popup == 1) {
                 this.sendNotification("SHOW_ALERT", {
                     type: "alert",
                     message: this.alertmsg,
@@ -1038,11 +878,10 @@ Module.register("MMM-WunderGround", {
             this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
             this.windDirectionTxt = data.current_observation.wind_dir;
             this.Humidity = data.current_observation.relative_humidity;
-            this.Humidity = this.Humidity.substring(0,this.Humidity.length -1);
+            this.Humidity = this.Humidity.substring(0, this.Humidity.length - 1);
             this.windSpeed = "wi-wind-beaufort-" + this.ms2Beaufort(data.current_observation.wind_kph);
             this.windSpeedMph = data.current_observation.wind_mph;
-            this.moonPhaseIcon = this.config.moonPhaseTable[data.moon_phase.ageOfMoon];
-			this.moonPhaseIcon = "<img class='moonPhaseIcon' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif'>";
+            this.moonPhaseIcon = "<img class='moonPhaseIcon' src='https://www.wunderground.com/graphics/moonpictsnew/moon" + data.moon_phase.ageOfMoon + ".gif'>";
 
 
             if (this.config.units == "metric") {
@@ -1052,25 +891,27 @@ Module.register("MMM-WunderGround", {
                 this.temperature = data.current_observation.temp_f;
                 var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext;
             }
-            
+
             // Attempt to scale txt_forecast in case it results in too many lines
             // var fc_text = data.forecast.txt_forecast.forecastday[0].fcttext_metric.replace(/(.*\d+)(C)(.*)/gi, "$1°C$3");
             var fc_wrap = 35;
             var fc_flines = 3;
             var fc_scale = 100;
-            var fc_lines = fc_text.length / fc_wrap;
-            if ( fc_lines >  fc_flines ) {
-                fc_scale = Math.round((fc_flines / fc_lines) * 100);
-                fc_wrap = Math.round(fc_wrap * (100 / fc_scale));   
+            if (this.config.scaletxt == 1) {
+                var fc_lines = fc_text.length / fc_wrap;
+                if (fc_lines > fc_flines) {
+                    fc_scale = Math.round((fc_flines / fc_lines) * 100);
+                    fc_wrap = Math.round(fc_wrap * (100 / fc_scale));
+                }
             }
             this.forecastText = '<div style="font-size:' + fc_scale + '%">';
             this.forecastText = this.forecastText + this.wordwrap(fc_text, fc_wrap, "<BR>");
-            console.log("Wrap: " + fc_wrap + " Scale: " + fc_scale + " Lines: " + fc_lines + " Length: " + fc_text.length);
+            // console.log("Wrap: " + fc_wrap + " Scale: " + fc_scale + " Lines: " + fc_lines + " Length: " + fc_text.length);
 
             this.temperature = this.roundValue(this.temperature);
-			this.weatherTypeTxt = "<img src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
-                                    data.current_observation.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png') +
-									"' style='vertical-align:middle' class='currentWeatherIcon'>";
+            this.weatherTypeTxt = "<img src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" +
+                data.current_observation.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png') +
+                "' style='vertical-align:middle' class='currentWeatherIcon'>";
 
             if (this.alerttext !== "") {
                 this.forecastText = "<B>" + this.alerttext + "</B><BR>" +
@@ -1087,48 +928,45 @@ Module.register("MMM-WunderGround", {
                 if (this.config.units == "metric") {
                     this.tmaxTemp = forecast.high.celsius;
                     this.tminTemp = forecast.low.celsius;
-                    if (Number(forecast.snow_allday.cm) >  0 ) {
-						this.tmm = forecast.snow_allday.cm + "cm";
-					} else {
-						this.tmm = forecast.qpf_allday.mm + "mm";
-					}
+                    if (Number(forecast.snow_allday.cm) > 0) {
+                        this.tmm = forecast.snow_allday.cm + "cm";
+                    } else {
+                        this.tmm = forecast.qpf_allday.mm + "mm";
+                    }
                 } else {
                     this.tmaxTemp = forecast.high.fahrenheit;
                     this.tminTemp = forecast.low.fahrenheit;
-                    if (Number(forecast.snow_allday.in) >  0 ) {
-						this.tmm = forecast.snow_allday.in + "in";
-					} else {
-						this.tmm = forecast.qpf_allday.in + "in";
-					}
+                    if (Number(forecast.snow_allday.in) > 0) {
+                        this.tmm = forecast.snow_allday.in + "in";
+                    } else {
+                        this.tmm = forecast.qpf_allday.in + "in";
+                    }
                 }
 
                 this.maxTemp = this.roundValue(this.maxTemp);
                 this.minTemp = this.roundValue(this.minTemp);
-				
+
                 this.windDir = this.deg2Cardinal(forecast.maxwind.degrees);
                 this.windDirImp = forecast.maxwind.dir;
                 this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(forecast.maxwind.kph);
                 this.windSpdMph = forecast.maxwind.mph;
 
-				this.icon_url = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
-                                forecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"' class='forecastWeatherIcon'>";
-                
-                this.forecast.push({
+                this.icon_url = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" +
+                    forecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png') + "' class='forecastWeatherIcon'>";
 
+                this.forecast.push({
                     day: forecast.date.weekday_short,
                     maxTemp: this.tmaxTemp,
                     minTemp: this.tminTemp,
                     icon: this.config.iconTableDay[forecast.icon],
-					icon_url: this.icon_url,
+                    icon_url: this.icon_url,
                     pop: forecast.pop,
-					windDir: this.windDir,
+                    windDir: this.windDir,
                     windDirImp: this.windDirImp,
-					windSpd: this.windSpd, 
+                    windSpd: this.windSpd,
                     windSpdMph: this.windSpdMph,
                     mm: this.tmm
-					
                 });
-
 
             }
 
@@ -1142,52 +980,44 @@ Module.register("MMM-WunderGround", {
                     if (this.config.units == "metric") {
                         this.tmaxTemp = hourlyforecast.temp.metric;
                         this.tminTemp = hourlyforecast.feelslike.metric;
-						if (Number(forecast.snow_allday.cm) >  0 ) {
-							this.tmm = forecast.snow_allday.cm + "cm";
-						} else {
-							this.tmm = forecast.qpf_allday.mm + "mm";
-						}
-						this.thour = hourlyforecast.FCTTIME.hour + ":00";
+                        if (Number(forecast.snow_allday.cm) > 0) {
+                            this.tmm = forecast.snow_allday.cm + "cm";
+                        } else {
+                            this.tmm = forecast.qpf_allday.mm + "mm";
+                        }
+                        this.thour = hourlyforecast.FCTTIME.hour + ":00";
                     } else {
                         this.tmaxTemp = hourlyforecast.temp.english;
                         this.tminTemp = hourlyforecast.feelslike.english;
-						if (Number(forecast.snow_allday.in) >  0 ) {
-							this.tmm = forecast.snow_allday.in + "in";
-						} else {
-							this.tmm = forecast.qpf_allday.in + "in";
-						}
+                        if (Number(forecast.snow_allday.in) > 0) {
+                            this.tmm = forecast.snow_allday.in + "in";
+                        } else {
+                            this.tmm = forecast.qpf_allday.in + "in";
+                        }
                         this.thour = hourlyforecast.FCTTIME.civil;
                     }
                     this.tthour = Number(hourlyforecast.FCTTIME.hour);
-                    //if (this.config.coloricon) {
-                    //    this.ForecastIcon = (this.sunrhour < this.tthour &&
-                    //    this.sunshour > this.tthour) ? this.config.iconTableDayColor[
-                    //    hourlyforecast.icon] : this.config.iconTableNightColor[
-                    //    hourlyforecast.icon];
-                    //} else {
-                        this.ForecastIcon = (this.sunrhour < this.tthour &&
+                    this.ForecastIcon = (this.sunrhour < this.tthour &&
                         this.sunshour > this.tthour) ? this.config.iconTableDay[
                         hourlyforecast.icon] : this.config.iconTableNight[
                         hourlyforecast.icon];
-                    //}
-                    
-					this.ForecastIconUrl = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" + 
-                                            hourlyforecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png')+"' class='forecastWeatherIcon'>";
-			
+
+                    this.ForecastIconUrl = "<img style='max-height:100%; max-width:100%; vertical-align:middle' src='./modules/MMM-WunderGround/img/VCloudsWeatherIcons/" +
+                        hourlyforecast.icon_url.replace('http://icons.wxug.com/i/c/k/', '').replace('.gif', '.png') + "' class='forecastWeatherIcon'>";
+
 
                     this.windDir = this.deg2Cardinal(hourlyforecast.wdir.degrees);
                     this.windDirImp = hourlyforecast.wdir.dir;
                     this.windSpd = "wi-wind-beaufort-" + this.ms2Beaufort(hourlyforecast.wspd.metric);
                     this.windSpdMph = hourlyforecast.wspd.english;
 
-                        
-                    this.hourlyforecast.push({
 
+                    this.hourlyforecast.push({
                         hour: this.thour,
                         maxTemp: this.tmaxTemp,
                         minTemp: this.tminTemp,
                         icon: this.ForecastIcon,
-						icon_url: this.ForecastIconUrl,
+                        icon_url: this.ForecastIconUrl,
                         pop: hourlyforecast.pop,
                         windDir: this.windDir,
                         windDirImp: this.windDirImp,
@@ -1198,9 +1028,6 @@ Module.register("MMM-WunderGround", {
                 }
             }
 
-
-
-
             Log.log(this.forecast);
 
             this.loaded = true;
@@ -1208,24 +1035,6 @@ Module.register("MMM-WunderGround", {
         }
     },
 
-    /* scheduleUpdate()
-     * Schedule next update.
-     *
-     * argument delay number - Milliseconds before next update. If empty, this.config.updateInterval is used.
-     */
-    scheduleUpdate: function (delay) {
-        var nextLoad = this.config.updateInterval;
-        if (typeof delay !== "undefined" && delay >= 0) {
-            nextLoad = delay;
-        }
-
-        var self = this;
-        clearTimeout(this.updateTimer);
-        Log.info(moment().format() + ": " + this.name + " scheduling next update in " + nextLoad + " seconds.");
-        this.updateTimer = setTimeout(function () {
-            self.updateWeather();
-        }, nextLoad);
-    },
 
     /* ms2Beaufort(ms)
      * Converts m2 to beaufort (windspeed).
@@ -1234,7 +1043,7 @@ Module.register("MMM-WunderGround", {
      *
      * return number - Windspeed in beaufort.
      */
-    ms2Beaufort: function (kmh) {
+    ms2Beaufort: function(kmh) {
         var speeds = [1, 5, 11, 19, 28, 38, 49, 61, 74, 88, 102,
             117, 1000
         ];
@@ -1247,11 +1056,10 @@ Module.register("MMM-WunderGround", {
         return 12;
     },
 
-    wordwrap: function (str, width, brk) {
+    wordwrap: function(str, width, brk) {
 
         brk = brk || "n";
         width = width || 75;
-        cut = false;
 
 
         if (!str) {
@@ -1260,15 +1068,13 @@ Module.register("MMM-WunderGround", {
 
         var re = new RegExp(".{1," + width +
             "}(\\s|$)|\\ S+?(\\s|$)", "g");
-            
+
         var wordwrapped = str.trim().match(RegExp(re));
         for (var i in wordwrapped) {
             wordwrapped[i] = wordwrapped[i].trim();
         }
-        
+
         return wordwrapped.join(brk);
-            
-        //return str.match(RegExp(re)).join(brk);
 
     },
 
@@ -1280,7 +1086,7 @@ Module.register("MMM-WunderGround", {
      * return number - Rounded Temperature.
      */
 
-    deg2Cardinal: function (deg) {
+    deg2Cardinal: function(deg) {
         if (deg > 11.25 && deg <= 33.75) {
             return "wi-from-nne";
         } else if (deg > 33.75 && deg <= 56.25) {
@@ -1323,49 +1129,49 @@ Module.register("MMM-WunderGround", {
      *
      * return number - Rounded Temperature.
      */
-    roundValue: function (temperature) {
+    roundValue: function(temperature) {
         return parseFloat(temperature).toFixed(this.config.roundTmpDecs);
     },
-    
-    socketNotificationReceived: function(notification, payload) {
-		var self = this;
 
-		Log.info('Wunderground received ' + notification)
+    socketNotificationReceived: function(notification, payload) {
+        var self = this;
+
+        Log.info('Wunderground received ' + notification);
         if (notification === 'WIFI_STRENGTH') {
             Log.info('received WIFI_STRENGTH');
-			Log.info(payload.wifi_strength);
-			this.wifiap = payload.wifi_ap;
-			this.wifistrength=payload.wifi_strength;
-			self.updateDom(self.config.animationSpeed);
+            Log.info(payload.wifi_strength);
+            this.wifiap = payload.wifi_ap;
+            this.wifistrength = payload.wifi_strength;
+            self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_TEMP') {
             Log.info('received SYSTEM_TEMP');
-			Log.info(payload.system_temp);
-			this.systemp=payload.system_temp;
-			self.updateDom(self.config.animationSpeed);
+            Log.info(payload.system_temp);
+            this.systemp = payload.system_temp;
+            self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_MEM') {
             Log.info('received SYSTEM_MEM');
-			Log.info(payload);
-			this.mem_size=payload.mem_size;
-			this.mem_used=payload.mem_used;
-			this.mem_free=payload.mem_free;
-			self.updateDom(self.config.animationSpeed);
-		}
+            Log.info(payload);
+            this.mem_size = payload.mem_size;
+            this.mem_used = payload.mem_used;
+            this.mem_free = payload.mem_free;
+            self.updateDom(self.config.animationSpeed);
+        }
         if (notification === 'SYSTEM_STORAGE') {
             Log.info('received SYSTEM_STORAGE');
-			Log.info(payload);
-			this.storage_size=payload.store_size;
-			this.storage_used=payload.store_used;
-			this.storage_free=payload.store_avail;
-			self.updateDom(self.config.animationSpeed);
+            Log.info(payload);
+            this.storage_size = payload.store_size;
+            this.storage_used = payload.store_used;
+            this.storage_free = payload.store_avail;
+            self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'WUNDERGROUND') {
             Log.info('received WUNDERGROUND');
-			Log.info(payload);
-			self.processWeather(JSON.parse(payload));
+            Log.info(payload);
+            self.processWeather(JSON.parse(payload));
         }
 
-	}
+    }
 
 });
