@@ -774,6 +774,7 @@ Module.register("MMM-WunderGround", {
 
     processWeather: function(data) {
         if (data.current_observation.estimated.hasOwnProperty("estimated") && this.haveforecast == 1) {
+            console.log("WeatherUnderground served us an estimated forecast. Skipping update...");
             return;
         }
 
