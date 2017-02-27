@@ -835,29 +835,34 @@ Module.register("MMM-WunderGround", {
             this.iconTable = (sunrise < now && sunset > now) ? this.config
                     .iconTableDay : this.config.iconTableNight;
  
-
+			var now = new Date();
+ 
             for (i = 0, count = data.alerts.length; i < count; i++) {
+				
+				var expire = data.alerts[i].expires;
+				expire = expire.substring(0, expire.length - 4) + 'Z';
+				if ( moment(expire).isAfter(now) ) {
+  
+					var talert = data.alerts[i].description;
+					var malert = data.alerts[i].message;
+					if (talert.length < malert.length) {
+						talert = malert;
+					}
+					if (this.config.alerttruncatestring !== "") {
+						var ialert = talert.indexOf(this.config.alerttruncatestring);
+						if (ialert > 0) {
+							talert = talert.substring(1, ialert);
+						}
+					}
+					this.alertmsg = this.alertmsg + talert;
 
-                var talert = data.alerts[i].description;
-                var malert = data.alerts[i].message;
-                if (talert.length < malert.length) {
-                    talert = malert;
-                }
-                if (this.config.alerttruncatestring !== "") {
-                    var ialert = talert.indexOf(this.config.alerttruncatestring);
-                    if (ialert > 0) {
-                        talert = talert.substring(1, ialert);
-                    }
-                }
-                this.alertmsg = this.alertmsg + talert;
-
-                this.alerttext = this.alerttext + "<B style=\"color:" +
-                    data.alerts[i].level_meteoalarm_name + "\">" + this
-                    .translate(data.alerts[i].type) + "</B>";
-                if (i < (count - 1)) {
-                    this.alerttext = this.alerttext + "<BR>";
-                }
-
+					this.alerttext = this.alerttext + "<B style=\"color:" +
+						data.alerts[i].level_meteoalarm_name + "\">" + this
+						.translate(data.alerts[i].type) + "</B>";
+					if (i < (count - 1)) {
+						this.alerttext = this.alerttext + "<BR>";
+					}
+				}
             }
 
             if (this.alertmsg !== "" && this.config.show_popup == 1) {
