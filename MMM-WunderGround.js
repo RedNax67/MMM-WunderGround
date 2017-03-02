@@ -836,6 +836,7 @@ Module.register("MMM-WunderGround", {
                     .iconTableDay : this.config.iconTableNight;
  
 			var now = new Date();
+			var firstAlert = 1;
  
             for (i = 0, count = data.alerts.length; i < count; i++) {
 				
@@ -854,14 +855,18 @@ Module.register("MMM-WunderGround", {
 							talert = talert.substring(1, ialert);
 						}
 					}
+
+					if (firstAlert === 0) {
+						this.alerttext = this.alerttext + "<BR>";
+					}
+					
 					this.alertmsg = this.alertmsg + talert;
+					
+					firstAlert = 0;
 
 					this.alerttext = this.alerttext + "<B style=\"color:" +
 						data.alerts[i].level_meteoalarm_name + "\">" + this
 						.translate(data.alerts[i].type) + "</B>";
-					if (i < (count - 1)) {
-						this.alerttext = this.alerttext + "<BR>";
-					}
 				}
             }
 
