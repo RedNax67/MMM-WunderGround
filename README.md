@@ -233,6 +233,13 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>iconset</code></td>
+			<td>Selects the style of icons to show<br>
+				<br><b>Possible values:</b> <code>"colourful", "dark", "flat_black", "flat_colourful", "flat_white", "light", "novacon", "sketchy", "VCloudsWeatherIcons", "weezle"</code>
+				<br><b>Default value:</b> <code>"VCloudsWeatherIcons"</code>
+			</td>
+		</tr>
+		<tr>
 			<td><code>sysstat</code></td>
 			<td>Toggle sysinfo display<br>
 				<br><b>Possible values:</b> <code>0 or 1</code>
