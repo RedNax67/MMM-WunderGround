@@ -34,12 +34,16 @@ module.exports = NodeHelper.create({
             if (wifilink[i].indexOf('SSID:') !== -1) {
                 var apArr=wifilink[i].split(" ");
                 var ap=apArr[1];
-                console.log(ap);
+				if ( this.config.debug === 1 ) {
+					console.log(ap);
+				}
             }
             if (wifilink[i].indexOf('signal:') !== -1) {
                 var signalArr = wifilink[i].split(" ");
                 var signal = String(130 + parseInt(signalArr[1]));
-                console.log(signal);
+                if ( this.config.debug === 1 ) {
+					console.log(signal);
+				}
             }
         }
         self.sendSocketNotification('WIFI_STRENGTH', {'wifi_strength':signal.toString(),'wifi_ap':ap});
@@ -72,7 +76,9 @@ module.exports = NodeHelper.create({
             }
             var tempArr=stdout.split("=");
             var temp=tempArr[1];
-            console.log(temp);
+			if ( this.config.debug === 1 ) {
+				console.log(temp);
+			}
             self.sendSocketNotification('SYSTEM_TEMP', {'system_temp':temp});
         });
   },
@@ -106,7 +112,9 @@ module.exports = NodeHelper.create({
         params += ".json";
         
         var Wurl = this.config.apiBase + params;
-		console.log(moment().format() + " 4 " + this.name  + ": " + Wurl);
+		if ( this.config.debug === 1 ) {
+			console.log(moment().format() + " 4 " + this.name  + ": " + Wurl);
+		}
         request({
             url: Wurl,
             method: 'GET'
@@ -141,7 +149,9 @@ module.exports = NodeHelper.create({
     if(notification === "GET_WUNDERGROUND"){
             
         this.config = payload;
-        console.log('Lets get WunderGround');
+        if ( this.config.debug === 1 ) {
+			console.log('Lets get WunderGround');
+		}
 
         if (!this.fetcherRunning) {
             this.fetchWunderground();
@@ -160,7 +170,9 @@ module.exports = NodeHelper.create({
 			params += ".json";
 			
 			var Wurl = this.config.apiBase + params;
-			console.log(moment().format() + " 3 " + this.name  + ": " + Wurl);
+			if ( this.config.debug === 1 ) {
+				console.log(moment().format() + " 3 " + this.name  + ": " + Wurl);
+			}
 			request({
 				url: Wurl,
 				method: 'GET'

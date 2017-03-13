@@ -36,6 +36,7 @@ Module.register("MMM-WunderGround", {
         sysstat: 0,
         scaletxt: 1,
         iconset: "VCloudsWeatherIcons",
+		debug: 0,
 
         retryDelay: 2500,
 
@@ -141,7 +142,9 @@ Module.register("MMM-WunderGround", {
     },
 
     getWunder: function() {
-        Log.info("WunderGround: Getting weather.");
+        if ( this.config.debug === 1 ) {
+			Log.info("WunderGround: Getting weather.");
+		}
         this.sendSocketNotification("GET_WUNDERGROUND", this.config);
     },
 
@@ -775,7 +778,9 @@ Module.register("MMM-WunderGround", {
 
     processWeather: function(data) {
         if (data.current_observation.estimated.hasOwnProperty("estimated") && this.haveforecast == 1) {
-            console.log("WeatherUnderground served us an estimated forecast. Skipping update...");
+            if ( this.config.debug === 1 ) {
+				console.log("WeatherUnderground served us an estimated forecast. Skipping update...");
+			}
             return;
         }
 
@@ -1035,7 +1040,9 @@ Module.register("MMM-WunderGround", {
                 }
             }
 
-            Log.log(this.forecast);
+            if ( this.config.debug === 1 ) {
+				Log.log(this.forecast);
+			}
 
             this.loaded = true;
             this.updateDom(this.config.animationSpeed);
@@ -1143,39 +1150,51 @@ Module.register("MMM-WunderGround", {
     socketNotificationReceived: function(notification, payload) {
         var self = this;
 
-        Log.info('Wunderground received ' + notification);
+        if ( this.config.debug === 1 ) {
+			Log.info('Wunderground received ' + notification);
+		}
         if (notification === 'WIFI_STRENGTH') {
-            Log.info('received WIFI_STRENGTH');
-            Log.info(payload.wifi_strength);
+			if ( this.config.debug === 1 ) {
+				Log.info('received WIFI_STRENGTH');
+				Log.info(payload.wifi_strength);
+			}
             this.wifiap = payload.wifi_ap;
             this.wifistrength = payload.wifi_strength;
             self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_TEMP') {
-            Log.info('received SYSTEM_TEMP');
-            Log.info(payload.system_temp);
+            if ( this.config.debug === 1 ) {
+				Log.info('received SYSTEM_TEMP');
+				Log.info(payload.system_temp);
+			}
             this.systemp = payload.system_temp;
             self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_MEM') {
-            Log.info('received SYSTEM_MEM');
-            Log.info(payload);
+            if ( this.config.debug === 1 ) {
+				Log.info('received SYSTEM_MEM');
+				Log.info(payload);
+			}
             this.mem_size = payload.mem_size;
             this.mem_used = payload.mem_used;
             this.mem_free = payload.mem_free;
             self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'SYSTEM_STORAGE') {
-            Log.info('received SYSTEM_STORAGE');
-            Log.info(payload);
+            if ( this.config.debug === 1 ) {
+				Log.info('received SYSTEM_STORAGE');
+				Log.info(payload);
+			}
             this.storage_size = payload.store_size;
             this.storage_used = payload.store_used;
             this.storage_free = payload.store_avail;
             self.updateDom(self.config.animationSpeed);
         }
         if (notification === 'WUNDERGROUND') {
-            Log.info('received WUNDERGROUND');
-            Log.info(payload);
+            if ( this.config.debug === 1 ) {
+				Log.info('received WUNDERGROUND');
+				Log.info(payload);
+			}
             self.processWeather(JSON.parse(payload));
         }
 

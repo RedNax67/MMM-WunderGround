@@ -246,6 +246,13 @@ The following properties can be configured:
 				<br><b>Default value:</b>  <code>0</code>
 			</td>
 		</tr>
+		<tr>
+			<td><code>debug</code></td>
+			<td>Toggle debug logging<br>
+				<br><b>Possible values:</b> <code>0 or 1</code>
+				<br><b>Default value:</b>  <code>0</code>
+			</td>
+		</tr>
 	</tbody>
 </table>
 
