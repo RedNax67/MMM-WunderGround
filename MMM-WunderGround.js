@@ -377,7 +377,7 @@ Module.register("MMM-WunderGround", {
                         break;
                     }
 					
-					if (this.config.dayly == 0) {
+					if (this.config.daily == 0) {
 					
 						if (this.config.fade && this.config.fadePoint < 1) {
 							if (this.config.fadePoint < 0) {
@@ -397,7 +397,7 @@ Module.register("MMM-WunderGround", {
             }
 
 
-            if (this.config.dayly == 1) {
+            if (this.config.daily == 1) {
 				for (f in this.forecast) {
 					forecast = this.forecast[f];
 
