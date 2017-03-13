@@ -25,6 +25,7 @@ Module.register("MMM-WunderGround", {
         tz: "",
         fcdaycount: "5",
         fcdaystart: "0",
+		daily: "1",
         hourly: "0",
         hourlyinterval: "3",
         hourlycount: "2",
@@ -37,6 +38,8 @@ Module.register("MMM-WunderGround", {
         scaletxt: 1,
         iconset: "VCloudsWeatherIcons",
 		debug: 0,
+		socknot: "GET_WUNDERGROUND",
+		sockrcv: "WUNDERGROUND",
 
         retryDelay: 2500,
 
@@ -145,7 +148,8 @@ Module.register("MMM-WunderGround", {
         if ( this.config.debug === 1 ) {
 			Log.info("WunderGround: Getting weather.");
 		}
-        this.sendSocketNotification("GET_WUNDERGROUND", this.config);
+        //this.sendSocketNotification("GET_WUNDERGROUND", this.config);
+		this.sendSocketNotification(this.config.socknot, this.config);
     },
 
     // Override dom generator.
@@ -372,66 +376,84 @@ Module.register("MMM-WunderGround", {
                     if (f > this.config.hourlycount) {
                         break;
                     }
+					
+					if (this.config.dayly == 0) {
+					
+						if (this.config.fade && this.config.fadePoint < 1) {
+							if (this.config.fadePoint < 0) {
+								this.config.fadePoint = 0;
+							}
+							startingPoint = this.forecast.length * this.config.fadePoint;
+							steps = this.forecast.length - startingPoint;
+							if (f >= startingPoint) {
+								currentStep = f - startingPoint;
+								row.style.opacity = 1 - (1 / steps *
+									currentStep);
+							}
+						}
+					}
+
                 }
             }
 
 
-            for (f in this.forecast) {
-                forecast = this.forecast[f];
+            if (this.config.dayly == 1) {
+				for (f in this.forecast) {
+					forecast = this.forecast[f];
 
-                row = document.createElement("tr");
-                table.appendChild(row);
+					row = document.createElement("tr");
+					table.appendChild(row);
+	
+					dayCell = document.createElement("td");
+					dayCell.className = "day";
+					dayCell.innerHTML = forecast.day;
+					row.appendChild(dayCell);
 
-                dayCell = document.createElement("td");
-                dayCell.className = "day";
-                dayCell.innerHTML = forecast.day;
-                row.appendChild(dayCell);
+					iconCell = document.createElement("td");
+					iconCell.className = "align-center bright weather-icon";
+					row.appendChild(iconCell);
 
-                iconCell = document.createElement("td");
-                iconCell.className = "align-center bright weather-icon";
-                row.appendChild(iconCell);
+					icon = document.createElement("span");
+					if (this.config.coloricon) {
+						icon.innerHTML = forecast.icon_url;
+					} else {
+						icon.className = "wi " + forecast.icon;
+					}
+					iconCell.appendChild(icon);
 
-                icon = document.createElement("span");
-                if (this.config.coloricon) {
-                    icon.innerHTML = forecast.icon_url;
-                } else {
-                    icon.className = "wi " + forecast.icon;
-                }
-                iconCell.appendChild(icon);
+					maxTempCell = document.createElement("td");
+					maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
+					maxTempCell.className = "align-right max-temp";
+					row.appendChild(maxTempCell);
+	
+					minTempCell = document.createElement("td");
+					minTempCell.innerHTML = forecast.minTemp + "&deg;";
+					minTempCell.className = "align-right min-temp";
+					row.appendChild(minTempCell);
+	
+					popCell = document.createElement("td");
+					popCell.innerHTML = forecast.pop + "%";
+					popCell.className = "align-right pop";
+					row.appendChild(popCell);
 
-                maxTempCell = document.createElement("td");
-                maxTempCell.innerHTML = forecast.maxTemp + "&deg;";
-                maxTempCell.className = "align-right max-temp";
-                row.appendChild(maxTempCell);
+					mmCell = document.createElement("td");
+					mmCell.innerHTML = forecast.mm;
+					mmCell.className = "align-right mm";
+					row.appendChild(mmCell);
 
-                minTempCell = document.createElement("td");
-                minTempCell.innerHTML = forecast.minTemp + "&deg;";
-                minTempCell.className = "align-right min-temp";
-                row.appendChild(minTempCell);
-
-                popCell = document.createElement("td");
-                popCell.innerHTML = forecast.pop + "%";
-                popCell.className = "align-right pop";
-                row.appendChild(popCell);
-
-                mmCell = document.createElement("td");
-                mmCell.innerHTML = forecast.mm;
-                mmCell.className = "align-right mm";
-                row.appendChild(mmCell);
-
-                if (this.config.fade && this.config.fadePoint < 1) {
-                    if (this.config.fadePoint < 0) {
-                        this.config.fadePoint = 0;
-                    }
-                    startingPoint = this.forecast.length * this.config.fadePoint;
-                    steps = this.forecast.length - startingPoint;
-                    if (f >= startingPoint) {
-                        currentStep = f - startingPoint;
-                        row.style.opacity = 1 - (1 / steps *
-                            currentStep);
-                    }
-                }
-
+					if (this.config.fade && this.config.fadePoint < 1) {
+						if (this.config.fadePoint < 0) {
+							this.config.fadePoint = 0;
+						}
+						startingPoint = this.forecast.length * this.config.fadePoint;
+						steps = this.forecast.length - startingPoint;
+						if (f >= startingPoint) {
+							currentStep = f - startingPoint;
+							row.style.opacity = 1 - (1 / steps *
+								currentStep);
+						}
+					}
+				}
             }
 
 
@@ -671,98 +693,94 @@ Module.register("MMM-WunderGround", {
             row_wind = document.createElement("tr");
 
 
+			if (this.config.daily == 1) {
+				for (f in this.forecast) {
+					forecast = this.forecast[f];
 
-            for (f in this.forecast) {
-                forecast = this.forecast[f];
+					dayCell = document.createElement("td");
+					dayCell.className = "hour";
+					dayCell.innerHTML = forecast.day;
+					row_time.appendChild(dayCell);
 
-                dayCell = document.createElement("td");
-                dayCell.className = "hour";
-                dayCell.innerHTML = forecast.day;
-                row_time.appendChild(dayCell);
+					iconCell = document.createElement("td");
+					iconCell.className = "align-center bright weather-icon";
 
-                iconCell = document.createElement("td");
-                iconCell.className = "align-center bright weather-icon";
+					icon = document.createElement("span");
+					if (this.config.coloricon) {
+						icon.innerHTML = forecast.icon_url;
+					} else {
+						icon.className = "wi " + forecast.icon;
+					}
+					iconCell.appendChild(icon);
 
-                icon = document.createElement("span");
-                if (this.config.coloricon) {
-                    icon.innerHTML = forecast.icon_url;
-                } else {
-                    icon.className = "wi " + forecast.icon;
-                }
-                iconCell.appendChild(icon);
+					row_icon.appendChild(iconCell);
 
-                row_icon.appendChild(iconCell);
+					maxTempCell = document.createElement("td");
+					maxTempCell.innerHTML = forecast.maxTemp + "&deg;/" + forecast.minTemp + "&deg;";
+					maxTempCell.className = "hour";
+					row_temp.appendChild(maxTempCell);
 
-                maxTempCell = document.createElement("td");
-                maxTempCell.innerHTML = forecast.maxTemp + "&deg;/" + forecast.minTemp + "&deg;";
-                maxTempCell.className = "hour";
-                row_temp.appendChild(maxTempCell);
+					mmCell = document.createElement("td");
+					if (this.config.units == "metric") {
+						mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
+						mmCell.className = "hour";
+					} else {
+						mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
+						mmCell.className = "hour";
+					}
 
-                mmCell = document.createElement("td");
-                if (this.config.units == "metric") {
-                    mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
-                    mmCell.className = "hour";
-                } else {
-                    mmCell.innerHTML = forecast.pop + "%/" + forecast.mm;
-                    mmCell.className = "hour";
+					row_pop.appendChild(mmCell);
 
-                }
+					windDirectionIcon = document.createElement("td");
+					windDirectionIcon.className = "center";
+					windDirectionIconCell = document.createElement("i");
+					if (this.config.windunits == "mph") {
+						windDirectionIconCell.innerHTML = forecast.windSpdMph + "<sub>mph</sub>";
+					} else {
+						windDirectionIconCell.className = "wi " + forecast.windSpd;
+					}
+					windDirectionIcon.appendChild(windDirectionIconCell);
 
-                row_pop.appendChild(mmCell);
+					spacer = document.createElement("i");
+					spacer.innerHTML = "&nbsp;&nbsp;";
+					windDirectionIcon.appendChild(spacer);
 
-                windDirectionIcon = document.createElement("td");
-                windDirectionIcon.className = "center";
-                windDirectionIconCell = document.createElement("i");
-                if (this.config.windunits == "mph") {
-                    windDirectionIconCell.innerHTML = forecast.windSpdMph + "<sub>mph</sub>";
-                } else {
-                    windDirectionIconCell.className = "wi " + forecast.windSpd;
-                }
-                windDirectionIcon.appendChild(windDirectionIconCell);
+					windDirectionIconCell = document.createElement("i");
 
-                spacer = document.createElement("i");
-                spacer.innerHTML = "&nbsp;&nbsp;";
-                windDirectionIcon.appendChild(spacer);
+					if (this.config.UseCardinals === 0) {
+						windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
+					} else {
+						windDirectionIconCell.className = "smaller";
+						windDirectionIconCell.innerHTML = this.windDirImp;
+					}
+					windDirectionIcon.appendChild(windDirectionIconCell);
 
+					row_wind.appendChild(windDirectionIcon);
 
-                windDirectionIconCell = document.createElement("i");
+					var nl = Number(f) + 1;
+					if ((nl % 4) === 0) {
+						table.appendChild(row_time);
+						table.appendChild(row_icon);
+						table.appendChild(row_temp);
+						table.appendChild(row_pop);
+						table.appendChild(row_wind);
+						row_time = document.createElement("tr");
+						row_icon = document.createElement("tr");
+						row_temp = document.createElement("tr");
+						row_pop = document.createElement("tr");
+						row_wind = document.createElement("tr");
+					}
 
-                if (this.config.UseCardinals === 0) {
-                    windDirectionIconCell.className = "wi wi-wind " + forecast.windDir;
-                } else {
-                    windDirectionIconCell.className = "smaller";
-                    windDirectionIconCell.innerHTML = this.windDirImp;
-                }
-                windDirectionIcon.appendChild(windDirectionIconCell);
+				}
 
-                row_wind.appendChild(windDirectionIcon);
-
-
-
-                var nl = Number(f) + 1;
-                if ((nl % 4) === 0) {
-                    table.appendChild(row_time);
-                    table.appendChild(row_icon);
-                    table.appendChild(row_temp);
-                    table.appendChild(row_pop);
-                    table.appendChild(row_wind);
-                    row_time = document.createElement("tr");
-                    row_icon = document.createElement("tr");
-                    row_temp = document.createElement("tr");
-                    row_pop = document.createElement("tr");
-                    row_wind = document.createElement("tr");
-                }
-
-            }
-
-            table.appendChild(row_time);
-            table.appendChild(row_icon);
-            table.appendChild(row_temp);
-            table.appendChild(row_pop);
-            table.appendChild(row_wind);
-            fctable.appendChild(table);
-            wrapper.appendChild(fctable);
-
+				table.appendChild(row_time);
+				table.appendChild(row_icon);
+				table.appendChild(row_temp);
+				table.appendChild(row_pop);
+				table.appendChild(row_wind);
+				fctable.appendChild(table);
+				wrapper.appendChild(fctable);
+			}
 
         }
         return wrapper;
@@ -1190,9 +1208,10 @@ Module.register("MMM-WunderGround", {
             this.storage_free = payload.store_avail;
             self.updateDom(self.config.animationSpeed);
         }
-        if (notification === 'WUNDERGROUND') {
+//        if (notification === 'WUNDERGROUND') {
+        if (notification === this.config.sockrcv) {
             if ( this.config.debug === 1 ) {
-				Log.info('received WUNDERGROUND');
+				Log.info('received ' + this.config.sockrcv);
 				Log.info(payload);
 			}
             self.processWeather(JSON.parse(payload));

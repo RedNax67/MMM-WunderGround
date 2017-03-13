@@ -116,11 +116,19 @@ The following properties can be configured:
 			</td>
 		</tr>
         <tr>
+			<td><code>daily</code></td>
+			<td>Display daily forecasts. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
+				<br><b>Default value:</b> <code>1</code> (Will display daily forecasts)
+				<br>This value is optional. By default the daily forecast will be displayed.
+			</td>
+		</tr>
+        <tr>
 			<td><code>hourly</code></td>
 			<td>Display hourly forecasts. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
 				<br><b>Default value:</b> <code>1</code> (Will display hourly forecasts)
-				<br>This value is optional. By default the forecast text will be displayed.
+				<br>This value is optional. By default the hourly forecast will be displayed.
 			</td>
 		</tr>
 		<tr>
