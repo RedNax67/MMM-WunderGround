@@ -1,5 +1,5 @@
 # Module: Weather Underground Forecast
-This is a module for MagicMirror, modified version of the default `weatherforecast` module. 
+This is a module for MagicMirror, modified version of the default `weatherforecast` module.
 
 This is similar to the default `weatherforecast` module, however it has additional functionality (such as displaying the probability of precipitation for each day). It also retrieves its data from Weather Underground instead of OpenWeatherMap.
 
@@ -46,13 +46,12 @@ The following properties can be configured:
 
 
 <table width="100%">
-	<!-- why, markdown... -->
 	<thead>
 		<tr>
 			<th>Option</th>
 			<th width="100%">Description</th>
 		</tr>
-	<thead>
+	</thead>
 	<tbody>
 
 		<tr>
@@ -263,5 +262,3 @@ The following properties can be configured:
 		</tr>
 	</tbody>
 </table>
-
-
