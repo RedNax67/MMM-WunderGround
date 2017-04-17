@@ -53,13 +53,9 @@ The following properties can be configured:
 		</tr>
 	</thead>
 	<tbody>
-
 		<tr>
 			<td><code>pws</code></td>
-			<td>Can be any WU api location info.<br>
-				<br><b>US Example:</b> <code>NY/New_York</code>
-				<br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br>
-                                <br> This value is <b>REQUIRED</b>
+			<td>Can be any WU api location info.<br><br><b>US Example:</b> <code>NY/New_York</code><br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br><br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
 		<tr>
@@ -161,7 +157,6 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>2000</code> (2 seconds)
 			</td>
 		</tr>
-
 		<tr>
 			<td><code>lang</code></td>
 			<td>The language of the days.<br>
