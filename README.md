@@ -1,5 +1,5 @@
 # Module: Weather Underground Forecast
-This is a module for MagicMirror, modified version of the default `weatherforecast` module. 
+This is a module for MagicMirror, modified version of the default `weatherforecast` module.
 
 This is similar to the default `weatherforecast` module, however it has additional functionality (such as displaying the probability of precipitation for each day). It also retrieves its data from Weather Underground instead of OpenWeatherMap.
 
@@ -46,26 +46,21 @@ The following properties can be configured:
 
 
 <table width="100%">
-	<!-- why, markdown... -->
 	<thead>
 		<tr>
 			<th>Option</th>
 			<th width="100%">Description</th>
 		</tr>
-	<thead>
+	</thead>
 	<tbody>
-
 		<tr>
 			<td><code>pws</code></td>
-			<td>Can be any WU api location info.<br>
-				<br><b>US Example:</b> <code>NY/New_York</code>
-				<br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br>
-                                <br> This value is <b>REQUIRED</b>
+			<td>Can be any WU api location info.<br><br><b>US Example:</b> <code>NY/New_York</code><br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br><br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
 		<tr>
 			<td><code>apikey</code></td>
-			<td>The <a href="https://www.wunderground.com/weather/api/d/pricing" target="_blank">Weather Underground</a> API key, which can be obtained by creating an OpenWeatherMap account. You need either Cumulus or Anvil plan for this module. As long as you make less than 500 queries a day, this is free.<br>
+			<td>The <a href="https://www.wunderground.com/weather/api/d/pricing">Weather Underground</a> API key, which can be obtained by creating an OpenWeatherMap account. You need either Cumulus or Anvil plan for this module. As long as you make less than 500 queries a day, this is free.<br>
 				<br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
@@ -162,7 +157,6 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>2000</code> (2 seconds)
 			</td>
 		</tr>
-
 		<tr>
 			<td><code>lang</code></td>
 			<td>The language of the days.<br>
@@ -263,5 +257,3 @@ The following properties can be configured:
 		</tr>
 	</tbody>
 </table>
-
-
