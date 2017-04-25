@@ -40,7 +40,7 @@ Module.register("MMM-WunderGround", {
 		debug: 0,
 		socknot: "GET_WUNDERGROUND",
 		sockrcv: "WUNDERGROUND",
-        enableCompliments === 0,
+        enableCompliments: 0,
 
         retryDelay: 2500,
 
