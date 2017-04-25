@@ -40,6 +40,7 @@ Module.register("MMM-WunderGround", {
 		debug: 0,
 		socknot: "GET_WUNDERGROUND",
 		sockrcv: "WUNDERGROUND",
+        enableCompliments === 0,
 
         retryDelay: 2500,
 
@@ -87,6 +88,28 @@ Module.register("MMM-WunderGround", {
             "sleet": "wi-night-alt-sleet",
             "snow": "wi-night-alt-snow",
             "tstorms": "wi-night-alt-thunderstorm"
+        },
+        
+        iconTableCompliments: {
+            "chanceflurries": "13",
+            "chancerain": "10",
+            "chancesleet": "13",
+            "chancesnow": "13",
+            "chancetstorms": "11",
+            "clear": "01",
+            "cloudy": "02",
+            "flurries": "13",
+            "fog": "50",
+            "haze": "50",
+            "hazy": "50",
+            "mostlycloudy": "03",
+            "mostlysunny": "02",
+            "partlycloudy": "02",
+            "partlysunny": "02",
+            "rain": "10",
+            "sleet": "13",
+            "snow": "13",
+            "tstorms": "11"
         }
 
     },
@@ -835,6 +858,14 @@ Module.register("MMM-WunderGround", {
 
             var sunriseSunsetDateObject = (sunrise < now && sunset >
                 now) ? sunset : sunrise;
+            
+            if (this.config.enableCompliments === 1) {
+                var complimentIconSuffix = (sunrise < now && sunset > now) ? "d" : "n";
+                var complimentIcon = '{"data":{"weather":[{"icon":"' + this.config.iconTableCompliments[data.current_observation.icon] + complimentIconSuffix + '"}]}}';
+                var complimentIconJson = JSON.parse(complimentIcon);
+                this.sendNotification("CURRENTWEATHER_DATA", complimentIconJson);
+            }
+            
             var timeString = moment(sunriseSunsetDateObject).format(
                 "HH:mm");
 
@@ -904,6 +935,7 @@ Module.register("MMM-WunderGround", {
             }
 
             this.weatherType = this.iconTable[data.current_observation.icon];
+            
             //Log.info("observation logo " + this.weatherType)
             this.windDirection = this.deg2Cardinal(data.current_observation.wind_degrees);
             this.windDirectionTxt = data.current_observation.wind_dir;
